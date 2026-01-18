@@ -1,5 +1,5 @@
 {
-  "name": "temp-nextjs",
+  "name": "mirjana-nail-salon",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -43,7 +43,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/SasanTazayoni/mirjana-nail-salon/issues"
   },
