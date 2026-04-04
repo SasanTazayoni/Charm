@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotation {
+  0% { --gradient-angle: 0deg; }
+  100% { --gradient-angle: 360deg; }
+}
+
 :root {
   --background: #061711;
   --foreground: #ffffff;
@@ -282,9 +293,42 @@ body {
   position: relative;
   aspect-ratio: 1;
   border-radius: 10px;
-  overflow: hidden;
+  overflow: visible;
   cursor: pointer;
-  border: 2px solid var(--brand-gold);
+}
+
+.gallery-item-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.gallery-item::before,
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 12px;
+  background: conic-gradient(
+    from var(--gradient-angle),
+    #000000,
+    var(--brand-gold),
+    #000000
+  );
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  z-index: -1;
+}
+
+.gallery-item::after {
+  filter: blur(8px);
+}
+
+.gallery-item:hover::before,
+.gallery-item:hover::after {
+  opacity: 1;
+  animation: rotation 2s linear infinite;
 }
 
 .gallery-image {
@@ -337,7 +381,6 @@ body {
   max-width: 90vw;
   max-height: 85vh;
   border-radius: 5px;
-  border: 2px solid var(--brand-gold);
   display: block;
 }
 

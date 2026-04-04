@@ -58,12 +58,14 @@ export default function Gallery() {
               className="gallery-item"
               onClick={() => openLightbox(photo)}
             >
-              <Image
-                src={photo.url}
-                alt={photo.pathname}
-                fill
-                className="gallery-image"
-              />
+              <div className="gallery-item-inner">
+                <Image
+                  src={photo.url}
+                  alt={photo.pathname}
+                  fill
+                  className="gallery-image"
+                />
+              </div>
             </div>
           ))}
         </div>
