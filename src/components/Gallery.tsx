@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import axios from "axios";
 import { IoClose } from "react-icons/io5";
+import { FaInstagram } from "react-icons/fa";
 
 type Photo = {
   url: string;
@@ -51,24 +52,37 @@ export default function Gallery() {
       {photos.length === 0 ? (
         <p className="gallery-empty">No photos yet.</p>
       ) : (
-        <div className="gallery-grid">
-          {photos.map((photo) => (
-            <div
-              key={photo.url}
-              className="gallery-item"
-              onClick={() => openLightbox(photo)}
-            >
-              <div className="gallery-item-inner">
-                <Image
-                  src={photo.url}
-                  alt={photo.pathname}
-                  fill
-                  className="gallery-image"
-                />
+        <>
+          <div className="gallery-grid">
+            {photos.map((photo) => (
+              <div
+                key={photo.url}
+                className="gallery-item"
+                onClick={() => openLightbox(photo)}
+              >
+                <div className="gallery-item-inner">
+                  <Image
+                    src={photo.url}
+                    alt={photo.pathname}
+                    fill
+                    className="gallery-image"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          <div className="gallery-instagram">
+            <a
+              href="https://www.instagram.com/charm_bymirjana"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gallery-instagram-link"
+            >
+              <FaInstagram size={20} />
+            </a>
+            <span className="gallery-instagram-text">Check out my Instagram to see more</span>
+          </div>
+        </>
       )}
 
       {selectedPhoto && createPortal(
