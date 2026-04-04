@@ -7,6 +7,7 @@
   --brand-pink: #f278a1;
   --brand-pink-dark: #c2396e;
   --brand-gold: #d4af37;
+  --brand-gold-dark: #a8872a;
 }
 
 @theme inline {
@@ -220,6 +221,12 @@ body {
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+.certificate-modal-backdrop-visible {
+  opacity: 1;
 }
 
 .certificate-modal {
@@ -234,14 +241,14 @@ body {
   right: 0;
   background: none;
   border: none;
-  color: var(--brand-pink);
+  color: var(--brand-gold);
   font-size: 1.25rem;
   cursor: pointer;
   transition: color 300ms ease-in-out;
 }
 
 .certificate-modal-close:hover {
-  color: var(--brand-pink-dark);
+  color: var(--brand-gold-dark);
 }
 
 .certificate-modal-image {

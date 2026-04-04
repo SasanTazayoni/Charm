@@ -4,9 +4,21 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { GiFleurDeLys } from "react-icons/gi";
+import { IoClose } from "react-icons/io5";
 
 export default function About() {
   const [certificateOpen, setCertificateOpen] = useState(false);
+  const [certificateVisible, setCertificateVisible] = useState(false);
+
+  const openCertificate = () => {
+    setCertificateOpen(true);
+    requestAnimationFrame(() => setCertificateVisible(true));
+  };
+
+  const closeCertificate = () => {
+    setCertificateVisible(false);
+    setTimeout(() => setCertificateOpen(false), 300);
+  };
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -53,7 +65,7 @@ export default function About() {
             recognised qualification, I am committed to delivering the highest
             standard of work — as you can see in{" "}
             <button
-              onClick={() => setCertificateOpen(true)}
+              onClick={openCertificate}
               className="certificate-inline-link"
             >
               my certificate
@@ -79,8 +91,8 @@ export default function About() {
 
       {certificateOpen && createPortal(
         <div
-          className="certificate-modal-backdrop"
-          onClick={() => setCertificateOpen(false)}
+          className={`certificate-modal-backdrop ${certificateVisible ? "certificate-modal-backdrop-visible" : ""}`}
+          onClick={closeCertificate}
         >
           <div
             className="certificate-modal"
@@ -88,9 +100,9 @@ export default function About() {
           >
             <button
               className="certificate-modal-close"
-              onClick={() => setCertificateOpen(false)}
+              onClick={closeCertificate}
             >
-              ✕
+              <IoClose size={32} />
             </button>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
