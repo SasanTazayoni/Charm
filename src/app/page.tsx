@@ -4,6 +4,7 @@ import About from "@/components/About";
 import Pricing from "@/components/Pricing";
 import Gallery from "@/components/Gallery";
 import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import Divider from "@/components/Divider";
 
@@ -19,6 +20,7 @@ export default function Home() {
       <Gallery />
       <Divider />
       <Contact />
+      <Footer />
       <ScrollToTop />
     </main>
   );

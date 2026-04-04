@@ -364,8 +364,12 @@ body {
 }
 
 @keyframes rotation {
-  0% { --gradient-angle: 0deg; }
-  100% { --gradient-angle: 360deg; }
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
 }
 
 .gallery-section {
@@ -539,7 +543,9 @@ body {
   justify-content: center;
   opacity: 0;
   transform: translateY(2rem);
-  transition: opacity 800ms ease-out, transform 800ms ease-out;
+  transition:
+    opacity 800ms ease-out,
+    transform 800ms ease-out;
 }
 
 .contact-visible {
@@ -593,4 +599,33 @@ body {
 
 .contact-link:hover {
   color: var(--brand-pink-dark);
+}
+
+/* Footer */
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.footer-github {
+  color: rgba(212, 175, 55, 0.5);
+  display: flex;
+  transition: color 300ms ease-in-out;
+}
+
+.footer-github:hover {
+  color: var(--brand-gold);
+}
+
+.footer-copyright {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(212, 175, 55, 0.5);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
 }
