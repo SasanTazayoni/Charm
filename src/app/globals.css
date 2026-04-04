@@ -30,12 +30,11 @@ body {
 /* Navbar */
 
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  background-color: var(--brand-green);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -110,6 +109,70 @@ body {
   color: var(--brand-pink-dark);
 }
 
+/* Pricing */
+
+.pricing-section {
+  padding: 6rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(2rem);
+  transition:
+    opacity 800ms ease-out,
+    transform 800ms ease-out;
+}
+
+.pricing-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.pricing-heading {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--brand-pink);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.pricing-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.pricing-divider-line {
+  width: 5rem;
+  height: 1px;
+  background-color: var(--brand-pink);
+}
+
+.pricing-divider-icon {
+  color: var(--brand-pink);
+}
+
+.pricing-card {
+  display: flex;
+  justify-content: center;
+  border: 2px solid var(--brand-gold);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pricing-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* About */
 
 .about-section {
@@ -118,7 +181,9 @@ body {
   margin: 0 auto;
   opacity: 0;
   transform: translateY(2rem);
-  transition: opacity 800ms ease-out, transform 800ms ease-out;
+  transition:
+    opacity 800ms ease-out,
+    transform 800ms ease-out;
 }
 
 .about-visible {
