@@ -12,7 +12,7 @@ const VIDEOS = [
 
 const FADE_DURATION = 2000;
 const FADE_OFFSET = 2.5;
-const OVERLAY_DELAY = 5000;
+const OVERLAY_DELAY = 2000;
 
 export default function Hero() {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>(
@@ -111,7 +111,7 @@ export default function Hero() {
               href="https://wa.me/38766955693"
               target="_blank"
               rel="noopener noreferrer"
-              className="contact-link"
+              className="brand-link"
             >
               <FaWhatsapp size={40} />
             </a>
@@ -119,7 +119,7 @@ export default function Hero() {
               href="https://www.instagram.com/charm_bymirjana"
               target="_blank"
               rel="noopener noreferrer"
-              className="contact-link"
+              className="brand-link"
             >
               <FaInstagram size={40} />
             </a>
