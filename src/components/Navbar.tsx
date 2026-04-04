@@ -20,10 +20,14 @@ export default function Navbar() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActiveSection(entry.target.id);
+          } else {
+            setActiveSection((current) =>
+              current === entry.target.id ? "" : current
+            );
           }
         });
       },
-      { rootMargin: "-50% 0px -50% 0px", threshold: 0 }
+      { threshold: 0.2 }
     );
 
     NAV_LINKS.forEach((link) => {
