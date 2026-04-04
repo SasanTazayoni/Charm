@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { GiFleurDeLys } from "react-icons/gi";
 
 export default function Pricing() {
   const [visible, setVisible] = useState(false);
@@ -22,11 +21,6 @@ export default function Pricing() {
 
       <div className="pricing-header">
         <h2 className="pricing-heading">Pricing</h2>
-        <div className="pricing-divider">
-          <div className="pricing-divider-line" />
-          <GiFleurDeLys size={20} className="pricing-divider-icon" />
-          <div className="pricing-divider-line" />
-        </div>
       </div>
 
       <div className="pricing-card">

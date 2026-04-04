@@ -27,6 +27,25 @@ body {
   font-family: var(--font-body), sans-serif;
 }
 
+/* Divider */
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.divider-line {
+  width: 10rem;
+  height: 1px;
+  background-color: var(--brand-pink);
+}
+
+.divider-icon {
+  color: var(--brand-pink);
+}
+
 /* Scroll to Top */
 
 .scroll-to-top {

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FaWhatsapp, FaInstagram } from "react-icons/fa";
-import { GiFleurDeLys } from "react-icons/gi";
+import Divider from "@/components/Divider";
 
 const VIDEOS = [
   "https://res.cloudinary.com/dfpneqsxy/video/upload/v1775236747/Charm/hero-video1_ufotyn.mp4",
@@ -12,7 +12,6 @@ const VIDEOS = [
 
 const FADE_DURATION = 2000;
 const FADE_OFFSET = 2.5;
-const OVERLAY_DELAY = 2000;
 
 export default function Hero() {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>(
@@ -21,20 +20,14 @@ export default function Hero() {
   const [opacities, setOpacities] = useState<number[]>(
     VIDEOS.map((_, videoIndex) => (videoIndex === 0 ? 1 : 0)),
   );
-  const [overlayVisible, setOverlayVisible] = useState(false);
   const activeIndexRef = useRef(0);
   const fadingRef = useRef(false);
   const fadeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     videoRefs.current[0]?.play().catch(() => {});
-    const overlayTimer = setTimeout(
-      () => setOverlayVisible(true),
-      OVERLAY_DELAY,
-    );
 
     return () => {
-      clearTimeout(overlayTimer);
       if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
       videoRefs.current[0]?.pause();
     };
@@ -89,10 +82,7 @@ export default function Hero() {
         />
       ))}
 
-      <div
-        style={{ opacity: overlayVisible ? 1 : 0 }}
-        className="hero-overlay absolute inset-0 flex items-center justify-center"
-      >
+      <div className="hero-overlay absolute inset-0 flex items-center justify-center">
         <div className="text-center px-6 text-brand-pink">
           <p className="text-2xl font-semibold tracking-[0.3em] uppercase mb-2">
             Professional Nail Artist
@@ -101,10 +91,8 @@ export default function Hero() {
           <p className="text-3xl font-light tracking-widest mb-8">
             Mirjana Vuković Đorđić
           </p>
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="w-20 h-px bg-brand-pink" />
-            <GiFleurDeLys size={24} className="text-brand-pink" />
-            <div className="w-20 h-px bg-brand-pink" />
+          <div className="mb-8">
+            <Divider />
           </div>
           <div className="flex items-center justify-center gap-8">
             <a

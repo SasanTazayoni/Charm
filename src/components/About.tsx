@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { GiFleurDeLys } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 
 export default function About() {
@@ -36,11 +35,6 @@ export default function About() {
 
       <div className="about-header">
         <h2 className="about-heading">About Me</h2>
-        <div className="about-divider">
-          <div className="about-divider-line" />
-          <GiFleurDeLys size={20} className="about-divider-icon" />
-          <div className="about-divider-line" />
-        </div>
       </div>
 
       <div className="about-container">
