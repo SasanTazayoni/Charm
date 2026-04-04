@@ -391,6 +391,95 @@ body {
   letter-spacing: 0.1em;
 }
 
+.gallery-instagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2.5rem;
+  color: var(--brand-pink);
+}
+
+.gallery-instagram-text {
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: var(--brand-pink);
+}
+
+.gallery-instagram-link {
+  color: var(--brand-pink);
+  display: flex;
+  transition: color 300ms ease-in-out;
+}
+
+.gallery-instagram-link:hover {
+  color: var(--brand-pink-dark);
+}
+
+/* Contact */
+
+.contact-section {
+  padding: 6rem 2rem;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(2rem);
+  transition: opacity 800ms ease-out, transform 800ms ease-out;
+}
+
+.contact-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contact-card {
+  border: 2px solid var(--brand-gold);
+  border-radius: 16px;
+  padding: 3rem 4rem;
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+}
+
+.contact-heading {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--brand-pink);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.contact-subtext {
+  color: var(--brand-pink);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--brand-pink);
+  text-decoration: none;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  transition: color 300ms ease-in-out;
+}
+
+.contact-link:hover {
+  color: var(--brand-pink-dark);
+}
+
 /* About */
 
 .about-section {
@@ -458,6 +547,7 @@ body {
   height: 360px;
   border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 0 0 2px var(--brand-gold);
 }
 
 .about-image {
