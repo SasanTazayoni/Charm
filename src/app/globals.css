@@ -601,6 +601,12 @@ body {
   color: var(--brand-pink-dark);
 }
 
+.contact-logo {
+  margin-top: 2rem;
+  display: block;
+  margin-inline: auto;
+}
+
 /* Footer */
 
 .footer {
