@@ -1,5 +1,17 @@
 import type { Metadata } from "next";
+import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
+
+const cormorant = Cormorant_Garamond({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  weight: ["300", "400", "600", "700"],
+});
+
+const montserrat = Montserrat({
+  variable: "--font-body",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://charm-nail-salon.vercel.app"),
@@ -99,7 +111,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className="antialiased"
+        className={`${cormorant.variable} ${montserrat.variable} antialiased`}
       >
         {children}
       </body>

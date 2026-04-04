@@ -3,20 +3,34 @@
 :root {
   --background: #061711;
   --foreground: #ffffff;
+  --brand-green: #061711;
+  --brand-pink: #f278a1;
+  --brand-gold: #c7c942;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand-green: var(--brand-green);
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-gold: var(--brand-gold);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+}
+
+.hero-overlay {
+  background-color: rgba(6, 23, 17, 0.85);
+  transition: opacity 1.5s ease-in-out;
 }
 
 .contact-link {
-  color: #f278a1;
+  color: var(--brand-pink);
   transition: color 300ms ease-in-out;
 }
 
