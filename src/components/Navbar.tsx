@@ -3,11 +3,20 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 const NAV_LINKS = ["About", "Pricing", "Gallery", "Contact"];
 
+const NAV_LABELS: Record<string, { English: string; Serbian: string }> = {
+  About:   { English: "About",   Serbian: "O nama"     },
+  Pricing: { English: "Pricing", Serbian: "Cjenovnik"  },
+  Gallery: { English: "Gallery", Serbian: "Galerija"   },
+  Contact: { English: "Contact", Serbian: "Kontakt"    },
+};
+
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
+  const { language } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,7 +63,7 @@ export default function Navbar() {
               href={`#${link.toLowerCase()}`}
               className={`nav-link ${activeSection === link.toLowerCase() ? "nav-link-active" : ""}`}
             >
-              {link}
+              {NAV_LABELS[link][language]}
             </Link>
           </li>
         ))}

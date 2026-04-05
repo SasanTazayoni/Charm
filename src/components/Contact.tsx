@@ -4,9 +4,11 @@ import useScrollVisible from "@/hooks/useScrollVisible";
 import Link from "next/link";
 import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
   const [sectionRef, visible] = useScrollVisible(0.2);
+  const { language } = useLanguage();
 
   return (
     <section
@@ -16,12 +18,10 @@ export default function Contact() {
     >
       <div className="contact-inner">
         <div className="contact-header section-header">
-          <h2 className="section-heading">Contact</h2>
+          <h2 className="section-heading">{language === "English" ? "Contact" : "Kontakt"}</h2>
         </div>
         <div className="contact-card">
-          <h2 className="section-heading contact-heading">Get in Touch</h2>
-          <p className="contact-subtext">Reach me on WhatsApp</p>
-
+          <h2 className="section-heading contact-heading">{language === "English" ? "Get in Touch" : "Stupite u kontakt"}</h2>
           <div className="contact-links">
             <Link
               href="https://wa.me/38766955693"

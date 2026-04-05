@@ -8,6 +8,7 @@ import axios from "axios";
 import { IoClose } from "react-icons/io5";
 import { FaInstagram } from "react-icons/fa";
 import { Loader2 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Photo = {
   url: string;
@@ -15,6 +16,7 @@ type Photo = {
 };
 
 export default function Gallery() {
+  const { language } = useLanguage();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
@@ -45,7 +47,7 @@ export default function Gallery() {
       className={`gallery-section section-animate ${visible ? "section-visible" : ""}`}
     >
       <div className="gallery-header section-header">
-        <h2 className="section-heading">Gallery</h2>
+        <h2 className="section-heading">{language === "English" ? "Gallery" : "Galerija"}</h2>
       </div>
 
       {loading ? (
@@ -85,7 +87,7 @@ export default function Gallery() {
               <FaInstagram size={20} />
             </a>
             <span className="gallery-instagram-text">
-              Check out my Instagram to see more
+              {language === "English" ? "Check out my Instagram to see more" : "Pogledajte moj Instagram za više"}
             </span>
           </div>
         </>
