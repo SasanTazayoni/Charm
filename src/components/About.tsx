@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import useScrollVisible from "@/hooks/useScrollVisible";
 import { createPortal } from "react-dom";
@@ -11,6 +11,13 @@ export default function About() {
   const { language } = useLanguage();
   const [certificateOpen, setCertificateOpen] = useState(false);
   const [certificateVisible, setCertificateVisible] = useState(false);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
+  }, []);
 
   const openCertificate = () => {
     setCertificateOpen(true);
@@ -19,7 +26,7 @@ export default function About() {
 
   const closeCertificate = () => {
     setCertificateVisible(false);
-    setTimeout(() => setCertificateOpen(false), 300);
+    closeTimerRef.current = setTimeout(() => setCertificateOpen(false), 300);
   };
   const [sectionRef, visible] = useScrollVisible(0.15);
 
