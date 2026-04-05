@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import useScrollVisible from "@/hooks/useScrollVisible";
 import { useLanguage } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
 
 export default function Pricing() {
   const [sectionRef, visible] = useScrollVisible(0.15);
@@ -19,20 +20,20 @@ export default function Pricing() {
   }, []);
 
   const src = isSmall
-    ? language === "English" ? "/pricing-small.png" : "/pricing-serbian-small.png"
-    : language === "English" ? "/pricing.jpg" : "/pricing-serbian.jpg";
+    ? tr.pricing.imageSrcSmall[language]
+    : tr.pricing.imageSrcLarge[language];
 
   return (
     <section id="pricing" ref={sectionRef} className={`pricing-section section-animate ${visible ? "section-visible" : ""}`}>
 
       <div className="section-header">
-        <h2 className="section-heading pricing-heading">{language === "English" ? "Pricing" : "Cjenovnik"}</h2>
+        <h2 className="section-heading pricing-heading">{tr.pricing.heading[language]}</h2>
       </div>
 
       <div className={`pricing-card ${isSmall ? "pricing-card-small" : ""}`}>
         <Image
           src={src}
-          alt={language === "English" ? "Charm Price List" : "Charm Cjenovnik"}
+          alt={tr.pricing.imageAlt[language]}
           width={480}
           height={600}
           className="pricing-image"

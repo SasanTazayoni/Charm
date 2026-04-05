@@ -9,6 +9,7 @@ import { IoClose } from "react-icons/io5";
 import { FaInstagram } from "react-icons/fa";
 import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
 import { fetchWithRetry } from "@/lib/fetchWithRetry";
 
 type Photo = {
@@ -49,7 +50,7 @@ export default function Gallery() {
       className={`gallery-section section-animate ${visible ? "section-visible" : ""}`}
     >
       <div className="section-header">
-        <h2 className="section-heading">{language === "English" ? "Gallery" : "Galerija"}</h2>
+        <h2 className="section-heading">{tr.gallery.heading[language]}</h2>
       </div>
 
       {loading ? (
@@ -57,9 +58,9 @@ export default function Gallery() {
           <Loader2 size={60} className="gallery-spinner" />
         </div>
       ) : fetchError ? (
-        <p className="gallery-empty">{language === "English" ? "Failed to load photos. Please refresh the page." : "Greška pri učitavanju fotografija. Osvježite stranicu."}</p>
+        <p className="gallery-empty">{tr.gallery.loadError[language]}</p>
       ) : photos.length === 0 ? (
-        <p className="gallery-empty">{language === "English" ? "No photos yet." : "Još nema fotografija."}</p>
+        <p className="gallery-empty">{tr.gallery.empty[language]}</p>
       ) : (
         <>
           <div className="gallery-grid">
@@ -69,12 +70,12 @@ export default function Gallery() {
                 className="gallery-item"
                 onClick={() => openLightbox(photo)}
                 role="button"
-                aria-label={language === "English" ? "Open photo" : "Otvori fotografiju"}
+                aria-label={tr.gallery.openPhotoLabel[language]}
               >
                 <div className="gallery-item-inner">
                   <Image
                     src={photo.url}
-                    alt={language === "English" ? "Charm nail art" : "Charm umjetnost nokta"}
+                    alt={tr.gallery.photoAlt[language]}
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
                     className="gallery-image"
@@ -94,7 +95,7 @@ export default function Gallery() {
               <FaInstagram size={20} />
             </a>
             <span className="gallery-instagram-text">
-              {language === "English" ? "Check out my Instagram to see more" : "Pogledajte moj Instagram za više"}
+              {tr.gallery.instagramText[language]}
             </span>
           </div>
         </>
@@ -110,13 +111,13 @@ export default function Gallery() {
               className="lightbox-modal"
               onClick={(e) => e.stopPropagation()}
             >
-              <button className="lightbox-close" onClick={closeLightbox} aria-label={language === "English" ? "Close" : "Zatvori"}>
+              <button className="lightbox-close" onClick={closeLightbox} aria-label={tr.gallery.closeLabel[language]}>
                 <IoClose size={32} className="text-brand-gold" />
               </button>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={selectedPhoto.url}
-                alt={language === "English" ? "Charm nail art" : "Charm umjetnost nokta"}
+                alt={tr.gallery.photoAlt[language]}
                 className="lightbox-image"
               />
             </div>

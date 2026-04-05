@@ -5,16 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useLanguage } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoClose } from "react-icons/io5";
 
-const NAV_LINKS = ["About", "Pricing", "Gallery", "Contact"];
+const NAV_LINKS = ["About", "Pricing", "Gallery", "Contact"] as const;
 
-const NAV_LABELS: Record<string, { English: string; Serbian: string }> = {
-  About:   { English: "About",   Serbian: "O nama"     },
-  Pricing: { English: "Pricing", Serbian: "Cjenovnik"  },
-  Gallery: { English: "Gallery", Serbian: "Galerija"   },
-  Contact: { English: "Contact", Serbian: "Kontakt"    },
+const NAV_LABELS = {
+  About:   tr.navbar.about,
+  Pricing: tr.navbar.pricing,
+  Gallery: tr.navbar.gallery,
+  Contact: tr.navbar.contact,
 };
 
 export default function Navbar() {

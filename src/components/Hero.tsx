@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
 import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 import Divider from "@/components/Divider";
 
@@ -87,9 +88,7 @@ export default function Hero() {
       <div className="hero-overlay absolute inset-0 flex items-center justify-center">
         <div className="text-center px-6 text-brand-pink">
           <p className="text-lg sm:text-xl md:text-2xl font-semibold tracking-[0.3em] uppercase mb-2">
-            {language === "English"
-              ? "Professional Nail Artist"
-              : "Profesionalni umjetnik nokta"}
+            {tr.hero.subtitle[language]}
           </p>
           <h1 className="text-[48px] sm:text-[60px] md:text-7xl font-bold tracking-wide mb-2">
             Charm

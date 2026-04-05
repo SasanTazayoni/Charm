@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
 
 export default function Contact() {
   const [sectionRef, visible] = useScrollVisible(0.2);
@@ -18,7 +19,7 @@ export default function Contact() {
     >
       <div className="contact-inner">
         <div className="section-header">
-          <h2 className="section-heading">{language === "English" ? "Contact" : "Kontakt"}</h2>
+          <h2 className="section-heading">{tr.contact.heading[language]}</h2>
         </div>
         <div className="contact-card">
           <Link

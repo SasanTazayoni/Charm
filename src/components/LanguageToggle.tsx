@@ -3,6 +3,7 @@
 import { RefreshCw } from "lucide-react";
 import CascadeButton from "./CascadeButton";
 import { useLanguage, type Language } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
 
 const OTHER: Record<Language, Language> = {
   English: "Serbian",
@@ -15,9 +16,9 @@ export default function LanguageToggle() {
   return (
     <div className="language-toggle">
       <p className="language-toggle-text">
-        {language === "English" ? "Currently in" : "Trenutno na"}{" "}
+        {tr.languageToggle.currentlyIn[language]}{" "}
         <span className="language-toggle-current">
-          {language === "English" ? "English" : "Srpskom"}
+          {tr.languageToggle.currentLanguage[language]}
         </span>
       </p>
       <CascadeButton
@@ -26,7 +27,7 @@ export default function LanguageToggle() {
         onClick={() => setLanguage(OTHER[language])}
       >
         <RefreshCw size={13} />
-        {language === "English" ? "Language" : "Jezik"}
+        {tr.languageToggle.button[language]}
       </CascadeButton>
     </div>
   );
