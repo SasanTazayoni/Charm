@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
+import CascadeButton from "@/components/CascadeButton";
 
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
@@ -41,9 +42,9 @@ export default function AdminLogin() {
             autoFocus
           />
           {error && <p className="admin-login-error">{error}</p>}
-          <button type="submit" className="gold-button admin-login-button" disabled={loading}>
+          <CascadeButton type="submit" variant="gold" className="gold-button admin-login-button" disabled={loading}>
             {loading ? "Logging in..." : "Log in"}
-          </button>
+          </CascadeButton>
         </form>
       </div>
     </div>

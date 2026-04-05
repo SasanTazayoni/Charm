@@ -34,11 +34,47 @@ body {
   font-size: 2.5rem;
   font-weight: 300;
   color: var(--brand-pink);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.05em;
 }
 
 .section-header {
   text-align: center;
+}
+
+/* Cascade Button */
+
+.cascade-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.cascade-button-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+}
+
+.squares-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cascade-square {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
 }
 
 .pink-outline-button {
@@ -47,14 +83,6 @@ body {
   border-radius: 8px;
   color: var(--brand-pink);
   cursor: pointer;
-  transition:
-    border-color 300ms ease-in-out,
-    color 300ms ease-in-out;
-}
-
-.pink-outline-button:hover {
-  border-color: var(--brand-pink-dark);
-  color: var(--brand-pink-dark);
 }
 
 .gold-button {
@@ -64,11 +92,6 @@ body {
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 300ms ease-in-out;
-}
-
-.gold-button:hover:not(:disabled) {
-  background-color: var(--brand-gold-dark);
 }
 
 .gold-button:disabled {
@@ -176,6 +199,12 @@ body {
   gap: 0.5rem;
 }
 
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
 .navbar-links {
   display: flex;
   align-items: center;
@@ -220,6 +249,41 @@ body {
 .nav-link:hover::after,
 .nav-link-active::after {
   transform: scaleX(1);
+}
+
+/* Language Toggle */
+
+.language-toggle-hero {
+  position: fixed;
+  top: 6rem;
+  right: 2rem;
+  z-index: 40;
+}
+
+.language-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.language-toggle-text {
+  color: var(--brand-gold);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.language-toggle-current {
+  font-weight: 600;
+}
+
+.language-toggle-button {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 /* Hero */
@@ -682,7 +746,6 @@ body {
 .admin-login-heading {
   font-size: 1.75rem;
   letter-spacing: 0.2em;
-  text-transform: uppercase;
 }
 
 .admin-login-form {
@@ -851,17 +914,6 @@ body {
 }
 
 .admin-confirm-delete {
-  background-color: var(--brand-gold);
-  border: none;
-  border-radius: 8px;
-  color: #000;
   padding: 0.5rem 1.25rem;
   font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 300ms ease-in-out;
-}
-
-.admin-confirm-delete:hover {
-  background-color: var(--brand-gold-dark);
 }

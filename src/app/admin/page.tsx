@@ -6,6 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { IoClose } from "react-icons/io5";
 import { FiUpload } from "react-icons/fi";
+import CascadeButton from "@/components/CascadeButton";
 
 type Photo = {
   url: string;
@@ -68,17 +69,18 @@ export default function AdminPage() {
       <div className="admin-header">
         <h1 className="section-heading admin-heading">Gallery Manager</h1>
         <div className="admin-actions">
-          <button
+          <CascadeButton
+            variant="gold"
             className="gold-button admin-upload-button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
           >
             <FiUpload size={16} />
             {uploading ? "Uploading..." : "Upload Photo"}
-          </button>
-          <button className="pink-outline-button admin-logout-button" onClick={handleLogout}>
+          </CascadeButton>
+          <CascadeButton variant="pink-outline" className="pink-outline-button admin-logout-button" onClick={handleLogout}>
             Log out
-          </button>
+          </CascadeButton>
         </div>
         <input
           ref={fileInputRef}
@@ -119,12 +121,12 @@ export default function AdminPage() {
           <div className="admin-confirm-modal" onClick={(e) => e.stopPropagation()}>
             <p className="admin-confirm-text">Delete this photo?</p>
             <div className="admin-confirm-actions">
-              <button className="pink-outline-button admin-confirm-cancel" onClick={() => setConfirmUrl(null)}>
+              <CascadeButton variant="pink-outline" className="pink-outline-button admin-confirm-cancel" onClick={() => setConfirmUrl(null)}>
                 Cancel
-              </button>
-              <button className="admin-confirm-delete" onClick={handleDelete}>
+              </CascadeButton>
+              <CascadeButton variant="gold" className="gold-button admin-confirm-delete" onClick={handleDelete}>
                 Delete
-              </button>
+              </CascadeButton>
             </div>
           </div>
         </div>
