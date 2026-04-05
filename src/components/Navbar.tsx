@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { createPortal } from "react-dom";
 import { useLanguage } from "@/context/LanguageContext";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { IoClose } from "react-icons/io5";
 
 const NAV_LINKS = ["About", "Pricing", "Gallery", "Contact"];
 
@@ -16,7 +19,21 @@ const NAV_LABELS: Record<string, { English: string; Serbian: string }> = {
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { language } = useLanguage();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) setMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,7 +53,7 @@ export default function Navbar() {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0, rootMargin: "-30% 0px -30% 0px" }
     );
 
     NAV_LINKS.forEach((link) => {
@@ -51,23 +68,56 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="navbar bg-brand-green/40 backdrop-blur-sm">
-      <div className="navbar-logo">
-        <Image src="/logo.png" alt="Charm" width={60} height={60} />
-        <span className="navbar-brand">Charm</span>
-      </div>
-      <ul className="navbar-links">
-        {NAV_LINKS.map((link) => (
-          <li key={link}>
-            <Link
-              href={`#${link.toLowerCase()}`}
-              className={`nav-link ${activeSection === link.toLowerCase() ? "nav-link-active" : ""}`}
-            >
-              {NAV_LABELS[link][language]}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <>
+      <nav className="navbar bg-brand-green/40 backdrop-blur-sm">
+        <div className="navbar-logo">
+          <Image src="/logo.png" alt="Charm" width={60} height={60} />
+          <span className="navbar-brand">Charm</span>
+        </div>
+
+        <ul className="navbar-links">
+          {NAV_LINKS.map((link) => (
+            <li key={link}>
+              <Link
+                href={`#${link.toLowerCase()}`}
+                className={`nav-link ${activeSection === link.toLowerCase() ? "nav-link-active" : ""}`}
+              >
+                {NAV_LABELS[link][language]}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <button
+          className="navbar-hamburger"
+          onClick={() => setMenuOpen((o) => !o)}
+          aria-label="Toggle menu"
+        >
+          {menuOpen ? <IoClose size={28} /> : <RxHamburgerMenu size={28} />}
+        </button>
+
+        <ul className={`navbar-mobile-menu ${menuOpen ? "navbar-mobile-menu-open" : ""}`}>
+          {NAV_LINKS.map((link) => (
+            <li key={link}>
+              <Link
+                href={`#${link.toLowerCase()}`}
+                className={`nav-link ${activeSection === link.toLowerCase() ? "nav-link-active" : ""}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {NAV_LABELS[link][language]}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {mounted && createPortal(
+        <div
+          className={`navbar-mobile-backdrop ${menuOpen ? "navbar-mobile-backdrop-visible" : ""}`}
+          onClick={() => setMenuOpen(false)}
+        />,
+        document.body
+      )}
+    </>
   );
 }
