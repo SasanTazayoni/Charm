@@ -110,7 +110,7 @@ export default function AdminPage() {
             disabled={uploading}
           >
             <FiUpload size={16} />
-            {uploading ? (serbian ? "Učitavanje..." : "Uploading...") : (serbian ? "Dodaj sliku" : "Upload Photo")}
+            {uploading ? (serbian ? "Učitavanje..." : "Uploading...") : (serbian ? "Dodaj sliku" : "Upload")}
           </CascadeButton>
           <CascadeButton variant="pink-outline" className="pink-outline-button admin-logout-button" onClick={handleLogout}>
             {serbian ? "Odjava" : "Log out"}
