@@ -76,7 +76,7 @@ export default function AdminPage() {
             <FiUpload size={16} />
             {uploading ? "Uploading..." : "Upload Photo"}
           </button>
-          <button className="admin-logout-button" onClick={handleLogout}>
+          <button className="pink-outline-button admin-logout-button" onClick={handleLogout}>
             Log out
           </button>
         </div>
@@ -119,7 +119,7 @@ export default function AdminPage() {
           <div className="admin-confirm-modal" onClick={(e) => e.stopPropagation()}>
             <p className="admin-confirm-text">Delete this photo?</p>
             <div className="admin-confirm-actions">
-              <button className="admin-confirm-cancel" onClick={() => setConfirmUrl(null)}>
+              <button className="pink-outline-button admin-confirm-cancel" onClick={() => setConfirmUrl(null)}>
                 Cancel
               </button>
               <button className="admin-confirm-delete" onClick={handleDelete}>

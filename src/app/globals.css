@@ -41,6 +41,22 @@ body {
   text-align: center;
 }
 
+.pink-outline-button {
+  background: none;
+  border: 1px solid var(--brand-pink);
+  border-radius: 8px;
+  color: var(--brand-pink);
+  cursor: pointer;
+  transition:
+    border-color 300ms ease-in-out,
+    color 300ms ease-in-out;
+}
+
+.pink-outline-button:hover {
+  border-color: var(--brand-pink-dark);
+  color: var(--brand-pink-dark);
+}
+
 .gold-button {
   background-color: var(--brand-gold);
   color: #000;
@@ -592,8 +608,6 @@ body {
 
 .contact-logo {
   margin-top: 2rem;
-  display: block;
-  margin-inline: auto;
 }
 
 /* Footer */
@@ -723,21 +737,8 @@ body {
 }
 
 .admin-logout-button {
-  background: none;
-  border: 1px solid var(--brand-pink);
-  border-radius: 8px;
-  color: var(--brand-pink);
   padding: 0.6rem 1.25rem;
   font-size: 0.85rem;
-  cursor: pointer;
-  transition:
-    border-color 300ms ease-in-out,
-    color 300ms ease-in-out;
-}
-
-.admin-logout-button:hover {
-  border-color: var(--brand-pink-dark);
-  color: var(--brand-pink-dark);
 }
 
 .admin-file-input {
@@ -827,19 +828,8 @@ body {
 }
 
 .admin-confirm-cancel {
-  background: none;
-  border: 1px solid var(--brand-pink);
-  border-radius: 8px;
-  color: var(--brand-pink);
   padding: 0.5rem 1.25rem;
   font-size: 0.85rem;
-  cursor: pointer;
-  transition: border-color 300ms ease-in-out, color 300ms ease-in-out;
-}
-
-.admin-confirm-cancel:hover {
-  border-color: var(--brand-pink-dark);
-  color: var(--brand-pink-dark);
 }
 
 .admin-confirm-delete {
