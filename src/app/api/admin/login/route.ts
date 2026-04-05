@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+  if (!process.env.ADMIN_PASSWORD || !process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
+  }
+
   const { password } = await request.json();
 
   if (password !== process.env.ADMIN_PASSWORD) {
@@ -8,7 +12,7 @@ export async function POST(request: NextRequest) {
   }
 
   const response = NextResponse.json({ success: true });
-  response.cookies.set("admin_auth", process.env.ADMIN_SECRET!, {
+  response.cookies.set("admin_auth", process.env.ADMIN_SECRET, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
