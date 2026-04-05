@@ -18,7 +18,7 @@ export default function Pricing() {
       <div className="pricing-card">
         <Image
           src={language === "English" ? "/pricing.jpg" : "/pricing-serbian.jpg"}
-          alt="Charm Price List"
+          alt={language === "English" ? "Charm Price List" : "Charm Cjenovnik"}
           width={480}
           height={600}
           className="pricing-image"

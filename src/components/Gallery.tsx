@@ -55,7 +55,7 @@ export default function Gallery() {
           <Loader2 size={60} className="gallery-spinner" />
         </div>
       ) : photos.length === 0 ? (
-        <p className="gallery-empty">No photos yet.</p>
+        <p className="gallery-empty">{language === "English" ? "No photos yet." : "Još nema fotografija."}</p>
       ) : (
         <>
           <div className="gallery-grid">
@@ -68,7 +68,7 @@ export default function Gallery() {
                 <div className="gallery-item-inner">
                   <Image
                     src={photo.url}
-                    alt="Charm nail art"
+                    alt={language === "English" ? "Charm nail art" : "Charm umjetnost nokta"}
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
                     className="gallery-image"

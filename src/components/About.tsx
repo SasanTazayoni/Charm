@@ -134,7 +134,7 @@ export default function About() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/certificate.jpeg"
-              alt="Professional Nail Technology Certificate"
+              alt={language === "English" ? "Professional Nail Technology Certificate" : "Sertifikat profesionalne tehnologije nokta"}
               className="certificate-modal-image"
             />
           </div>

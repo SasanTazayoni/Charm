@@ -8,11 +8,14 @@ import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import LanguageToggle from "@/components/LanguageToggle";
 import Divider from "@/components/Divider";
-import { LanguageProvider } from "@/context/LanguageContext";
+import { LanguageProvider, type Language } from "@/context/LanguageContext";
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const initialLanguage = (cookieStore.get("language")?.value ?? "English") as Language;
   return (
-    <LanguageProvider>
+    <LanguageProvider initialLanguage={initialLanguage}>
     <main>
       <Navbar />
       <div className="language-toggle-hero">
