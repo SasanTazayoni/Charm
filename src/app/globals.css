@@ -460,7 +460,7 @@ body {
 
 .about-container {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 2fr;
   gap: 4rem;
   align-items: flex-start;
 }
@@ -472,7 +472,7 @@ body {
 .about-image-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 3 / 4;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 0 2px var(--brand-gold);
@@ -480,12 +480,11 @@ body {
 
 .about-image {
   object-fit: cover;
-  object-position: center top;
+  object-position: center;
 }
 
 .about-content {
   flex: 1;
-  padding-top: 0.5rem;
 }
 
 .about-text {
@@ -557,10 +556,34 @@ body {
   border-radius: 4px;
 }
 
+@media (max-width: 1024px) {
+  .about-container {
+    display: block;
+  }
+
+  .about-profile {
+    float: left;
+    width: 40%;
+    margin-right: 2rem;
+    margin-bottom: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   .about-section {
     padding-top: 72px;
     padding-bottom: 72px;
+  }
+
+  .about-container {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .about-profile {
+    float: none;
+    width: 100%;
+    margin-right: 0;
   }
 }
 
