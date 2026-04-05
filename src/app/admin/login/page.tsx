@@ -1,16 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
 import CascadeButton from "@/components/CascadeButton";
+import { getCookie } from "cookies-next";
 
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [serbian, setSerbianState] = useState(false);
+
+  useEffect(() => {
+    setSerbianState(getCookie("language") === "Serbian");
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +27,7 @@ export default function AdminLogin() {
       await axios.post("/api/admin/login", { password });
       router.push("/admin");
     } catch {
-      setError("Incorrect password.");
+      setError(serbian ? "Netačna lozinka." : "Incorrect password.");
     } finally {
       setLoading(false);
     }
@@ -31,11 +37,11 @@ export default function AdminLogin() {
     <div className="admin-login-page">
       <div className="admin-login-card">
         <Image src="/logo.png" alt="Charm" width={160} height={160} />
-        <h1 className="section-heading admin-login-heading">Admin</h1>
+        <h1 className="section-heading admin-login-heading">{serbian ? "Administrator" : "Admin"}</h1>
         <form onSubmit={handleSubmit} className="admin-login-form">
           <input
             type="password"
-            placeholder="Password"
+            placeholder={serbian ? "Lozinka" : "Password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="admin-login-input"
@@ -43,7 +49,7 @@ export default function AdminLogin() {
           />
           {error && <p className="admin-login-error">{error}</p>}
           <CascadeButton type="submit" variant="gold" className="gold-button admin-login-button" disabled={loading}>
-            {loading ? "Logging in..." : "Log in"}
+            {loading ? (serbian ? "Prijava..." : "Logging in...") : (serbian ? "Prijava" : "Log in")}
           </CascadeButton>
         </form>
       </div>
