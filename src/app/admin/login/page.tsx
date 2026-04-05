@@ -12,10 +12,10 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [serbian, setSerbian] = useState(false);
+  const [isSerbian, setIsSerbian] = useState(false);
 
   useEffect(() => {
-    setSerbian(getCookie("language") === "Serbian");
+    setIsSerbian(getCookie("language") === "Serbian");
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,16 +30,16 @@ export default function AdminLogin() {
       if (axios.isAxiosError(err)) {
         const status = err.response?.status;
         if (status === 401) {
-          setError(serbian ? "Netačna lozinka." : "Incorrect password.");
+          setError(isSerbian ? "Netačna lozinka." : "Incorrect password.");
         } else if (status === 500) {
-          setError(serbian ? "Greška na serveru. Kontaktirajte administratora." : "Server error. Please contact the administrator.");
+          setError(isSerbian ? "Greška na serveru. Kontaktirajte administratora." : "Server error. Please contact the administrator.");
         } else if (!err.response) {
-          setError(serbian ? "Nema veze. Provjerite internet i pokušajte ponovo." : "No connection. Check your internet and try again.");
+          setError(isSerbian ? "Nema veze. Provjerite internet i pokušajte ponovo." : "No connection. Check your internet and try again.");
         } else {
-          setError(serbian ? "Nešto je pošlo po krivu. Pokušajte ponovo." : "Something went wrong. Please try again.");
+          setError(isSerbian ? "Nešto je pošlo po krivu. Pokušajte ponovo." : "Something went wrong. Please try again.");
         }
       } else {
-        setError(serbian ? "Nešto je pošlo po krivu. Pokušajte ponovo." : "Something went wrong. Please try again.");
+        setError(isSerbian ? "Nešto je pošlo po krivu. Pokušajte ponovo." : "Something went wrong. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -50,11 +50,11 @@ export default function AdminLogin() {
     <div className="admin-login-page">
       <div className="admin-login-card">
         <Image src="/logo.png" alt="Charm" width={160} height={160} />
-        <h1 className="section-heading admin-login-heading">{serbian ? "Administrator" : "Admin"}</h1>
+        <h1 className="section-heading admin-login-heading">{isSerbian ? "Administrator" : "Admin"}</h1>
         <form onSubmit={handleSubmit} className="admin-login-form">
           <input
             type="password"
-            placeholder={serbian ? "Lozinka" : "Password"}
+            placeholder={isSerbian ? "Lozinka" : "Password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="admin-login-input"
@@ -62,7 +62,7 @@ export default function AdminLogin() {
           />
           {error && <p className="admin-login-error">{error}</p>}
           <CascadeButton type="submit" variant="gold" className="gold-button admin-login-button" disabled={loading}>
-            {loading ? (serbian ? "Prijava..." : "Logging in...") : (serbian ? "Prijava" : "Log in")}
+            {loading ? (isSerbian ? "Prijava..." : "Logging in...") : (isSerbian ? "Prijava" : "Log in")}
           </CascadeButton>
         </form>
       </div>
