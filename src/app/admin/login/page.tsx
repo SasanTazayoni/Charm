@@ -26,8 +26,21 @@ export default function AdminLogin() {
     try {
       await axios.post("/api/admin/login", { password });
       router.push("/admin");
-    } catch {
-      setError(serbian ? "Netačna lozinka." : "Incorrect password.");
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        if (status === 401) {
+          setError(serbian ? "Netačna lozinka." : "Incorrect password.");
+        } else if (status === 500) {
+          setError(serbian ? "Greška na serveru. Kontaktirajte administratora." : "Server error. Please contact the administrator.");
+        } else if (!err.response) {
+          setError(serbian ? "Nema veze. Provjerite internet i pokušajte ponovo." : "No connection. Check your internet and try again.");
+        } else {
+          setError(serbian ? "Nešto je pošlo po krivu. Pokušajte ponovo." : "Something went wrong. Please try again.");
+        }
+      } else {
+        setError(serbian ? "Nešto je pošlo po krivu. Pokušajte ponovo." : "Something went wrong. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
