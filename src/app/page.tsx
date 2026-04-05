@@ -6,12 +6,18 @@ import Gallery from "@/components/Gallery";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import LanguageToggle from "@/components/LanguageToggle";
 import Divider from "@/components/Divider";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 export default function Home() {
   return (
+    <LanguageProvider>
     <main>
       <Navbar />
+      <div className="language-toggle-hero">
+        <LanguageToggle />
+      </div>
       <Hero />
       <About />
       <Divider />
@@ -23,5 +29,6 @@ export default function Home() {
       <Footer />
       <ScrollToTop />
     </main>
+    </LanguageProvider>
   );
 }
