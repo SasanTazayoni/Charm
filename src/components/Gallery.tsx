@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
 import { fetchWithRetry } from "@/lib/fetchWithRetry";
+import { useModalState } from "@/hooks/useModalState";
 import type { Photo } from "@/types/photo";
 
 export default function Gallery() {
@@ -19,7 +20,7 @@ export default function Gallery() {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-  const [lightboxVisible, setLightboxVisible] = useState(false);
+  const { isOpen: lightboxOpen, isVisible: lightboxVisible, open: openLightboxAnim, close: closeLightbox } = useModalState();
   const [sectionRef, visible] = useScrollVisible(0.1);
 
   useEffect(() => {
@@ -31,12 +32,7 @@ export default function Gallery() {
 
   const openLightbox = (photo: Photo) => {
     setSelectedPhoto(photo);
-    requestAnimationFrame(() => setLightboxVisible(true));
-  };
-
-  const closeLightbox = () => {
-    setLightboxVisible(false);
-    setTimeout(() => setSelectedPhoto(null), 300);
+    openLightboxAnim();
   };
 
   return (
@@ -99,7 +95,7 @@ export default function Gallery() {
         </>
       )}
 
-      {selectedPhoto &&
+      {lightboxOpen &&
         createPortal(
           <div
             className={`lightbox-backdrop ${lightboxVisible ? "lightbox-backdrop-visible" : ""}`}
@@ -114,7 +110,7 @@ export default function Gallery() {
               </button>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={selectedPhoto.url}
+                src={selectedPhoto!.url}
                 alt={tr.gallery.photoAlt[language]}
                 className="lightbox-image"
               />

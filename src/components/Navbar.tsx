@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
+import { useModalState } from "@/hooks/useModalState";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoClose } from "react-icons/io5";
 
@@ -20,19 +21,8 @@ const NAV_LABELS = {
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
+  const { isOpen: menuOpen, isVisible: menuVisible, open: openMenu, close: closeMenu } = useModalState();
   const [mounted, setMounted] = useState(false);
-
-  const openMenu = () => {
-    setMenuOpen(true);
-    requestAnimationFrame(() => setMenuVisible(true));
-  };
-
-  const closeMenu = () => {
-    setMenuVisible(false);
-    setTimeout(() => setMenuOpen(false), 300);
-  };
   const { language } = useLanguage();
 
   useEffect(() => {

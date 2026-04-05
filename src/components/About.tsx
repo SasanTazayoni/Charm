@@ -1,34 +1,16 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
 import useScrollVisible from "@/hooks/useScrollVisible";
+import { useModalState } from "@/hooks/useModalState";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { IoClose } from "react-icons/io5";
 
 export default function About() {
   const { language } = useLanguage();
-  const [certificateOpen, setCertificateOpen] = useState(false);
-  const [certificateVisible, setCertificateVisible] = useState(false);
-  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-    };
-  }, []);
-
-  const openCertificate = () => {
-    setCertificateOpen(true);
-    requestAnimationFrame(() => setCertificateVisible(true));
-  };
-
-  const closeCertificate = () => {
-    setCertificateVisible(false);
-    closeTimerRef.current = setTimeout(() => setCertificateOpen(false), 300);
-  };
+  const { isOpen: certificateOpen, isVisible: certificateVisible, open: openCertificate, close: closeCertificate } = useModalState();
   const [sectionRef, visible] = useScrollVisible(0.15);
 
   return (
