@@ -17,8 +17,6 @@
   --color-brand-pink: var(--brand-pink);
   --color-brand-pink-dark: var(--brand-pink-dark);
   --color-brand-gold: var(--brand-gold);
-  --font-heading: var(--font-heading);
-  --font-body: var(--font-body);
 }
 
 body {
@@ -203,9 +201,6 @@ body {
   transform: scale(1.05);
 }
 
-.scroll-to-top:hover {
-  transform: scale(1.05);
-}
 
 @media (max-width: 768px) {
   .scroll-to-top {

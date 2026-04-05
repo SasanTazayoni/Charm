@@ -68,6 +68,8 @@ export default function Gallery() {
                 key={photo.url}
                 className="gallery-item"
                 onClick={() => openLightbox(photo)}
+                role="button"
+                aria-label={language === "English" ? "Open photo" : "Otvori fotografiju"}
               >
                 <div className="gallery-item-inner">
                   <Image
@@ -87,6 +89,7 @@ export default function Gallery() {
               target="_blank"
               rel="noopener noreferrer"
               className="gallery-instagram-link"
+              aria-label="Instagram"
             >
               <FaInstagram size={20} />
             </a>
@@ -107,13 +110,13 @@ export default function Gallery() {
               className="lightbox-modal"
               onClick={(e) => e.stopPropagation()}
             >
-              <button className="lightbox-close" onClick={closeLightbox}>
+              <button className="lightbox-close" onClick={closeLightbox} aria-label={language === "English" ? "Close" : "Zatvori"}>
                 <IoClose size={32} color="var(--brand-gold)" />
               </button>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={selectedPhoto.url}
-                alt="Charm nail art"
+                alt={language === "English" ? "Charm nail art" : "Charm umjetnost nokta"}
                 className="lightbox-image"
               />
             </div>

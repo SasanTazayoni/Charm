@@ -135,6 +135,7 @@ export default function About() {
             <button
               className="certificate-modal-close"
               onClick={closeCertificate}
+              aria-label={language === "English" ? "Close" : "Zatvori"}
             >
               <IoClose size={32} />
             </button>

@@ -106,6 +106,7 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               className="brand-link"
+              aria-label="WhatsApp"
             >
               <FaWhatsapp size={40} />
             </a>
@@ -114,6 +115,7 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               className="brand-link"
+              aria-label="Instagram"
             >
               <FaInstagram size={40} />
             </a>

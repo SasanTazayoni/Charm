@@ -64,16 +64,14 @@ export default function AdminPage() {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const code = error.response?.status;
-        if (serbian) {
-          setStatus({
-            text: code === 400 ? "Nevažeći tip fajla. Dozvoljeni su samo JPEG, PNG i WebP." :
-                  code === 413 ? "Fajl je preveć velik. Maksimalna veličina je 10MB." :
-                  "Došlo je do greške. Pokušajte ponovo.",
-            type: "error",
-          });
-        } else {
-          setStatus({ text: error.response?.data?.error ?? "Upload failed. Please try again.", type: "error" });
-        }
+        setStatus({
+          text: serbian
+            ? code === 400 ? "Nevažeći tip fajla. Dozvoljeni su samo JPEG, PNG i WebP."
+            : code === 413 ? "Fajl je preveć velik. Maksimalna veličina je 10MB."
+            : "Došlo je do greške. Pokušajte ponovo."
+            : error.response?.data?.error ?? "Upload failed. Please try again.",
+          type: "error",
+        });
       }
     } finally {
       setUploading(false);

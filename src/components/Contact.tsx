@@ -21,17 +21,15 @@ export default function Contact() {
           <h2 className="section-heading">{language === "English" ? "Contact" : "Kontakt"}</h2>
         </div>
         <div className="contact-card">
-<div className="contact-links">
-            <Link
-              href="https://wa.me/38766955693"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-link"
-            >
-              <FaWhatsapp size={28} />
-              <span>+387 66 955 693</span>
-            </Link>
-          </div>
+          <Link
+            href="https://wa.me/38766955693"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-link"
+          >
+            <FaWhatsapp size={28} />
+            <span>+387 66 955 693</span>
+          </Link>
           <Image
             src="/logo.png"
             alt="Charm"

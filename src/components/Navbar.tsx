@@ -25,7 +25,7 @@ export default function Navbar() {
 
   const openMenu = () => {
     setMenuOpen(true);
-    requestAnimationFrame(() => requestAnimationFrame(() => setMenuVisible(true)));
+    requestAnimationFrame(() => setMenuVisible(true));
   };
 
   const closeMenu = () => {
