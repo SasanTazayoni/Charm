@@ -56,6 +56,7 @@ export default function Gallery() {
                     src={photo.url}
                     alt={photo.pathname}
                     fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
                     className="gallery-image"
                   />
                 </div>

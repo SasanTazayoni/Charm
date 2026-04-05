@@ -16,6 +16,7 @@ export default function AdminPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [uploading, setUploading] = useState(false);
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
+  const [confirmUrl, setConfirmUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -45,10 +46,12 @@ export default function AdminPage() {
     }
   };
 
-  const handleDelete = async (url: string) => {
-    setDeletingUrl(url);
+  const handleDelete = async () => {
+    if (!confirmUrl) return;
+    setDeletingUrl(confirmUrl);
+    setConfirmUrl(null);
     try {
-      await axios.delete("/api/delete", { data: { url } });
+      await axios.delete("/api/delete", { data: { url: confirmUrl } });
       await fetchPhotos();
     } finally {
       setDeletingUrl(null);
@@ -96,17 +99,34 @@ export default function AdminPage() {
                 src={photo.url}
                 alt={photo.pathname}
                 fill
+                sizes="25vw"
                 className="admin-photo-image"
               />
               <button
                 className="admin-delete-button"
-                onClick={() => handleDelete(photo.url)}
+                onClick={() => setConfirmUrl(photo.url)}
                 disabled={deletingUrl === photo.url}
               >
                 <IoClose size={16} />
               </button>
             </div>
           ))}
+        </div>
+      )}
+
+      {confirmUrl && (
+        <div className="admin-confirm-backdrop" onClick={() => setConfirmUrl(null)}>
+          <div className="admin-confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <p className="admin-confirm-text">Delete this photo?</p>
+            <div className="admin-confirm-actions">
+              <button className="admin-confirm-cancel" onClick={() => setConfirmUrl(null)}>
+                Cancel
+              </button>
+              <button className="admin-confirm-delete" onClick={handleDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
