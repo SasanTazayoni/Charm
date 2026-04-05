@@ -69,7 +69,9 @@ export default function Gallery() {
                 key={photo.url}
                 className="gallery-item"
                 onClick={() => openLightbox(photo)}
+                onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openLightbox(photo)}
                 role="button"
+                tabIndex={0}
                 aria-label={tr.gallery.openPhotoLabel[language]}
               >
                 <div className="gallery-item-inner">
