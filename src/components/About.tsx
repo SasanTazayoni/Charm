@@ -31,10 +31,10 @@ export default function About() {
   }, []);
 
   return (
-    <section id="about" ref={sectionRef} className={`about-section ${visible ? "about-visible" : ""}`}>
+    <section id="about" ref={sectionRef} className={`about-section section-animate ${visible ? "section-visible" : ""}`}>
 
-      <div className="about-header">
-        <h2 className="about-heading">About Me</h2>
+      <div className="about-header section-header">
+        <h2 className="section-heading about-heading">About</h2>
       </div>
 
       <div className="about-container">

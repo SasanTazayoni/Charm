@@ -17,10 +17,10 @@ export default function Pricing() {
   }, []);
 
   return (
-    <section id="pricing" ref={sectionRef} className={`pricing-section ${visible ? "pricing-visible" : ""}`}>
+    <section id="pricing" ref={sectionRef} className={`pricing-section section-animate ${visible ? "section-visible" : ""}`}>
 
-      <div className="pricing-header">
-        <h2 className="pricing-heading">Pricing</h2>
+      <div className="pricing-header section-header">
+        <h2 className="section-heading pricing-heading">Pricing</h2>
       </div>
 
       <div className="pricing-card">

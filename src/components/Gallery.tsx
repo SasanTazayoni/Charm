@@ -43,10 +43,10 @@ export default function Gallery() {
   };
 
   return (
-    <section id="gallery" ref={sectionRef} className={`gallery-section ${visible ? "gallery-visible" : ""}`}>
+    <section id="gallery" ref={sectionRef} className={`gallery-section section-animate ${visible ? "section-visible" : ""}`}>
 
-      <div className="gallery-header">
-        <h2 className="gallery-heading">Gallery</h2>
+      <div className="gallery-header section-header">
+        <h2 className="section-heading">Gallery</h2>
       </div>
 
       {photos.length === 0 ? (

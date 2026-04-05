@@ -24,10 +24,14 @@ export default function Contact() {
     <section
       id="contact"
       ref={sectionRef}
-      className={`contact-section ${visible ? "contact-visible" : ""}`}
+      className={`contact-section section-animate ${visible ? "section-visible" : ""}`}
     >
+      <div className="contact-inner">
+      <div className="contact-header section-header">
+        <h2 className="section-heading">Contact</h2>
+      </div>
       <div className="contact-card">
-        <h2 className="contact-heading">Get in Touch</h2>
+        <h2 className="section-heading contact-heading">Get in Touch</h2>
         <p className="contact-subtext">Book an appointment or send a message</p>
 
         <div className="contact-links">
@@ -48,6 +52,7 @@ export default function Contact() {
           height={160}
           className="contact-logo"
         />
+      </div>
       </div>
     </section>
   );
