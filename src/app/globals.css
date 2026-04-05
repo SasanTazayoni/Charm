@@ -99,7 +99,7 @@ body {
 }
 
 .divider-line {
-  width: 10rem;
+  width: 7rem;
   height: 1px;
   background-color: var(--brand-pink);
 }
@@ -474,7 +474,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .gallery-spinner {
@@ -623,6 +625,7 @@ body {
 
 .contact-logo {
   margin-top: 2rem;
+  margin-inline: auto;
 }
 
 /* Footer */

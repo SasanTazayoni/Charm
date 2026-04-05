@@ -15,32 +15,32 @@ export default function Contact() {
       className={`contact-section section-animate ${visible ? "section-visible" : ""}`}
     >
       <div className="contact-inner">
-      <div className="contact-header section-header">
-        <h2 className="section-heading">Contact</h2>
-      </div>
-      <div className="contact-card">
-        <h2 className="section-heading contact-heading">Get in Touch</h2>
-        <p className="contact-subtext">Book an appointment or send a message</p>
-
-        <div className="contact-links">
-          <Link
-            href="https://wa.me/38766955693"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-link"
-          >
-            <FaWhatsapp size={28} />
-            <span>+387 66 955 693</span>
-          </Link>
+        <div className="contact-header section-header">
+          <h2 className="section-heading">Contact</h2>
         </div>
-        <Image
-          src="/logo.png"
-          alt="Charm"
-          width={160}
-          height={160}
-          className="contact-logo"
-        />
-      </div>
+        <div className="contact-card">
+          <h2 className="section-heading contact-heading">Get in Touch</h2>
+          <p className="contact-subtext">Reach me on WhatsApp</p>
+
+          <div className="contact-links">
+            <Link
+              href="https://wa.me/38766955693"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact-link"
+            >
+              <FaWhatsapp size={28} />
+              <span>+387 66 955 693</span>
+            </Link>
+          </div>
+          <Image
+            src="/logo.png"
+            alt="Charm"
+            width={160}
+            height={160}
+            className="contact-logo"
+          />
+        </div>
       </div>
     </section>
   );
