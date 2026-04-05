@@ -597,6 +597,18 @@ body {
   }
 }
 
+@media (max-width: 428px) {
+  .pricing-section {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .pricing-card-small {
+    border: none;
+    border-radius: 0;
+  }
+}
+
 /* Gallery */
 
 @property --gradient-angle {
