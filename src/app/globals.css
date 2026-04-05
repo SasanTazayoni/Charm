@@ -41,6 +41,25 @@ body {
   text-align: center;
 }
 
+.gold-button {
+  background-color: var(--brand-gold);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 300ms ease-in-out;
+}
+
+.gold-button:hover:not(:disabled) {
+  background-color: var(--brand-gold-dark);
+}
+
+.gold-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .section-animate {
   opacity: 0;
   transform: translateY(2rem);
@@ -537,11 +556,7 @@ body {
 }
 
 .contact-heading {
-  font-family: var(--font-heading);
   font-size: 2rem;
-  font-weight: 300;
-  color: var(--brand-pink);
-  letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
 }
@@ -608,4 +623,172 @@ body {
   color: rgba(212, 175, 55, 0.5);
   font-size: 0.75rem;
   letter-spacing: 0.05em;
+}
+
+/* Admin */
+
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.admin-login-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  border: 1px solid var(--brand-gold);
+  border-radius: 16px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 360px;
+}
+
+.admin-login-heading {
+  font-size: 1.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.admin-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.admin-login-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--foreground);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 300ms ease-in-out;
+}
+
+.admin-login-input:focus {
+  border-color: var(--brand-gold);
+}
+
+.admin-login-error {
+  color: var(--brand-pink);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.admin-login-button {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+.admin-page {
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-heading {
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.admin-upload-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.85rem;
+}
+
+.admin-logout-button {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.6rem 1.25rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    border-color 300ms ease-in-out,
+    color 300ms ease-in-out;
+}
+
+.admin-logout-button:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.admin-file-input {
+  display: none;
+}
+
+.admin-empty {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.9rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.admin-photo-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-photo-image {
+  object-fit: cover;
+}
+
+.admin-delete-button {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 300ms ease-in-out;
+}
+
+.admin-delete-button:hover:not(:disabled) {
+  background-color: var(--brand-pink-dark);
+}
+
+.admin-delete-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
