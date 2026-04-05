@@ -1,20 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import useScrollVisible from "@/hooks/useScrollVisible";
 
 export default function Pricing() {
-  const [visible, setVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.15 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+  const [sectionRef, visible] = useScrollVisible(0.15);
 
   return (
     <section id="pricing" ref={sectionRef} className={`pricing-section section-animate ${visible ? "section-visible" : ""}`}>

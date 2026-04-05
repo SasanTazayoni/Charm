@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import useScrollVisible from "@/hooks/useScrollVisible";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import axios from "axios";
@@ -14,22 +15,12 @@ type Photo = {
 
 export default function Gallery() {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [visible, setVisible] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [lightboxVisible, setLightboxVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
+  const [sectionRef, visible] = useScrollVisible(0.1);
 
   useEffect(() => {
     axios.get<Photo[]>("/api/photos").then((res) => setPhotos(res.data));
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
   }, []);
 
   const openLightbox = (photo: Photo) => {

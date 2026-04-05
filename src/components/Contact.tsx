@@ -1,24 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import useScrollVisible from "@/hooks/useScrollVisible";
 import Link from "next/link";
 import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
 
 export default function Contact() {
-  const [visible, setVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setVisible(true);
-      },
-      { threshold: 0.2 },
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+  const [sectionRef, visible] = useScrollVisible(0.2);
 
   return (
     <section
