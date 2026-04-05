@@ -10,7 +10,7 @@ export async function fetchWithRetry<T>(
     } catch (err) {
       lastErr = err;
       if (attempt < retries - 1) {
-        await new Promise((r) => setTimeout(r, delayMs));
+        await new Promise((r) => setTimeout(r, delayMs * 2 ** attempt));
       }
     }
   }
