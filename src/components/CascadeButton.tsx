@@ -56,18 +56,18 @@ export default function CascadeButton({ children, className = "", variant, ...pr
     squaresContainer.appendChild(fragment);
 
     function getCursorCell(e: MouseEvent): [number, number] {
-      const rect = button.getBoundingClientRect();
+      const rect = button!.getBoundingClientRect();
       const col = Math.max(0, Math.min(cols - 1, Math.floor((e.clientX - rect.left) / SQUARE_SIZE)));
       const row = Math.max(0, Math.min(rows - 1, Math.floor((e.clientY - rect.top) / SQUARE_SIZE)));
       return [row, col];
     }
 
     function startWave(row: number, col: number): void {
-      const idx = row * cols + col;
-      if (revealed[idx]) return;
-      revealed[idx] = 1;
-      squares[idx].style.opacity = "0";
-      frontier.push(idx);
+      const squareIndex = row * cols + col;
+      if (revealed[squareIndex]) return;
+      revealed[squareIndex] = 1;
+      squares[squareIndex].style.opacity = "0";
+      frontier.push(squareIndex);
       if (!intervalId) intervalId = setInterval(processWave, 20);
     }
 
@@ -78,20 +78,20 @@ export default function CascadeButton({ children, className = "", variant, ...pr
         return;
       }
       const nextFrontier: number[] = [];
-      for (const idx of frontier) {
-        const row = Math.floor(idx / cols);
-        const col = idx % cols;
+      for (const squareIndex of frontier) {
+        const row = Math.floor(squareIndex / cols);
+        const col = squareIndex % cols;
         const neighbors: [number, number][] = [
           [row - 1, col], [row + 1, col],
           [row, col - 1], [row, col + 1],
         ];
-        for (const [nr, nc] of neighbors) {
-          if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
-            const nIdx = nr * cols + nc;
-            if (!revealed[nIdx]) {
-              revealed[nIdx] = 1;
-              squares[nIdx].style.opacity = "0";
-              nextFrontier.push(nIdx);
+        for (const [neighborRow, neighborCol] of neighbors) {
+          if (neighborRow >= 0 && neighborRow < rows && neighborCol >= 0 && neighborCol < cols) {
+            const neighborIndex = neighborRow * cols + neighborCol;
+            if (!revealed[neighborIndex]) {
+              revealed[neighborIndex] = 1;
+              squares[neighborIndex].style.opacity = "0";
+              nextFrontier.push(neighborIndex);
             }
           }
         }
@@ -99,16 +99,16 @@ export default function CascadeButton({ children, className = "", variant, ...pr
       frontier = nextFrontier;
     }
 
-    function handleMouseEnter(e: Event): void {
-      if (button.disabled) return;
+    function handleMouseEnter(e: MouseEvent): void {
+      if (!button || button.disabled) return;
       isHovering = true;
-      const [row, col] = getCursorCell(e as MouseEvent);
+      const [row, col] = getCursorCell(e);
       startWave(row, col);
     }
 
-    function handleMouseMove(e: Event): void {
-      if (!isHovering || button.disabled) return;
-      const [row, col] = getCursorCell(e as MouseEvent);
+    function handleMouseMove(e: MouseEvent): void {
+      if (!isHovering || !button || button.disabled) return;
+      const [row, col] = getCursorCell(e);
       startWave(row, col);
     }
 
