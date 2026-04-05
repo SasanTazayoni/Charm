@@ -467,6 +467,21 @@ body {
   transform: scale(1.05);
 }
 
+.gallery-loading {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.gallery-spinner {
+  color: var(--brand-gold);
+  animation: spin 1s linear infinite;
+}
+
 .gallery-empty {
   text-align: center;
   color: rgba(255, 255, 255, 0.4);

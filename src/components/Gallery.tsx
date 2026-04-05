@@ -7,6 +7,7 @@ import Image from "next/image";
 import axios from "axios";
 import { IoClose } from "react-icons/io5";
 import { FaInstagram } from "react-icons/fa";
+import { Loader2 } from "lucide-react";
 
 type Photo = {
   url: string;
@@ -15,12 +16,16 @@ type Photo = {
 
 export default function Gallery() {
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [lightboxVisible, setLightboxVisible] = useState(false);
   const [sectionRef, visible] = useScrollVisible(0.1);
 
   useEffect(() => {
-    axios.get<Photo[]>("/api/photos").then((res) => setPhotos(res.data));
+    axios.get<Photo[]>("/api/photos").then((res) => {
+      setPhotos(res.data);
+      setLoading(false);
+    });
   }, []);
 
   const openLightbox = (photo: Photo) => {
@@ -34,13 +39,20 @@ export default function Gallery() {
   };
 
   return (
-    <section id="gallery" ref={sectionRef} className={`gallery-section section-animate ${visible ? "section-visible" : ""}`}>
-
+    <section
+      id="gallery"
+      ref={sectionRef}
+      className={`gallery-section section-animate ${visible ? "section-visible" : ""}`}
+    >
       <div className="gallery-header section-header">
         <h2 className="section-heading">Gallery</h2>
       </div>
 
-      {photos.length === 0 ? (
+      {loading ? (
+        <div className="gallery-loading">
+          <Loader2 size={60} className="gallery-spinner" />
+        </div>
+      ) : photos.length === 0 ? (
         <p className="gallery-empty">No photos yet.</p>
       ) : (
         <>
@@ -72,31 +84,36 @@ export default function Gallery() {
             >
               <FaInstagram size={20} />
             </a>
-            <span className="gallery-instagram-text">Check out my Instagram to see more</span>
+            <span className="gallery-instagram-text">
+              Check out my Instagram to see more
+            </span>
           </div>
         </>
       )}
 
-      {selectedPhoto && createPortal(
-        <div
-          className={`lightbox-backdrop ${lightboxVisible ? "lightbox-backdrop-visible" : ""}`}
-          onClick={closeLightbox}
-        >
-          <div className="lightbox-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="lightbox-close" onClick={closeLightbox}>
-              <IoClose size={32} color="var(--brand-gold)" />
-            </button>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={selectedPhoto.url}
-              alt={selectedPhoto.pathname}
-              className="lightbox-image"
-            />
-          </div>
-        </div>,
-        document.body
-      )}
-
+      {selectedPhoto &&
+        createPortal(
+          <div
+            className={`lightbox-backdrop ${lightboxVisible ? "lightbox-backdrop-visible" : ""}`}
+            onClick={closeLightbox}
+          >
+            <div
+              className="lightbox-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="lightbox-close" onClick={closeLightbox}>
+                <IoClose size={32} color="var(--brand-gold)" />
+              </button>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={selectedPhoto.url}
+                alt={selectedPhoto.pathname}
+                className="lightbox-image"
+              />
+            </div>
+          </div>,
+          document.body,
+        )}
     </section>
   );
 }
