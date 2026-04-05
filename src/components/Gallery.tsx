@@ -48,7 +48,7 @@ export default function Gallery() {
       ref={sectionRef}
       className={`gallery-section section-animate ${visible ? "section-visible" : ""}`}
     >
-      <div className="gallery-header section-header">
+      <div className="section-header">
         <h2 className="section-heading">{language === "English" ? "Gallery" : "Galerija"}</h2>
       </div>
 

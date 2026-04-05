@@ -33,7 +33,7 @@ export default function About() {
   return (
     <section id="about" ref={sectionRef} className={`about-section section-animate ${visible ? "section-visible" : ""}`}>
 
-      <div className="about-header section-header">
+      <div className="section-header">
         <h2 className="section-heading about-heading">{language === "English" ? "About" : "O nama"}</h2>
       </div>
 

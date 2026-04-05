@@ -86,17 +86,21 @@ export default function Hero() {
 
       <div className="hero-overlay absolute inset-0 flex items-center justify-center">
         <div className="text-center px-6 text-brand-pink">
-          <p className="text-2xl font-semibold tracking-[0.3em] uppercase mb-2">
-            {language === "English" ? "Professional Nail Artist" : "Profesionalni umjetnik nokta"}
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold tracking-[0.3em] uppercase mb-2">
+            {language === "English"
+              ? "Professional Nail Artist"
+              : "Profesionalni umjetnik nokta"}
           </p>
-          <h1 className="text-7xl font-bold tracking-wide mb-2">Charm</h1>
-          <p className="text-3xl font-light tracking-widest mb-8">
+          <h1 className="text-[48px] sm:text-[60px] md:text-7xl font-bold tracking-wide mb-2">
+            Charm
+          </h1>
+          <p className="text-xl sm:text-2xl md:text-3xl font-light tracking-widest mb-8">
             Mirjana Vuković Đorđić
           </p>
-          <div className="mb-8">
+          <div className="mb-5 md:mb-8">
             <Divider />
           </div>
-          <div className="flex items-center justify-center gap-8">
+          <div className="hero-social-icons flex items-center justify-center gap-6 md:gap-8">
             <a
               href="https://wa.me/38766955693"
               target="_blank"

@@ -11,7 +11,7 @@ export default function Pricing() {
   return (
     <section id="pricing" ref={sectionRef} className={`pricing-section section-animate ${visible ? "section-visible" : ""}`}>
 
-      <div className="pricing-header section-header">
+      <div className="section-header">
         <h2 className="section-heading pricing-heading">{language === "English" ? "Pricing" : "Cjenovnik"}</h2>
       </div>
 

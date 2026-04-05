@@ -17,12 +17,11 @@ export default function Contact() {
       className={`contact-section section-animate ${visible ? "section-visible" : ""}`}
     >
       <div className="contact-inner">
-        <div className="contact-header section-header">
+        <div className="section-header">
           <h2 className="section-heading">{language === "English" ? "Contact" : "Kontakt"}</h2>
         </div>
         <div className="contact-card">
-          <h2 className="section-heading contact-heading">{language === "English" ? "Get in Touch" : "Stupite u kontakt"}</h2>
-          <div className="contact-links">
+<div className="contact-links">
             <Link
               href="https://wa.me/38766955693"
               target="_blank"
