@@ -7,16 +7,24 @@ import { useRouter } from "next/navigation";
 import { IoClose } from "react-icons/io5";
 import { FiUpload } from "react-icons/fi";
 import CascadeButton from "@/components/CascadeButton";
+import { getCookie } from "cookies-next";
 
 type Photo = {
   url: string;
   pathname: string;
 };
 
+type StatusMessage = { text: string; type: "success" | "error" } | null;
+
 export default function AdminPage() {
+  const [serbian, setSerbianState] = useState(false);
+
+  useEffect(() => {
+    setSerbianState(getCookie("language") === "Serbian");
+  }, []);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [status, setStatus] = useState<StatusMessage>(null);
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
   const [confirmUrl, setConfirmUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -36,16 +44,27 @@ export default function AdminPage() {
     if (!files || files.length === 0) return;
 
     setUploading(true);
-    setUploadError(null);
+    setStatus(null);
     const formData = new FormData();
     formData.append("file", files[0]);
 
     try {
       await axios.post("/api/upload", formData);
       await fetchPhotos();
+      setStatus({ text: serbian ? "Fotografija je uspješno dodana." : "Photo uploaded successfully.", type: "success" });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setUploadError(error.response?.data?.error ?? "Upload failed. Please try again.");
+        const code = error.response?.status;
+        if (serbian) {
+          setStatus({
+            text: code === 400 ? "Nevažeći tip fajla. Dozvoljeni su samo JPEG, PNG i WebP." :
+                  code === 413 ? "Fajl je preveć velik. Maksimalna veličina je 10MB." :
+                  "Došlo je do greške. Pokušajte ponovo.",
+            type: "error",
+          });
+        } else {
+          setStatus({ text: error.response?.data?.error ?? "Upload failed. Please try again.", type: "error" });
+        }
       }
     } finally {
       setUploading(false);
@@ -57,9 +76,13 @@ export default function AdminPage() {
     if (!confirmUrl) return;
     setDeletingUrl(confirmUrl);
     setConfirmUrl(null);
+    setStatus(null);
     try {
       await axios.delete("/api/delete", { data: { url: confirmUrl } });
       await fetchPhotos();
+      setStatus({ text: serbian ? "Fotografija je uspješno obrisana." : "Photo deleted successfully.", type: "success" });
+    } catch {
+      setStatus({ text: serbian ? "Nešto je pošlo po krivu. Pokušajte ponovo." : "Something went wrong. Please try again.", type: "error" });
     } finally {
       setDeletingUrl(null);
     }
@@ -73,8 +96,12 @@ export default function AdminPage() {
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <h1 className="section-heading admin-heading">Gallery Manager</h1>
-        {uploadError && <p className="admin-upload-error">{uploadError}</p>}
+        <h1 className="section-heading admin-heading">{serbian ? "Upravitelj galerijom" : "Gallery Manager"}</h1>
+        {status && (
+          <p className={status.type === "success" ? "admin-upload-success" : "admin-upload-error"}>
+            {status.text}
+          </p>
+        )}
         <div className="admin-actions">
           <CascadeButton
             variant="gold"
@@ -83,10 +110,10 @@ export default function AdminPage() {
             disabled={uploading}
           >
             <FiUpload size={16} />
-            {uploading ? "Uploading..." : "Upload Photo"}
+            {uploading ? (serbian ? "Učitavanje..." : "Uploading...") : (serbian ? "Dodaj sliku" : "Upload Photo")}
           </CascadeButton>
           <CascadeButton variant="pink-outline" className="pink-outline-button admin-logout-button" onClick={handleLogout}>
-            Log out
+            {serbian ? "Odjava" : "Log out"}
           </CascadeButton>
         </div>
         <input
@@ -99,7 +126,7 @@ export default function AdminPage() {
       </div>
 
       {photos.length === 0 ? (
-        <p className="admin-empty">No photos yet.</p>
+        <p className="admin-empty">{serbian ? "Još nema fotografija." : "No photos yet."}</p>
       ) : (
         <div className="admin-grid">
           {photos.map((photo) => (
@@ -126,13 +153,13 @@ export default function AdminPage() {
       {confirmUrl && (
         <div className="admin-confirm-backdrop" onClick={() => setConfirmUrl(null)}>
           <div className="admin-confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <p className="admin-confirm-text">Delete this photo?</p>
+            <p className="admin-confirm-text">{serbian ? "Obrisati ovu fotografiju?" : "Delete this photo?"}</p>
             <div className="admin-confirm-actions">
               <CascadeButton variant="pink-outline" className="pink-outline-button admin-confirm-cancel" onClick={() => setConfirmUrl(null)}>
-                Cancel
+                {serbian ? "Odustani" : "Cancel"}
               </CascadeButton>
               <CascadeButton variant="gold" className="gold-button admin-confirm-delete" onClick={handleDelete}>
-                Delete
+                {serbian ? "Obriši" : "Delete"}
               </CascadeButton>
             </div>
           </div>
