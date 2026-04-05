@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
@@ -20,7 +20,18 @@ const NAV_LABELS: Record<string, { English: string; Serbian: string }> = {
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const openMenu = () => {
+    setMenuOpen(true);
+    requestAnimationFrame(() => requestAnimationFrame(() => setMenuVisible(true)));
+  };
+
+  const closeMenu = () => {
+    setMenuVisible(false);
+    setTimeout(() => setMenuOpen(false), 300);
+  };
   const { language } = useLanguage();
 
   useEffect(() => {
@@ -29,7 +40,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768) setMenuOpen(false);
+      if (window.innerWidth > 768) closeMenu();
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -90,31 +101,33 @@ export default function Navbar() {
 
         <button
           className="navbar-hamburger"
-          onClick={() => setMenuOpen((o) => !o)}
+          onClick={() => menuOpen ? closeMenu() : openMenu()}
           aria-label="Toggle menu"
         >
           {menuOpen ? <IoClose size={28} /> : <RxHamburgerMenu size={28} />}
         </button>
 
-        <ul className={`navbar-mobile-menu ${menuOpen ? "navbar-mobile-menu-open" : ""}`}>
-          {NAV_LINKS.map((link) => (
-            <li key={link}>
-              <Link
-                href={`#${link.toLowerCase()}`}
-                className={`nav-link ${activeSection === link.toLowerCase() ? "nav-link-active" : ""}`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {NAV_LABELS[link][language]}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {menuOpen && (
+          <ul className={`navbar-mobile-menu ${menuVisible ? "navbar-mobile-menu-open" : ""}`}>
+            {NAV_LINKS.map((link) => (
+              <li key={link}>
+                <Link
+                  href={`#${link.toLowerCase()}`}
+                  className={`nav-link ${activeSection === link.toLowerCase() ? "nav-link-active" : ""}`}
+                  onClick={closeMenu}
+                >
+                  {NAV_LABELS[link][language]}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </nav>
 
       {mounted && createPortal(
         <div
-          className={`navbar-mobile-backdrop ${menuOpen ? "navbar-mobile-backdrop-visible" : ""}`}
-          onClick={() => setMenuOpen(false)}
+          className={`navbar-mobile-backdrop ${menuVisible ? "navbar-mobile-backdrop-visible" : ""}`}
+          onClick={closeMenu}
         />,
         document.body
       )}
