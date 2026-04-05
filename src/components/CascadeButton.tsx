@@ -31,10 +31,10 @@ export default function CascadeButton({ children, className = "", variant, ...pr
 
     if (total === 0) return;
 
-    const revealed = new Uint8Array(total);
+    const revealedSquares = new Uint8Array(total);
     const squares: HTMLDivElement[] = [];
     let isHovering = false;
-    let frontier: number[] = [];
+    let frontierSquares: number[] = [];
     let intervalId: ReturnType<typeof setInterval> | null = null;
 
     const squaresContainer = document.createElement("div");
@@ -64,21 +64,21 @@ export default function CascadeButton({ children, className = "", variant, ...pr
 
     function startWave(row: number, col: number): void {
       const squareIndex = row * cols + col;
-      if (revealed[squareIndex]) return;
-      revealed[squareIndex] = 1;
+      if (revealedSquares[squareIndex]) return;
+      revealedSquares[squareIndex] = 1;
       squares[squareIndex].style.opacity = "0";
-      frontier.push(squareIndex);
+      frontierSquares.push(squareIndex);
       if (!intervalId) intervalId = setInterval(processWave, 20);
     }
 
     function processWave(): void {
-      if (frontier.length === 0) {
+      if (frontierSquares.length === 0) {
         clearInterval(intervalId!);
         intervalId = null;
         return;
       }
       const nextFrontier: number[] = [];
-      for (const squareIndex of frontier) {
+      for (const squareIndex of frontierSquares) {
         const row = Math.floor(squareIndex / cols);
         const col = squareIndex % cols;
         const neighbors: [number, number][] = [
@@ -88,15 +88,15 @@ export default function CascadeButton({ children, className = "", variant, ...pr
         for (const [neighborRow, neighborCol] of neighbors) {
           if (neighborRow >= 0 && neighborRow < rows && neighborCol >= 0 && neighborCol < cols) {
             const neighborIndex = neighborRow * cols + neighborCol;
-            if (!revealed[neighborIndex]) {
-              revealed[neighborIndex] = 1;
+            if (!revealedSquares[neighborIndex]) {
+              revealedSquares[neighborIndex] = 1;
               squares[neighborIndex].style.opacity = "0";
               nextFrontier.push(neighborIndex);
             }
           }
         }
       }
-      frontier = nextFrontier;
+      frontierSquares = nextFrontier;
     }
 
     function handleMouseEnter(e: MouseEvent): void {
@@ -118,11 +118,11 @@ export default function CascadeButton({ children, className = "", variant, ...pr
         clearInterval(intervalId);
         intervalId = null;
       }
-      frontier = [];
+      frontierSquares = [];
       for (let i = 0; i < total; i++) {
-        if (revealed[i]) {
+        if (revealedSquares[i]) {
           squares[i].style.opacity = "1";
-          revealed[i] = 0;
+          revealedSquares[i] = 0;
         }
       }
     }
