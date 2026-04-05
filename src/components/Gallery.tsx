@@ -68,7 +68,7 @@ export default function Gallery() {
                 <div className="gallery-item-inner">
                   <Image
                     src={photo.url}
-                    alt={photo.pathname}
+                    alt="Charm nail art"
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
                     className="gallery-image"
@@ -109,7 +109,7 @@ export default function Gallery() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={selectedPhoto.url}
-                alt={selectedPhoto.pathname}
+                alt="Charm nail art"
                 className="lightbox-image"
               />
             </div>

@@ -99,7 +99,7 @@ export default function AdminPage() {
             <div key={photo.url} className="admin-photo-item">
               <Image
                 src={photo.url}
-                alt={photo.pathname}
+                alt="Charm nail art"
                 fill
                 sizes="25vw"
                 className="admin-photo-image"
