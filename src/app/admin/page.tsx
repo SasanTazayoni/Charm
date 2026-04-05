@@ -6,8 +6,10 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { IoClose } from "react-icons/io5";
 import { FiUpload } from "react-icons/fi";
+import { Loader2 } from "lucide-react";
 import CascadeButton from "@/components/CascadeButton";
 import { getCookie } from "cookies-next";
+import { fetchWithRetry } from "@/lib/fetchWithRetry";
 
 type Photo = {
   url: string;
@@ -17,12 +19,13 @@ type Photo = {
 type StatusMessage = { text: string; type: "success" | "error" } | null;
 
 export default function AdminPage() {
-  const [serbian, setSerbianState] = useState(false);
+  const [serbian, setSerbian] = useState(false);
 
   useEffect(() => {
-    setSerbianState(getCookie("language") === "Serbian");
+    setSerbian(getCookie("language") === "Serbian");
   }, []);
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [loadingPhotos, setLoadingPhotos] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState<StatusMessage>(null);
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
@@ -31,8 +34,14 @@ export default function AdminPage() {
   const router = useRouter();
 
   const fetchPhotos = async () => {
-    const res = await axios.get<Photo[]>("/api/photos");
-    setPhotos(res.data);
+    try {
+      const res = await fetchWithRetry(() => axios.get<Photo[]>("/api/photos", { timeout: 8000 }));
+      setPhotos(res.data);
+    } catch {
+      setStatus({ text: serbian ? "Greška pri učitavanju fotografija. Osvježite stranicu." : "Failed to load photos. Please refresh the page.", type: "error" });
+    } finally {
+      setLoadingPhotos(false);
+    }
   };
 
   useEffect(() => {
@@ -125,7 +134,11 @@ export default function AdminPage() {
         />
       </div>
 
-      {photos.length === 0 ? (
+      {loadingPhotos ? (
+        <div className="gallery-loading">
+          <Loader2 size={60} className="gallery-spinner" />
+        </div>
+      ) : photos.length === 0 ? (
         <p className="admin-empty">{serbian ? "Još nema fotografija." : "No photos yet."}</p>
       ) : (
         <div className="admin-grid">

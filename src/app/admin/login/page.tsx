@@ -12,10 +12,10 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [serbian, setSerbianState] = useState(false);
+  const [serbian, setSerbian] = useState(false);
 
   useEffect(() => {
-    setSerbianState(getCookie("language") === "Serbian");
+    setSerbian(getCookie("language") === "Serbian");
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

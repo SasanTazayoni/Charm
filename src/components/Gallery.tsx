@@ -9,6 +9,7 @@ import { IoClose } from "react-icons/io5";
 import { FaInstagram } from "react-icons/fa";
 import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { fetchWithRetry } from "@/lib/fetchWithRetry";
 
 type Photo = {
   url: string;
@@ -19,15 +20,16 @@ export default function Gallery() {
   const { language } = useLanguage();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [lightboxVisible, setLightboxVisible] = useState(false);
   const [sectionRef, visible] = useScrollVisible(0.1);
 
   useEffect(() => {
-    axios.get<Photo[]>("/api/photos").then((res) => {
-      setPhotos(res.data);
-      setLoading(false);
-    });
+    fetchWithRetry(() => axios.get<Photo[]>("/api/photos", { timeout: 8000 }))
+      .then((res) => setPhotos(res.data))
+      .catch(() => setFetchError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   const openLightbox = (photo: Photo) => {
@@ -54,6 +56,8 @@ export default function Gallery() {
         <div className="gallery-loading">
           <Loader2 size={60} className="gallery-spinner" />
         </div>
+      ) : fetchError ? (
+        <p className="gallery-empty">{language === "English" ? "Failed to load photos. Please refresh the page." : "Greška pri učitavanju fotografija. Osvježite stranicu."}</p>
       ) : photos.length === 0 ? (
         <p className="gallery-empty">{language === "English" ? "No photos yet." : "Još nema fotografija."}</p>
       ) : (
