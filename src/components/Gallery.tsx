@@ -111,7 +111,7 @@ export default function Gallery() {
               onClick={(e) => e.stopPropagation()}
             >
               <button className="lightbox-close" onClick={closeLightbox} aria-label={language === "English" ? "Close" : "Zatvori"}>
-                <IoClose size={32} color="var(--brand-gold)" />
+                <IoClose size={32} className="text-brand-gold" />
               </button>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
