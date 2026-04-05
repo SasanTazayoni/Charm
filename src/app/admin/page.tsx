@@ -10,11 +10,7 @@ import { Loader2 } from "lucide-react";
 import CascadeButton from "@/components/CascadeButton";
 import { getCookie } from "cookies-next";
 import { fetchWithRetry } from "@/lib/fetchWithRetry";
-
-type Photo = {
-  url: string;
-  pathname: string;
-};
+import type { Photo } from "@/types/photo";
 
 type StatusMessage = { text: string; type: "success" | "error" } | null;
 

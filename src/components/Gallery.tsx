@@ -11,11 +11,7 @@ import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
 import { fetchWithRetry } from "@/lib/fetchWithRetry";
-
-type Photo = {
-  url: string;
-  pathname: string;
-};
+import type { Photo } from "@/types/photo";
 
 export default function Gallery() {
   const { language } = useLanguage();
