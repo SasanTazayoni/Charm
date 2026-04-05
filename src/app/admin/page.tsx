@@ -16,6 +16,7 @@ type Photo = {
 export default function AdminPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
   const [confirmUrl, setConfirmUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -35,12 +36,17 @@ export default function AdminPage() {
     if (!files || files.length === 0) return;
 
     setUploading(true);
+    setUploadError(null);
     const formData = new FormData();
     formData.append("file", files[0]);
 
     try {
       await axios.post("/api/upload", formData);
       await fetchPhotos();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setUploadError(error.response?.data?.error ?? "Upload failed. Please try again.");
+      }
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -68,6 +74,7 @@ export default function AdminPage() {
     <div className="admin-page">
       <div className="admin-header">
         <h1 className="section-heading admin-heading">Gallery Manager</h1>
+        {uploadError && <p className="admin-upload-error">{uploadError}</p>}
         <div className="admin-actions">
           <CascadeButton
             variant="gold"
