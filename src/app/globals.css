@@ -236,12 +236,6 @@ body {
   gap: 0.5rem;
 }
 
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
 .navbar-links {
   display: flex;
   align-items: center;
