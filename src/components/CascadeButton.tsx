@@ -19,8 +19,7 @@ export default function CascadeButton({ children, className = "", variant, ...pr
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const button = buttonRef.current;
-    if (!button) return;
+    const button = buttonRef.current!;
 
     const squareColor = SQUARE_COLORS[variant];
     const buttonWidth = button.offsetWidth;

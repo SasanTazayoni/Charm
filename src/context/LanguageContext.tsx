@@ -15,9 +15,9 @@ const LanguageContext = createContext<LanguageContextType | null>(null);
 export function LanguageProvider({ children, initialLanguage = "English" }: { children: ReactNode; initialLanguage?: Language }) {
   const [language, setLanguage] = useState<Language>(initialLanguage);
 
-  const handleSetLanguage = (lang: Language) => {
-    setLanguage(lang);
-    setCookie("language", lang, { maxAge: 60 * 60 * 24 * 365 });
+  const handleSetLanguage = (selectedLanguage: Language) => {
+    setLanguage(selectedLanguage);
+    setCookie("language", selectedLanguage, { maxAge: 60 * 60 * 24 * 365 });
   };
 
   return (
@@ -28,7 +28,7 @@ export function LanguageProvider({ children, initialLanguage = "English" }: { ch
 }
 
 export function useLanguage() {
-  const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("useLanguage must be used within a LanguageProvider");
-  return ctx;
+  const languageContext = useContext(LanguageContext);
+  if (!languageContext) throw new Error("useLanguage must be used within a LanguageProvider");
+  return languageContext;
 }
