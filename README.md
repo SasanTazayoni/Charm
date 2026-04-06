@@ -14,6 +14,32 @@ You can view the website [here](https://charm-nail-salon.vercel.app/).
 
 ![Charm website on various devices](documentation/amiresponsive.png)
 
+## User Experience
+
+### User Stories
+
+**Browsing & Discovery**
+
+- As a user, I want to see example nail work in a gallery so I can judge the quality and style before booking.
+- As a user, I want to view pricing information so I know what to expect before reaching out.
+- As a user, I want to read about the nail technician's background and qualifications so I can feel confident in their expertise.
+
+**Language**
+
+- As a Serbian-speaking user, I want to switch the site to Serbian so I can read it in my native language.
+
+**Accessibility & Experience**
+
+- As a user, I want the site to work well on my phone so I can browse on the go.
+- As a user, I want the gallery to open images in a lightbox so I can view them clearly without leaving the page.
+- As a user, I want the site to load quickly even with many photos so I am not waiting around.
+
+**Admin**
+
+- As the salon owner, I want to upload and delete gallery photos through a protected admin panel so I can keep the portfolio up to date without touching code.
+
+### Design
+
 ## Technologies used
 
 ### Languages
