@@ -10,14 +10,14 @@ export default function Pricing() {
   const [isSmall, setIsSmall] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 428px)");
-    setIsSmall(mq.matches);
+    const mediaQuery = window.matchMedia("(max-width: 428px)");
+    setIsSmall(mediaQuery.matches);
     const handler = (e: MediaQueryListEvent) => setIsSmall(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
-  const src = isSmall
+  const pricingImageSrc = isSmall
     ? tr.pricing.imageSrcSmall[language]
     : tr.pricing.imageSrcLarge[language];
 
@@ -30,7 +30,7 @@ export default function Pricing() {
 
       <div className={`pricing-card ${isSmall ? "pricing-card-small" : ""}`}>
         <Image
-          src={src}
+          src={pricingImageSrc}
           alt={tr.pricing.imageAlt[language]}
           width={480}
           height={600}

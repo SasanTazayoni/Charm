@@ -19,17 +19,17 @@ export default function Gallery() {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-  const { isOpen: lightboxOpen, isVisible: lightboxVisible, open: openLightboxAnim, close: closeLightbox } = useModalState();
+  const { isOpen: lightboxOpen, isVisible: lightboxVisible, open: triggerLightboxOpen, close: closeLightbox } = useModalState();
   useEffect(() => {
     fetchWithRetry(() => axios.get<Photo[]>("/api/photos", { timeout: 8000 }))
-      .then((res) => setPhotos(res.data))
+      .then((photosResponse) => setPhotos(photosResponse.data))
       .catch(() => setFetchError(true))
       .finally(() => setLoading(false));
   }, []);
 
   const openLightbox = (photo: Photo) => {
     setSelectedPhoto(photo);
-    openLightboxAnim();
+    triggerLightboxOpen();
   };
 
   return (

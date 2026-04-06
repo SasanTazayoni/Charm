@@ -31,8 +31,8 @@ export default function AdminPage() {
 
   const fetchPhotos = useCallback(async () => {
     try {
-      const res = await fetchWithRetry(() => axios.get<Photo[]>("/api/photos", { timeout: 8000 }));
-      setPhotos(res.data);
+      const photosResponse = await fetchWithRetry(() => axios.get<Photo[]>("/api/photos", { timeout: 8000 }));
+      setPhotos(photosResponse.data);
     } catch {
       setStatus({ text: isSerbian ? "Greška pri učitavanju fotografija. Osvježite stranicu." : "Failed to load photos. Please refresh the page.", type: "error" });
     } finally {
