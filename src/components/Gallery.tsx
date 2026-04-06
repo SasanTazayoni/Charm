@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useScrollVisible from "@/hooks/useScrollVisible";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import axios from "axios";
@@ -21,8 +20,6 @@ export default function Gallery() {
   const [fetchError, setFetchError] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const { isOpen: lightboxOpen, isVisible: lightboxVisible, open: openLightboxAnim, close: closeLightbox } = useModalState();
-  const [sectionRef, visible] = useScrollVisible(0.1);
-
   useEffect(() => {
     fetchWithRetry(() => axios.get<Photo[]>("/api/photos", { timeout: 8000 }))
       .then((res) => setPhotos(res.data))
@@ -38,8 +35,7 @@ export default function Gallery() {
   return (
     <section
       id="gallery"
-      ref={sectionRef}
-      className={`gallery-section section-animate ${visible ? "section-visible" : ""}`}
+      className="gallery-section"
     >
       <div className="section-header">
         <h2 className="section-heading">{tr.gallery.heading[language]}</h2>

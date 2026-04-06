@@ -114,18 +114,6 @@ body {
   cursor: not-allowed;
 }
 
-.section-animate {
-  opacity: 0;
-  transform: translateY(2rem);
-  transition:
-    opacity 800ms ease-out,
-    transform 800ms ease-out;
-}
-
-.section-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
 
 /* Divider */
 

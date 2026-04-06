@@ -2,7 +2,6 @@
 
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
-import useScrollVisible from "@/hooks/useScrollVisible";
 import { useModalState } from "@/hooks/useModalState";
 import { createPortal } from "react-dom";
 import Image from "next/image";
@@ -11,10 +10,9 @@ import { IoClose } from "react-icons/io5";
 export default function About() {
   const { language } = useLanguage();
   const { isOpen: certificateOpen, isVisible: certificateVisible, open: openCertificate, close: closeCertificate } = useModalState();
-  const [sectionRef, visible] = useScrollVisible(0.15);
 
   return (
-    <section id="about" ref={sectionRef} className={`about-section section-animate ${visible ? "section-visible" : ""}`}>
+    <section id="about" className="about-section">
 
       <div className="section-header">
         <h2 className="section-heading about-heading">{tr.about.heading[language]}</h2>

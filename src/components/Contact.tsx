@@ -1,6 +1,5 @@
 "use client";
 
-import useScrollVisible from "@/hooks/useScrollVisible";
 import Link from "next/link";
 import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
@@ -8,14 +7,12 @@ import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
 
 export default function Contact() {
-  const [sectionRef, visible] = useScrollVisible(0.2);
   const { language } = useLanguage();
 
   return (
     <section
       id="contact"
-      ref={sectionRef}
-      className={`contact-section section-animate ${visible ? "section-visible" : ""}`}
+      className="contact-section"
     >
       <div className="contact-inner">
         <div className="section-header">
