@@ -1,3 +1,7 @@
+# Charm Nail Salon
+
+![HTML](tech/html.png) ![CSS](tech/css.png) ![Typescript](tech/typescript.png) ![Tailwind](tech/tailwind.png) ![React](tech/react.png) ![Vercel](tech/vercel.png) ![NextJS](tech/next.png) ![Cloudinary](tech/cloudinary.png) ![Neon](tech/neon.png) ![ClaudeCode](tech/claude.png) ![Canva](tech/canva.png) ![VSCode](tech/vscode.png) ![Vitest](tech/jest.png)
+
 ## Technologies used
 
 ### Languages
@@ -15,6 +19,7 @@
 - [Cloudinary](https://cloudinary.com/) used to host and serve gallery videos.
 - [Vercel](https://vercel.com/) used to deploy the website and host gallery images via Vercel Blob storage.
 - [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) used to store and serve gallery photos.
+- [Neon](https://neon.tech/) used to host gallery images.
 - [Axios](https://axios-http.com/) used for HTTP requests to the photos API.
 - [Lucide React](https://lucide.dev/) used for icons.
 - [React Icons](https://react-icons.github.io/react-icons/) used for icons.
