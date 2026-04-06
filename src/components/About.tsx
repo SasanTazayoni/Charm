@@ -52,6 +52,9 @@ export default function About() {
         <div
           className={`certificate-modal-backdrop ${certificateVisible ? "certificate-modal-backdrop-visible" : ""}`}
           onClick={closeCertificate}
+          onKeyDown={(e) => e.key === "Escape" && closeCertificate()}
+          role="presentation"
+          tabIndex={-1}
         >
           <div
             className="certificate-modal"

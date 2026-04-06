@@ -100,6 +100,9 @@ export default function Gallery() {
           <div
             className={`lightbox-backdrop ${lightboxVisible ? "lightbox-backdrop-visible" : ""}`}
             onClick={closeLightbox}
+            onKeyDown={(e) => e.key === "Escape" && closeLightbox()}
+            role="presentation"
+            tabIndex={-1}
           >
             <div
               className="lightbox-modal"
