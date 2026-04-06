@@ -28,7 +28,7 @@
 - [Github](https://github.com/) used to host the repository and manage version control.
 - [VSCode](https://code.visualstudio.com/) used as the code editor/IDE to develop the project.
 - [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) used for performance review.
-- [Amiresponsive](https://amiresponsive.co.uk/) used to display website on the most common devices.
+- [AmIResponsive](https://fireship.dev/amiresponsive) used to display website on the most common devices.
 - [Remove.bg](https://www.remove.bg/) used to remove backgrounds from images.
 - [Canva](https://www.canva.com/) used to create the logo.
 - [Claude Code](https://claude.ai/code) used to assist with development.
