@@ -40,6 +40,26 @@ You can view the website [here](https://charm-nail-salon.vercel.app/).
 
 ### Design
 
+Charm embraces an elegant aesthetic designed to reflect the artistry and precision of professional nail care. Its rich visuals, refined colour palette, and fluid animations create an atmosphere of quiet luxury — one that feels aspirational without being out of reach. The layout is intentionally spacious and visual-first, letting the work speak for itself through a curated gallery and cinematic hero section. Clear navigation and a well-defined visual hierarchy guide visitors naturally from discovery to contact, while the bilingual toggle ensures the experience feels personal and inclusive for both English and Serbian-speaking clients. Fully responsive across all devices, the site is as polished on mobile as it is on desktop. More than a portfolio, Charm is a first impression — built to inspire confidence and make a prospective client feel they are already in good hands.
+
+#### Colour palette
+
+![Charm colour palette](documentation/colourpalette.png)
+
+The palette blends deep forest green, soft pink, and gold to evoke luxury, femininity, and refinement. Green grounds the design with calm sophistication, pink brings warmth and creativity, and gold signals premium quality — together creating an atmosphere that feels intimate, elegant, and distinctly on-brand for a high-end nail salon.
+
+#### Typography
+
+Cormorant Garamond is used for headings and Montserrat for body text. The pairing is a classic contrast — Cormorant's high-contrast serif brings an editorial, high-fashion quality to titles, while Montserrat's clean geometry keeps the body copy crisp and readable. Together they balance elegance with clarity, reinforcing the salon's premium yet approachable character.
+
+#### Wireframes
+
+The wireframe was designed for desktop only, as the mobile and tablet layouts follow predictable reflow patterns — the navbar collapses into a hamburger menu, the about section stacks into a single column, and the gallery shifts from three columns on tablet to two on mobile. These adaptations were straightforward enough to implement without dedicated wireframes. It can be viewed here:
+
+![Charm wireframe](documentation/wireframe.png)
+
+The wireframe does not fully correspond with the end product due to multiple changes made throughout the production phase.
+
 ## Technologies used
 
 ### Languages
