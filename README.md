@@ -2,6 +2,18 @@
 
 ![HTML](tech/html.png) ![CSS](tech/css.png) ![Typescript](tech/typescript.png) ![Tailwind](tech/tailwind.png) ![React](tech/react.png) ![Vercel](tech/vercel.png) ![NextJS](tech/next.png) ![Cloudinary](tech/cloudinary.png) ![Neon](tech/neon.png) ![ClaudeCode](tech/claude.png) ![Canva](tech/canva.png) ![VSCode](tech/vscode.png) ![Vitest](tech/jest.png)
 
+## Introduction
+
+Charm is a professional nail salon website created for Mirjana Vuković Đorđić, a nail artist based in Bijeljina, Bosnia & Herzegovina. The aim was to give her an elegant and trustworthy online presence that reflects the quality and creativity of her work. With over four years of professional experience and a formally recognised qualification, Mirjana specialises in nail art, gel nails, gel lac, manicure, acrylic nails, and rubber base — and the site was built to showcase that range with clarity and style.
+
+The site achieves this by presenting her services, pricing, and portfolio in a clean, visually driven layout. Visitors can learn about Mirjana, browse her gallery of work, view pricing, and get in touch directly. The gallery features both photos and videos, hosted via Vercel Blob and Cloudinary, giving prospective clients a real feel for the standard of work they can expect. The site also supports both English and Serbian, reflecting Mirjana's bilingual client base.
+
+This was a freelance project built for a client abroad, combining a real-world brief with the challenge of delivering a polished, production-ready product. From designing the layout to integrating media hosting and deploying the final result, every decision was made with Mirjana's clients in mind.
+
+You can view the website [here](https://charm-nail-salon.vercel.app/).
+
+![Charm website on various devices](documentation/amiresponsive.png)
+
 ## Technologies used
 
 ### Languages
