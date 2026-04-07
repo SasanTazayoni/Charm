@@ -62,7 +62,7 @@ export default function AdminLogin() {
           />
           {error && <p className="admin-login-error">{error}</p>}
           <CascadeButton type="submit" variant="gold" className="gold-button admin-login-button" disabled={loading}>
-            {loading ? (isSerbian ? "Prijava..." : "Logging in...") : (isSerbian ? "Prijava" : "Log in")}
+            {isSerbian ? "Prijava" : "Log in"}
           </CascadeButton>
         </form>
       </div>

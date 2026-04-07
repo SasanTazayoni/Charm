@@ -110,10 +110,8 @@ body {
 }
 
 .gold-button:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
 }
-
 
 /* Divider */
 
@@ -188,7 +186,6 @@ body {
   opacity: 1;
   transform: scale(1.05);
 }
-
 
 @media (max-width: 768px) {
   .scroll-to-top {
@@ -945,7 +942,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 100%;
+  width: 180px;
 }
 
 .admin-login-input {
@@ -954,6 +951,7 @@ body {
   border-radius: 8px;
   padding: 0.75rem 1rem;
   color: var(--foreground);
+  text-align: center;
   font-size: 0.9rem;
   outline: none;
   transition: border-color 300ms ease-in-out;
@@ -1149,6 +1147,10 @@ body {
 @media (max-width: 428px) {
   .admin-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-login-card {
+    padding: 24px;
   }
 }
 
