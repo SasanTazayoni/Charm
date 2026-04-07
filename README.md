@@ -270,3 +270,53 @@ Automated tests were implemented across all 23 test files covering every compone
 ### Bugs
 
 - There is a bug where the page freezes and does not load properly when clicking the back or forward buttons - this is a known NextJS bug.
+
+## Deployment
+
+This project is deployed using [Vercel](https://vercel.com), which supports Next.js natively with zero configuration.
+
+### Prerequisites
+
+Before deploying, ensure you have the following:
+
+- A [GitHub](https://github.com) account with the project pushed to a repository.
+- A [Vercel](https://vercel.com) account (free tier is sufficient).
+- A [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) store set up for gallery image storage.
+- The following environment variables ready:
+  - `ADMIN_PASSWORD` — the password used to log in to the admin panel.
+  - `ADMIN_SECRET` — a secret token used to verify admin sessions.
+  - `BLOB_READ_WRITE_TOKEN` — provided by Vercel Blob.
+
+### Steps
+
+1. Go to [vercel.com](https://vercel.com) and log in or create an account.
+2. Click **Add New** → **Project**.
+3. Select **Import Git Repository** and choose your GitHub repository.
+4. Vercel will automatically detect it as a Next.js project — no build configuration is needed.
+5. Under **Environment Variables**, add the following:
+   - `ADMIN_PASSWORD`
+   - `ADMIN_SECRET`
+   - `BLOB_READ_WRITE_TOKEN`
+6. Click **Deploy**.
+7. Once the build completes, Vercel will provide a live URL for the project.
+8. To set up a custom domain, go to the project dashboard → **Settings** → **Domains** and add your domain.
+
+### Redeployment
+
+Any subsequent push to the `main` branch will trigger an automatic redeployment on Vercel.
+
+### Installing NPM
+
+- Go to the [Node.js official website](https://nodejs.org/en).
+- Download the LTS (Long Term Support) version for your operating system (Windows, macOS, or Linux).
+- Run the installer and follow the on-screen instructions.
+- Ensure the option “Add to PATH” is selected during installation.
+- Open a terminal (Command Prompt, PowerShell, or Terminal).
+- Check Node.js installation by running `node -v` – this should print the Node.js version.
+- Check npm installation by running `npm -v` – this should print the npm version.
+- (Optional) Update npm to the latest version by running `npm install -g npm@latest`.
+- You are now ready to use npm for installing packages and running scripts in your projects.
+
+## Credits
+
+- Thanks to [WebDevSimplified](https://www.youtube.com/@WebDevSimplified) for teaching NextJS.
