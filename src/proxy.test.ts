@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { middleware } from "./proxy";
+import { proxy } from "./proxy";
 import { NextRequest } from "next/server";
 
-describe("middleware", () => {
+describe("proxy", () => {
   beforeEach(() => {
     process.env.ADMIN_SECRET = "correct-secret";
   });
@@ -16,34 +16,34 @@ describe("middleware", () => {
 
   describe("when accessing a protected admin route", () => {
     it("redirects to /admin/login if no token is present", () => {
-      const response = middleware(makeRequest("/admin"));
+      const response = proxy(makeRequest("/admin"));
       expect(response.status).toBe(307);
       expect(response.headers.get("location")).toBe("http://localhost/admin/login");
     });
 
     it("redirects to /admin/login if token is incorrect", () => {
-      const response = middleware(makeRequest("/admin", "wrong-token"));
+      const response = proxy(makeRequest("/admin", "wrong-token"));
       expect(response.status).toBe(307);
       expect(response.headers.get("location")).toBe("http://localhost/admin/login");
     });
 
     it("allows access if token matches ADMIN_SECRET", () => {
       process.env.ADMIN_SECRET = "correct-secret";
-      const response = middleware(makeRequest("/admin", "correct-secret"));
+      const response = proxy(makeRequest("/admin", "correct-secret"));
       expect(response.status).toBe(200);
     });
   });
 
   describe("when accessing /admin/login", () => {
     it("always allows access regardless of token", () => {
-      const response = middleware(makeRequest("/admin/login"));
+      const response = proxy(makeRequest("/admin/login"));
       expect(response.status).toBe(200);
     });
   });
 
   describe("when accessing a nested admin route", () => {
     it("redirects if accessing /admin/dashboard without a token", () => {
-      const response = middleware(makeRequest("/admin/dashboard"));
+      const response = proxy(makeRequest("/admin/dashboard"));
       expect(response.status).toBe(307);
       expect(response.headers.get("location")).toBe("http://localhost/admin/login");
     });
