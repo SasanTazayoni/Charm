@@ -44,7 +44,7 @@ Charm embraces an elegant aesthetic designed to reflect the artistry and precisi
 
 #### Colour palette
 
-![Charm colour palette](documentation/colourpalette.png)
+![Charm colour palette](documentation/colourpalette.jpg)
 
 The palette blends deep forest green, soft pink, and gold to evoke luxury, femininity, and refinement. Green grounds the design with calm sophistication, pink brings warmth and creativity, and gold signals premium quality — together creating an atmosphere that feels intimate, elegant, and distinctly on-brand for a high-end nail salon.
 
@@ -59,6 +59,88 @@ The wireframe was designed for desktop only, as the mobile and tablet layouts fo
 ![Charm wireframe](documentation/wireframe.png)
 
 The wireframe does not fully correspond with the end product due to multiple changes made throughout the production phase.
+
+## Features
+
+### Current features
+
+The website is fully responsive across all devices and supports both English and Serbian through a language toggle that persists across the session via a cookie. All interactive buttons feature a custom cascade hover animation that ripples outward from the cursor position.
+
+#### Navbar
+
+The navbar is fixed to the top of the page and uses an intersection observer to highlight the active section as the user scrolls. On desktop it displays navigation links inline; on mobile it collapses into a hamburger menu with a dropdown overlay.
+
+![Navbar](documentation/navbar.png)
+![Navbar dropdown](documentation/navbardropdown.png)
+![Navbar mobile](documentation/navbarmobile.png)
+
+#### Hero
+
+A fullscreen video hero section plays looping clips of nail work, fading between them automatically. The language toggle is accessible directly from this section on the top right.
+
+![Hero](documentation/hero.png)
+![Hero in Serbian](documentation/heroserbian.png)
+
+#### About
+
+The about section introduces Mirjana with a brief biography and a link that opens a lightbox modal displaying her formal qualification certificate.
+
+![About](documentation/about.png)
+![Certificate modal](documentation/certificate.png)
+
+#### Pricing
+
+The pricing section presents a responsive pricing card with a background image that adapts to screen size.
+
+![Pricing](documentation/pricing.png)
+
+#### Gallery
+
+The gallery displays photos in a responsive grid fetched from Vercel Blob storage. Clicking a photo opens it in a fullscreen lightbox modal. At 324px and below the lightbox is disabled. An Instagram link is included beneath the grid.
+
+![Gallery](documentation/gallery.png)
+![Gallery modal](documentation/gallerymodal.png)
+![Instagram link](documentation/morepictures.png)
+
+#### Contact
+
+The contact section provides a WhatsApp link so visitors can reach Mirjana directly.
+
+![Contact](documentation/contact.png)
+
+#### Footer
+
+A minimal footer displays the copyright notice and a link to the GitHub repository.
+
+![Footer](documentation/footer.png)
+
+#### Divider
+
+A decorative pink divider separates each major section of the page.
+
+![Divider](documentation/divider.png)
+
+#### Scroll to top
+
+A scroll-to-top button appears once the user scrolls past the hero section, allowing quick navigation back to the top.
+
+![Scroll to top](documentation/arrowtotop.png)
+
+#### Admin panel
+
+A password-protected admin panel at `/admin` allows the salon owner to manage the gallery without touching code. Photos can be uploaded or deleted, with confirmation dialogs and clear status messages for success and error states. Duplicate file name detection prevents accidental overwrites.
+
+![Admin login](documentation/admin.png)
+![Admin panel](documentation/adminpanel.png)
+![Delete confirmation](documentation/deleteconfirmation.png)
+![Upload message](documentation/uploadmessage.png)
+![Delete message](documentation/deletemessage.png)
+![Error message](documentation/errormessage.png)
+
+### Future features
+
+- Video upload support for the gallery alongside existing photo uploads.
+- Appointment booking integration so clients can request a slot directly from the site.
 
 ## Technologies used
 
