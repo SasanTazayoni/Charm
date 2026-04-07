@@ -22,12 +22,8 @@ const NAV_LABELS = {
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
   const { isOpen: menuOpen, isVisible: menuVisible, open: openMenu, close: closeMenu } = useModalState();
-  const [mounted, setMounted] = useState(false);
+  const mounted = typeof window !== "undefined";
   const { language } = useLanguage();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,7 +31,7 @@ export default function Navbar() {
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [closeMenu]);
 
   useEffect(() => {
     const handleScroll = () => {

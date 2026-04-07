@@ -7,11 +7,12 @@ import { translations as tr } from "@/constants/translations";
 
 export default function Pricing() {
   const { language } = useLanguage();
-  const [isSmall, setIsSmall] = useState(false);
+  const [isSmall, setIsSmall] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 428px)").matches : false
+  );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 428px)");
-    setIsSmall(mediaQuery.matches);
     const handler = (e: MediaQueryListEvent) => setIsSmall(e.matches);
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);

@@ -28,11 +28,12 @@ export default function Hero() {
   const fadeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    videoRefs.current[0]?.play().catch(() => {});
+    const firstVideo = videoRefs.current[0];
+    firstVideo?.play().catch(() => {});
 
     return () => {
       if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
-      videoRefs.current[0]?.pause();
+      firstVideo?.pause();
     };
   }, []);
 
