@@ -28,6 +28,7 @@ export default function Gallery() {
   }, []);
 
   const openLightbox = (photo: Photo) => {
+    if (window.innerWidth <= 324) return;
     setSelectedPhoto(photo);
     triggerLightboxOpen();
   };

@@ -803,6 +803,12 @@ body {
   }
 }
 
+@media (max-width: 324px) {
+  .gallery-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
 /* Contact */
 
 .contact-section {
@@ -991,7 +997,6 @@ body {
 
 .admin-heading {
   font-size: 2rem;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
@@ -1145,12 +1150,18 @@ body {
 }
 
 @media (max-width: 428px) {
-  .admin-grid {
-    grid-template-columns: 1fr;
-  }
-
   .admin-login-card {
     padding: 24px;
+  }
+
+  .admin-confirm-modal {
+    max-width: 240px;
+  }
+}
+
+@media (max-width: 324px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
   }
 }
 
