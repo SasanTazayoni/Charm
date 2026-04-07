@@ -64,7 +64,7 @@ export default function AdminPage() {
           : "A photo with that name already exists. Rename the file and try again.",
         type: "error",
       });
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      fileInputRef.current!.value = "";
       return;
     }
 
