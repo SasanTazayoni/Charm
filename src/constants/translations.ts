@@ -82,6 +82,7 @@ export const translations = {
     deleteSuccess:          createTranslation("Photo deleted successfully.", "Fotografija je uspješno obrisana."),
     deleteError:            createTranslation("Something went wrong. Please try again.", "Nešto je pošlo po krivu. Pokušajte ponovo."),
     empty:                  createTranslation("No photos yet.", "Još nema fotografija."),
+    deletePhotoLabel:       createTranslation("Delete photo", "Obriši fotografiju"),
     confirmDelete:          createTranslation("Delete this photo?", "Obrisati ovu fotografiju?"),
     cancel:                 createTranslation("Cancel", "Odustani"),
     delete:                 createTranslation("Delete", "Obriši"),

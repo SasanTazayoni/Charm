@@ -170,6 +170,7 @@ export default function AdminPage() {
                 className="admin-delete-button"
                 onClick={() => setConfirmUrl(photo.url)}
                 disabled={deletingUrl === photo.url}
+                aria-label={tr.admin.deletePhotoLabel[language]}
               >
                 <IoClose size={16} />
               </button>
