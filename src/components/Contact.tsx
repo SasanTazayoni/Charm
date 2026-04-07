@@ -5,6 +5,7 @@ import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
+import { WHATSAPP_URL } from "@/constants/contact";
 
 export default function Contact() {
   const { language } = useLanguage();
@@ -20,7 +21,7 @@ export default function Contact() {
         </div>
         <div className="contact-card">
           <Link
-            href="https://wa.me/38766955693"
+            href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="contact-link"

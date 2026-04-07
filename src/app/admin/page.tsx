@@ -1,24 +1,23 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { IoClose } from "react-icons/io5";
 import { Loader2 } from "lucide-react";
 import CascadeButton from "@/components/CascadeButton";
-import { getCookie } from "cookies-next";
+import { useLanguage } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
+import { GALLERY_PREFIX } from "@/constants/blob";
 import { fetchWithRetry } from "@/lib/fetchWithRetry";
 import type { Photo } from "@/types/photo";
 
 type StatusMessage = { text: string; type: "success" | "error" } | null;
 
 export default function AdminPage() {
-  const [isSerbian, setIsSerbian] = useState(false);
-
-  useEffect(() => {
-    setIsSerbian(getCookie("language") === "Serbian");
-  }, []);
+  const { language } = useLanguage();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loadingPhotos, setLoadingPhotos] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -35,16 +34,11 @@ export default function AdminPage() {
       );
       setPhotos(photosResponse.data);
     } catch {
-      setStatus({
-        text: isSerbian
-          ? "Greška pri učitavanju fotografija. Osvježite stranicu."
-          : "Failed to load photos. Please refresh the page.",
-        type: "error",
-      });
+      setStatus({ text: tr.admin.loadError[language], type: "error" });
     } finally {
       setLoadingPhotos(false);
     }
-  }, [isSerbian]);
+  }, [language]);
 
   useEffect(() => {
     fetchPhotos();
@@ -55,14 +49,9 @@ export default function AdminPage() {
     if (!files || files.length === 0) return;
 
     const selectedFile = files[0];
-    const fileAlreadyExists = photos.some((photo) => photo.pathname === `gallery/${selectedFile.name}`);
+    const fileAlreadyExists = photos.some((photo) => photo.pathname === `${GALLERY_PREFIX}${selectedFile.name}`);
     if (fileAlreadyExists) {
-      setStatus({
-        text: isSerbian
-          ? "Fotografija s tim imenom već postoji. Preimenujte fajl i pokušajte ponovo."
-          : "A photo with that name already exists. Rename the file and try again.",
-        type: "error",
-      });
+      setStatus({ text: tr.admin.uploadErrorDuplicate[language], type: "error" });
       fileInputRef.current!.value = "";
       return;
     }
@@ -75,30 +64,22 @@ export default function AdminPage() {
     try {
       await axios.post("/api/upload", formData);
       await fetchPhotos();
-      setStatus({
-        text: isSerbian
-          ? "Fotografija je uspješno dodana."
-          : "Photo uploaded successfully.",
-        type: "success",
-      });
+      setStatus({ text: tr.admin.uploadSuccess[language], type: "success" });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const code = error.response?.status;
         setStatus({
-          text: isSerbian
-            ? code === 400
-              ? "Nevažeći tip fajla. Dozvoljeni su samo JPEG, PNG i WebP."
+          text: code === 400
+              ? tr.admin.uploadErrorInvalidFile[language]
               : code === 413
-                ? "Fajl je preveć velik. Maksimalna veličina je 10MB."
-                : "Došlo je do greške. Pokušajte ponovo."
-            : (error.response?.data?.error ??
-              "Upload failed. Please try again."),
+                ? tr.admin.uploadErrorFileTooLarge[language]
+                : tr.admin.uploadError[language],
           type: "error",
         });
       }
     } finally {
       setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      fileInputRef.current!.value = "";
     }
   };
 
@@ -110,19 +91,9 @@ export default function AdminPage() {
     try {
       await axios.delete("/api/delete", { data: { url: confirmUrl } });
       await fetchPhotos();
-      setStatus({
-        text: isSerbian
-          ? "Fotografija je uspješno obrisana."
-          : "Photo deleted successfully.",
-        type: "success",
-      });
+      setStatus({ text: tr.admin.deleteSuccess[language], type: "success" });
     } catch {
-      setStatus({
-        text: isSerbian
-          ? "Nešto je pošlo po krivu. Pokušajte ponovo."
-          : "Something went wrong. Please try again.",
-        type: "error",
-      });
+      setStatus({ text: tr.admin.deleteError[language], type: "error" });
     } finally {
       setDeletingUrl(null);
     }
@@ -137,7 +108,7 @@ export default function AdminPage() {
     <div className="admin-page">
       <div className="admin-header">
         <h1 className="section-heading admin-heading">
-          {isSerbian ? "Upravitelj galerijom" : "Gallery Manager"}
+          {tr.admin.heading[language]}
         </h1>
         {status && (
           <p
@@ -157,14 +128,14 @@ export default function AdminPage() {
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
           >
-            {isSerbian ? "Dodaj" : "Upload"}
+            {tr.admin.upload[language]}
           </CascadeButton>
           <CascadeButton
             variant="pink-outline"
             className="pink-outline-button admin-logout-button"
             onClick={handleLogout}
           >
-            {isSerbian ? "Odjava" : "Log out"}
+            {tr.admin.logout[language]}
           </CascadeButton>
         </div>
         <input
@@ -182,7 +153,7 @@ export default function AdminPage() {
         </div>
       ) : photos.length === 0 ? (
         <p className="admin-empty">
-          {isSerbian ? "Još nema fotografija." : "No photos yet."}
+          {tr.admin.empty[language]}
         </p>
       ) : (
         <div className="admin-grid">
@@ -207,7 +178,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      {confirmUrl && (
+      {confirmUrl && createPortal(
         <div
           className="admin-confirm-backdrop"
           onClick={() => setConfirmUrl(null)}
@@ -217,7 +188,7 @@ export default function AdminPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <p className="admin-confirm-text">
-              {isSerbian ? "Obrisati ovu fotografiju?" : "Delete this photo?"}
+              {tr.admin.confirmDelete[language]}
             </p>
             <div className="admin-confirm-actions">
               <CascadeButton
@@ -225,18 +196,19 @@ export default function AdminPage() {
                 className="pink-outline-button admin-confirm-cancel"
                 onClick={() => setConfirmUrl(null)}
               >
-                {isSerbian ? "Odustani" : "Cancel"}
+                {tr.admin.cancel[language]}
               </CascadeButton>
               <CascadeButton
                 variant="gold"
                 className="gold-button admin-confirm-delete"
                 onClick={handleDelete}
               >
-                {isSerbian ? "Obriši" : "Delete"}
+                {tr.admin.delete[language]}
               </CascadeButton>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

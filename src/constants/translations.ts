@@ -76,6 +76,7 @@ export const translations = {
     loadError:              createTranslation("Failed to load photos. Please refresh the page.", "Greška pri učitavanju fotografija. Osvježite stranicu."),
     uploadSuccess:          createTranslation("Photo uploaded successfully.", "Fotografija je uspješno dodana."),
     uploadError:            createTranslation("Upload failed. Please try again.", "Došlo je do greške. Pokušajte ponovo."),
+    uploadErrorDuplicate:   createTranslation("A photo with that name already exists. Rename the file and try again.", "Fotografija s tim imenom već postoji. Preimenujte fajl i pokušajte ponovo."),
     uploadErrorInvalidFile: createTranslation("Invalid file type. Only JPEG, PNG and WebP are allowed.", "Nevažeći tip fajla. Dozvoljeni su samo JPEG, PNG i WebP."),
     uploadErrorFileTooLarge: createTranslation("File too large. Maximum size is 10MB.", "Fajl je preveć velik. Maksimalna veličina je 10MB."),
     deleteSuccess:          createTranslation("Photo deleted successfully.", "Fotografija je uspješno obrisana."),
@@ -84,6 +85,13 @@ export const translations = {
     confirmDelete:          createTranslation("Delete this photo?", "Obrisati ovu fotografiju?"),
     cancel:                 createTranslation("Cancel", "Odustani"),
     delete:                 createTranslation("Delete", "Obriši"),
+  },
+
+  notFound: {
+    code:    createTranslation("404", "404"),
+    heading: createTranslation("Page Not Found", "Stranica nije pronađena"),
+    text:    createTranslation("This page doesn't exist — but great nails do.", "Ova stranica ne postoji — ali lijepi nokti postoje."),
+    button:  createTranslation("Back to Home", "Nazad na početnu"),
   },
 
   adminLogin: {

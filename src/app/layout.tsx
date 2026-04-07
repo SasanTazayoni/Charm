@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PHONE, INSTAGRAM_URL } from "@/constants/contact";
 import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 
@@ -75,14 +76,14 @@ const jsonLd = {
   name: "Charm",
   description:
     "Professional nail artist based in Bijeljina, Bosnia & Herzegovina, specialising in nail art, gel nails, and manicure.",
-  telephone: "+38766955693",
+  telephone: PHONE,
   address: {
     "@type": "PostalAddress",
     streetAddress: "Trnjaci Glavna",
     addressLocality: "Bijeljina",
     addressCountry: "BA",
   },
-  sameAs: ["https://www.instagram.com/charm_bymirjana"],
+  sameAs: [INSTAGRAM_URL],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Nail Services",

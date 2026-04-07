@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
@@ -21,8 +21,8 @@ const NAV_LABELS = {
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
-  const { isOpen: menuOpen, isVisible: menuVisible, open: openMenu, close: closeMenu } = useModalState();
-  const mounted = typeof window !== "undefined";
+  const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
+  const { isOpen: isMenuOpen, isVisible: isMenuVisible, open: openMenu, close: closeMenu } = useModalState();
   const { language } = useLanguage();
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export default function Navbar() {
     <>
       <nav className="navbar bg-brand-green/40 backdrop-blur-sm">
         <div className="navbar-logo">
-          <Image src="/logo.png" alt="Charm" width={60} height={60} />
+          <Image src="/logo.png" alt="Charm" width={60} height={60} priority />
           <span className="navbar-brand">Charm</span>
         </div>
 
@@ -88,14 +88,14 @@ export default function Navbar() {
 
         <button
           className="navbar-hamburger"
-          onClick={() => menuOpen ? closeMenu() : openMenu()}
+          onClick={() => isMenuOpen ? closeMenu() : openMenu()}
           aria-label="Toggle menu"
         >
-          {menuOpen ? <IoClose size={28} /> : <RxHamburgerMenu size={28} />}
+          {isMenuOpen ? <IoClose size={28} /> : <RxHamburgerMenu size={28} />}
         </button>
 
-        {menuOpen && (
-          <ul className={`navbar-mobile-menu ${menuVisible ? "navbar-mobile-menu-open" : ""}`}>
+        {isMenuOpen && (
+          <ul className={`navbar-mobile-menu ${isMenuVisible ? "navbar-mobile-menu-open" : ""}`}>
             {NAV_LINKS.map((link) => (
               <li key={link}>
                 <Link
@@ -113,7 +113,7 @@ export default function Navbar() {
 
       {mounted && createPortal(
         <div
-          className={`navbar-mobile-backdrop ${menuVisible ? "navbar-mobile-backdrop-visible" : ""}`}
+          className={`navbar-mobile-backdrop ${isMenuVisible ? "navbar-mobile-backdrop-visible" : ""}`}
           onClick={closeMenu}
         />,
         document.body

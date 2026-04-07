@@ -1,22 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
 import CascadeButton from "@/components/CascadeButton";
-import { getCookie } from "cookies-next";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AdminLogin() {
+  const { language } = useLanguage();
+  const isSerbian = language === "Serbian";
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [isSerbian, setIsSerbian] = useState(false);
-
-  useEffect(() => {
-    setIsSerbian(getCookie("language") === "Serbian");
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +46,7 @@ export default function AdminLogin() {
   return (
     <div className="admin-login-page">
       <div className="admin-login-card">
-        <Image src="/logo.png" alt="Charm" width={160} height={160} />
+        <Image src="/logo.png" alt="Charm" width={160} height={160} priority />
         <h1 className="section-heading admin-login-heading">{isSerbian ? "Administrator" : "Admin"}</h1>
         <form onSubmit={handleSubmit} className="admin-login-form">
           <input

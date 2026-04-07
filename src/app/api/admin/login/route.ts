@@ -5,7 +5,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
   }
 
-  const { password } = await request.json();
+  let body: { password?: unknown };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+  const { password } = body;
 
   if (password !== process.env.ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Invalid password" }, { status: 401 });

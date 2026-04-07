@@ -7,9 +7,15 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { url } = await request.json();
+  let body: { url?: unknown };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+  const { url } = body;
 
-  if (!url) {
+  if (!url || typeof url !== "string") {
     return NextResponse.json({ error: "No URL provided" }, { status: 400 });
   }
 

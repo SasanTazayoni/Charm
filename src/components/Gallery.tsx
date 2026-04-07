@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import axios from "axios";
@@ -11,6 +11,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
 import { fetchWithRetry } from "@/lib/fetchWithRetry";
 import { useModalState } from "@/hooks/useModalState";
+import { INSTAGRAM_URL } from "@/constants/contact";
 import type { Photo } from "@/types/photo";
 
 export default function Gallery() {
@@ -19,7 +20,8 @@ export default function Gallery() {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-  const { isOpen: lightboxOpen, isVisible: lightboxVisible, open: triggerLightboxOpen, close: closeLightbox } = useModalState();
+  const { isOpen: lightboxOpen, isVisible: lightboxVisible, open: openLightboxModal, close: closeLightbox } = useModalState();
+  const backdropRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     fetchWithRetry(() => axios.get<Photo[]>("/api/photos", { timeout: 8000 }))
       .then((photosResponse) => setPhotos(photosResponse.data))
@@ -27,10 +29,14 @@ export default function Gallery() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    if (lightboxOpen) backdropRef.current?.focus();
+  }, [lightboxOpen]);
+
   const openLightbox = (photo: Photo) => {
     if (window.innerWidth <= 324) return;
     setSelectedPhoto(photo);
-    triggerLightboxOpen();
+    openLightboxModal();
   };
 
   return (
@@ -77,13 +83,13 @@ export default function Gallery() {
           </div>
           <div className="gallery-instagram">
             <a
-              href="https://www.instagram.com/charm_bymirjana"
+              href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="gallery-instagram-link"
               aria-label="Instagram"
             >
-              <FaInstagram size={20} />
+              <FaInstagram size={24} />
             </a>
             <span className="gallery-instagram-text">
               {tr.gallery.instagramText[language]}
@@ -95,6 +101,7 @@ export default function Gallery() {
       {lightboxOpen &&
         createPortal(
           <div
+            ref={backdropRef}
             className={`lightbox-backdrop ${lightboxVisible ? "lightbox-backdrop-visible" : ""}`}
             onClick={closeLightbox}
             onKeyDown={(e) => e.key === "Escape" && closeLightbox()}

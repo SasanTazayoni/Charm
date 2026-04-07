@@ -4,30 +4,30 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CascadeButton from "@/components/CascadeButton";
 import { LanguageProvider, type Language } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
 
 export default async function NotFound() {
   const cookieStore = await cookies();
-  const language = (cookieStore.get("language")?.value ?? "English") as Language;
-  const isSerbian = language === "Serbian";
+  const language = (cookieStore.get("language")?.value ??
+    "English") as Language;
 
   return (
     <LanguageProvider initialLanguage={language}>
-      <main style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <main className="not-found-page">
         <Navbar />
-        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", textAlign: "center" }}>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5rem" }}>
-            <p style={{ fontFamily: "var(--font-heading)", fontSize: "8rem", fontWeight: 300, color: "var(--brand-gold)", letterSpacing: "0.1em", lineHeight: 1, opacity: 0.6, margin: 0 }}>
-              404
-            </p>
-            <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", fontWeight: 300, color: "var(--brand-pink)", letterSpacing: "0.05em", margin: 0 }}>
-              {isSerbian ? "Stranica nije pronađena" : "Page Not Found"}
+        <div className="not-found-body">
+          <div className="not-found-content">
+            <p className="not-found-code">{tr.notFound.code[language]}</p>
+            <h1 className="not-found-heading">
+              {tr.notFound.heading[language]}
             </h1>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.95rem", letterSpacing: "0.03em", margin: 0 }}>
-              {isSerbian ? "Ova stranica ne postoji — ali lijepi nokti postoje." : "This page doesn't exist — but great nails do."}
-            </p>
+            <p className="not-found-text">{tr.notFound.text[language]}</p>
             <Link href="/">
-              <CascadeButton variant="gold" className="gold-button" style={{ padding: "0.75rem 2rem" }}>
-                {isSerbian ? "Nazad na početnu" : "Back to Home"}
+              <CascadeButton
+                variant="gold"
+                className="gold-button not-found-button"
+              >
+                {tr.notFound.button[language]}
               </CascadeButton>
             </Link>
           </div>

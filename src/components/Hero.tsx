@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
+import { WHATSAPP_URL, INSTAGRAM_URL } from "@/constants/contact";
 import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 import Divider from "@/components/Divider";
 
@@ -102,7 +103,7 @@ export default function Hero() {
           </div>
           <div className="hero-social-icons flex items-center justify-center gap-6 md:gap-8">
             <a
-              href="https://wa.me/38766955693"
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="brand-link"
@@ -111,7 +112,7 @@ export default function Hero() {
               <FaWhatsapp size={40} />
             </a>
             <a
-              href="https://www.instagram.com/charm_bymirjana"
+              href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="brand-link"

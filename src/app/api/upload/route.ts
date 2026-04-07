@@ -1,5 +1,6 @@
 import { put } from "@vercel/blob";
 import { NextRequest, NextResponse } from "next/server";
+import { GALLERY_PREFIX } from "@/constants/blob";
 
 export async function POST(request: NextRequest) {
   const token = request.cookies.get("admin_auth")?.value;
@@ -26,6 +27,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: `File too large. Maximum size is ${MAX_SIZE_MB}MB.` }, { status: 413 });
   }
 
-  const blob = await put(`gallery/${file.name}`, file, { access: "public" });
+  const blob = await put(`${GALLERY_PREFIX}${file.name}`, file, { access: "public" });
   return NextResponse.json(blob);
 }
