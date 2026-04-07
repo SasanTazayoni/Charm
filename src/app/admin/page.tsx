@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { IoClose } from "react-icons/io5";
 import { Loader2 } from "lucide-react";
 import CascadeButton from "@/components/CascadeButton";
+import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
 import { GALLERY_PREFIX } from "@/constants/blob";
@@ -105,6 +106,7 @@ export default function AdminPage() {
   };
 
   return (
+    <>
     <div className="admin-page">
       <div className="admin-header">
         <h1 className="section-heading admin-heading">
@@ -212,5 +214,7 @@ export default function AdminPage() {
         document.body
       )}
     </div>
+    <Footer />
+    </>
   );
 }
