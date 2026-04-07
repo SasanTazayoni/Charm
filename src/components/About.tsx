@@ -26,7 +26,7 @@ export default function About() {
               src="/mirjana.jpg"
               alt="Mirjana Vuković Đorđić"
               fill
-              sizes="(max-width: 768px) 100vw, 25vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 40vw, 380px"
               className="about-image"
             />
           </div>

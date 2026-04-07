@@ -376,7 +376,8 @@ body {
 }
 
 .language-toggle-button {
-  padding: 0.35rem 0.75rem;
+  width: 100px;
+  height: 40px;
   font-size: 0.75rem;
   display: flex;
   align-items: center;
@@ -552,12 +553,19 @@ body {
   .about-container {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
 
   .about-profile {
     float: none;
     width: 100%;
     margin-right: 0;
+  }
+}
+
+@media (max-width: 428px) {
+  .about-container {
+    gap: 1.5rem;
   }
 }
 
@@ -905,7 +913,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(212, 175, 55, 0.5);
+  color: var(--brand-gold);
   font-size: 0.75rem;
   letter-spacing: 0.05em;
 }
@@ -948,14 +956,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 180px;
+  width: 150px;
 }
 
 .admin-login-input {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 8px;
-  padding: 0.75rem 1rem;
+  height: 50px;
   color: var(--foreground);
   text-align: center;
   font-size: 0.9rem;
@@ -974,7 +982,8 @@ body {
 }
 
 .admin-login-button {
-  padding: 0.75rem;
+  width: 150px;
+  height: 50px;
   font-size: 0.9rem;
   letter-spacing: 0.05em;
 }
@@ -1028,17 +1037,15 @@ body {
   align-items: center;
 }
 
-.admin-actions .cascade-button {
-  min-width: 100px;
-}
-
 .admin-upload-button {
-  padding: 0.6rem 1.25rem;
+  width: 100px;
+  height: 40px;
   font-size: 0.85rem;
 }
 
 .admin-logout-button {
-  padding: 0.6rem 1.25rem;
+  width: 100px;
+  height: 40px;
   font-size: 0.85rem;
 }
 
@@ -1129,12 +1136,14 @@ body {
 }
 
 .admin-confirm-cancel {
-  padding: 0.5rem 1.25rem;
+  width: 80px;
+  height: 40px;
   font-size: 0.85rem;
 }
 
 .admin-confirm-delete {
-  padding: 0.5rem 1.25rem;
+  width: 80px;
+  height: 40px;
   font-size: 0.85rem;
 }
 
