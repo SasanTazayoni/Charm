@@ -172,3 +172,101 @@ A password-protected admin panel at `/admin` allows the salon owner to manage th
 - [Remove.bg](https://www.remove.bg/) used to remove backgrounds from images.
 - [Canva](https://www.canva.com/) used to create the logo.
 - [Claude Code](https://claude.ai/code) used to assist with development.
+
+## Testing
+
+### Validator testing
+
+#### W3C HTML Validator
+
+The deployed site was validated using the [W3C HTML Validator](https://validator.w3.org/). The only notice returned was a trailing slash on void elements (e.g. `<meta />`), which is a known artifact of Next.js rendering JSX to HTML and has no practical effect on how browsers parse the page.
+
+#### W3C CSS Validator
+
+The stylesheet was validated using the [W3C CSS Validator (Jigsaw)](https://jigsaw.w3.org/css-validator/). All warnings returned were informational only:
+
+- **CSS variables not statically checked** — the validator cannot evaluate `var(--brand-pink)` etc. at parse time as they are resolved at runtime. This is a known validator limitation.
+- **`pointer-events: auto` not defined by specification** — while technically not in the spec, this value is universally supported across all browsers and functions as the standard reset value.
+- **Imported style sheets not checked** — refers to `@import "tailwindcss"`, which the validator cannot fetch and check at validation time.
+
+No errors were found.
+
+#### ESLint / TypeScript
+
+The project was linted using ESLint and the TypeScript compiler with no errors:
+
+```bash
+npx eslint src
+npx tsc --noEmit
+```
+
+### Testing user stories
+
+**Browsing & Discovery**
+
+As a user, I want to see example nail work in a gallery so I can judge the quality and style before booking.
+→ A responsive photo gallery on the main page displays Mirjana's work, fetched from Vercel Blob storage and presented in a clean grid layout.
+
+As a user, I want to view pricing information so I know what to expect before reaching out.
+→ A dedicated pricing section on the main page presents a pricing card with all relevant information.
+
+As a user, I want to read about the nail technician's background and qualifications so I can feel confident in their expertise.
+→ The about section introduces Mirjana with a personal biography and a link that opens her formal qualification certificate in a lightbox modal.
+
+**Contact & Booking**
+
+As a user, I want a contact section so I can reach out directly.
+→ The contact section provides a WhatsApp link so visitors can message Mirjana directly.
+
+**Language**
+
+As a Serbian-speaking user, I want to switch the site to Serbian so I can read it in my native language.
+→ A language toggle in the hero section switches all site text between English and Serbian, with the preference persisted in a cookie across the session.
+
+**Accessibility & Experience**
+
+As a user, I want the site to work well on my phone so I can browse on the go.
+→ The site is fully responsive across all screen sizes, with a collapsible hamburger menu on mobile and adapted grid layouts at each breakpoint.
+
+As a user, I want the gallery to open images in a lightbox so I can view them clearly without leaving the page.
+→ Clicking any gallery photo opens it in a fullscreen lightbox modal with a close button and keyboard support (Escape key).
+
+As a user, I want the site to load quickly even with many photos so I am not waiting around.
+→ Images are served from Vercel Blob with optimised delivery, and Next.js handles server-side rendering and static optimisation for fast initial load times.
+
+**Admin**
+
+As the salon owner, I want to upload and delete gallery photos through a protected admin panel so I can keep the portfolio up to date without touching code.
+→ A password-protected admin panel at `/admin` allows the salon owner to upload and delete photos directly, with confirmation dialogs, duplicate detection, and clear status feedback for every action.
+
+### Lighthouse testing
+
+Lighthouse was a helpful tool for checking where where the website was experiencing the most issues.
+
+- Home page (Desktop / Mobile):
+
+![Gallery manager page desktop Lighthouse test](documentation/lighthouse/mainpage.png) <br>
+
+![Gallery manager page mobile Lighthouse test](documentation/lighthouse/mainpagemobile.png) <br>
+
+- Login page (Desktop / Mobile):
+
+![Login page desktop Lighthouse test](documentation/lighthouse/login.png) <br>
+
+![Login page mobile Lighthouse test](documentation/lighthouse/loginmobile.png) <br>
+
+- Admin gallery page (Desktop / Mobile):
+
+![Gallery manager page desktop Lighthouse test](documentation/lighthouse/gallerymanager.png) <br>
+
+![Gallery manager page mobile Lighthouse test](documentation/lighthouse/gallerymanagermobile.png) <br>
+
+### Automated testing
+
+Automated tests were implemented across all 23 test files covering every component, page, API route, hook, and utility — 158 tests in total, using Vitest and React Testing Library.
+
+![Unit tests for the application](documentation/unittests.png)
+
+### Bugs
+
+- There is a bug where the page freezes and does not load properly when clicking the back or forward buttons - this is a known NextJS bug.
