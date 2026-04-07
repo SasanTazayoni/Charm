@@ -1028,10 +1028,11 @@ body {
   align-items: center;
 }
 
+.admin-actions .cascade-button {
+  min-width: 100px;
+}
+
 .admin-upload-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   padding: 0.6rem 1.25rem;
   font-size: 0.85rem;
 }
@@ -1137,6 +1138,27 @@ body {
   font-size: 0.85rem;
 }
 
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .admin-heading {
+    width: 100%;
+  }
+
+  .admin-actions {
+    order: 1;
+  }
+
+  .admin-upload-error,
+  .admin-upload-success {
+    order: 2;
+  }
+}
+
 @media (max-width: 1024px) {
   .admin-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -1162,6 +1184,10 @@ body {
 @media (max-width: 324px) {
   .admin-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-actions {
+    flex-direction: column;
   }
 }
 

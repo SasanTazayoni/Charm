@@ -5,7 +5,6 @@ import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { IoClose } from "react-icons/io5";
-import { FiUpload } from "react-icons/fi";
 import { Loader2 } from "lucide-react";
 import CascadeButton from "@/components/CascadeButton";
 import { getCookie } from "cookies-next";
@@ -158,7 +157,6 @@ export default function AdminPage() {
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
           >
-            <FiUpload size={16} />
             {isSerbian ? "Dodaj" : "Upload"}
           </CascadeButton>
           <CascadeButton
