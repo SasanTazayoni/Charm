@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import AdminPage from "./page";
+import { LanguageProvider } from "@/context/LanguageContext";
 import axios from "axios";
 
 const mockPush = vi.fn();
@@ -17,10 +18,10 @@ vi.mock("@/components/CascadeButton", () => ({
     <button onClick={onClick} disabled={disabled} {...props}>{children}</button>
   ),
 }));
-const mockGetCookie = vi.fn().mockReturnValue(undefined);
-vi.mock("cookies-next", () => ({
-  getCookie: () => mockGetCookie(),
-}));
+vi.mock("react-dom", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("react-dom")>();
+  return { ...actual, createPortal: (node: React.ReactNode) => node };
+});
 vi.mock("@/lib/fetchWithRetry", () => ({
   fetchWithRetry: vi.fn((operation: () => Promise<unknown>) => operation()),
 }));
@@ -37,13 +38,13 @@ describe("AdminPage", () => {
 
   it("shows a loading spinner initially", () => {
     vi.mocked(axios.get).mockReturnValue(new Promise(() => {}));
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     expect(container.querySelector(".gallery-spinner")).toBeTruthy();
   });
 
   it("shows photos after successful fetch", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => {
       expect(container.querySelectorAll(".admin-photo-item")).toHaveLength(2);
     });
@@ -51,7 +52,7 @@ describe("AdminPage", () => {
 
   it("shows error message when fetch fails", async () => {
     vi.mocked(axios.get).mockRejectedValue(new Error("Network error"));
-    render(<AdminPage />);
+    render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => {
       expect(screen.getByText(/failed to load photos/i)).toBeTruthy();
     });
@@ -59,7 +60,7 @@ describe("AdminPage", () => {
 
   it("shows empty state when no photos", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: [] });
-    render(<AdminPage />);
+    render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => {
       expect(screen.getByText("No photos yet.")).toBeTruthy();
     });
@@ -69,7 +70,7 @@ describe("AdminPage", () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
     vi.mocked(axios.post).mockResolvedValue({});
 
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
     const input = container.querySelector("input[type='file']")!;
@@ -83,7 +84,7 @@ describe("AdminPage", () => {
 
   it("does nothing when file input fires with no files", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
     const input = container.querySelector("input[type='file']")!;
@@ -96,7 +97,7 @@ describe("AdminPage", () => {
     vi.mocked(axios.post).mockRejectedValue(new Error("unexpected"));
     vi.spyOn(axios, "isAxiosError").mockReturnValue(false);
 
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
     const input = container.querySelector("input[type='file']")!;
@@ -107,7 +108,7 @@ describe("AdminPage", () => {
     expect(container.querySelector(".admin-upload-error")).toBeNull();
   });
 
-  it("shows fallback upload error when response has no error message", async () => {
+  it("shows invalid file type error on 400", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
     vi.mocked(axios.post).mockRejectedValue({
       isAxiosError: true,
@@ -115,7 +116,7 @@ describe("AdminPage", () => {
     });
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
     const input = container.querySelector("input[type='file']")!;
@@ -123,14 +124,14 @@ describe("AdminPage", () => {
     fireEvent.change(input, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(screen.getByText("Upload failed. Please try again.")).toBeTruthy();
+      expect(screen.getByText("Invalid file type. Only JPEG, PNG and WebP are allowed.")).toBeTruthy();
     });
   });
 
   it("shows error when uploading a file with a duplicate name", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
 
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
     const input = container.querySelector("input[type='file']")!;
@@ -147,25 +148,25 @@ describe("AdminPage", () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
     vi.mocked(axios.post).mockRejectedValue({
       isAxiosError: true,
-      response: { status: 400, data: { error: "Invalid file type." } },
+      response: { status: 500, data: {} },
     });
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
     const input = container.querySelector("input[type='file']")!;
-    const file = new File(["content"], "test.gif", { type: "image/gif" });
+    const file = new File(["content"], "test.jpg", { type: "image/jpeg" });
     fireEvent.change(input, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(screen.getByText("Invalid file type.")).toBeTruthy();
+      expect(screen.getByText("Upload failed. Please try again.")).toBeTruthy();
     });
   });
 
   it("does nothing when delete is confirmed with no confirmUrl set", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-delete-button")).toBeTruthy());
 
     fireEvent.click(container.querySelector(".admin-delete-button")!);
@@ -175,7 +176,7 @@ describe("AdminPage", () => {
 
   it("shows confirm modal when delete button is clicked", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-delete-button")).toBeTruthy());
 
     fireEvent.click(container.querySelector(".admin-delete-button")!);
@@ -184,7 +185,7 @@ describe("AdminPage", () => {
 
   it("hides confirm modal when cancel is clicked", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => fireEvent.click(container.querySelector(".admin-delete-button")!));
 
     fireEvent.click(screen.getByText("Cancel"));
@@ -195,7 +196,7 @@ describe("AdminPage", () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
     vi.mocked(axios.delete).mockResolvedValue({});
 
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => fireEvent.click(container.querySelector(".admin-delete-button")!));
     fireEvent.click(screen.getByText("Delete"));
 
@@ -208,7 +209,7 @@ describe("AdminPage", () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
     vi.mocked(axios.delete).mockRejectedValue(new Error("Network error"));
 
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => fireEvent.click(container.querySelector(".admin-delete-button")!));
     fireEvent.click(screen.getByText("Delete"));
 
@@ -219,7 +220,7 @@ describe("AdminPage", () => {
 
   it("clicking the upload button triggers the file input", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: [] });
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(screen.getByText("No photos yet.")).toBeTruthy());
 
     const fileInput = container.querySelector("input[type='file']") as HTMLInputElement;
@@ -230,7 +231,7 @@ describe("AdminPage", () => {
 
   it("clicking the confirm backdrop dismisses the modal", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    const { container } = render(<AdminPage />);
+    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => fireEvent.click(container.querySelector(".admin-delete-button")!));
 
     fireEvent.click(container.querySelector(".admin-confirm-backdrop")!);
@@ -241,7 +242,7 @@ describe("AdminPage", () => {
     vi.mocked(axios.get).mockResolvedValue({ data: [] });
     vi.mocked(axios.post).mockResolvedValue({});
 
-    render(<AdminPage />);
+    render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(screen.getByText("No photos yet.")).toBeTruthy());
 
     fireEvent.click(screen.getByText("Log out"));
@@ -252,13 +253,9 @@ describe("AdminPage", () => {
   });
 
   describe("when language is Serbian", () => {
-    beforeEach(() => {
-      mockGetCookie.mockReturnValue("Serbian");
-    });
-
     it("shows Serbian error message when fetch fails", async () => {
       vi.mocked(axios.get).mockRejectedValue(new Error("Network error"));
-      render(<AdminPage />);
+      render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => {
         expect(screen.getByText("Greška pri učitavanju fotografija. Osvježite stranicu.")).toBeTruthy();
       });
@@ -266,7 +263,7 @@ describe("AdminPage", () => {
 
     it("shows Serbian empty state when no photos", async () => {
       vi.mocked(axios.get).mockResolvedValue({ data: [] });
-      render(<AdminPage />);
+      render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => {
         expect(screen.getByText("Još nema fotografija.")).toBeTruthy();
       });
@@ -275,7 +272,7 @@ describe("AdminPage", () => {
     it("shows Serbian error when uploading a duplicate file name", async () => {
       vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
 
-      const { container } = render(<AdminPage />);
+      const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
       const input = container.querySelector("input[type='file']")!;
@@ -292,7 +289,7 @@ describe("AdminPage", () => {
       vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
       vi.mocked(axios.post).mockResolvedValue({});
 
-      const { container } = render(<AdminPage />);
+      const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
       const input = container.querySelector("input[type='file']")!;
@@ -312,7 +309,7 @@ describe("AdminPage", () => {
       });
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-      const { container } = render(<AdminPage />);
+      const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
       const input = container.querySelector("input[type='file']")!;
@@ -332,7 +329,7 @@ describe("AdminPage", () => {
       });
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-      const { container } = render(<AdminPage />);
+      const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
       const input = container.querySelector("input[type='file']")!;
@@ -352,7 +349,7 @@ describe("AdminPage", () => {
       });
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-      const { container } = render(<AdminPage />);
+      const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
       const input = container.querySelector("input[type='file']")!;
@@ -368,7 +365,7 @@ describe("AdminPage", () => {
       vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
       vi.mocked(axios.delete).mockResolvedValue({});
 
-      const { container } = render(<AdminPage />);
+      const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => fireEvent.click(container.querySelector(".admin-delete-button")!));
       fireEvent.click(screen.getByText("Obriši"));
 
@@ -381,7 +378,7 @@ describe("AdminPage", () => {
       vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
       vi.mocked(axios.delete).mockRejectedValue(new Error("Network error"));
 
-      const { container } = render(<AdminPage />);
+      const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => fireEvent.click(container.querySelector(".admin-delete-button")!));
       fireEvent.click(screen.getByText("Obriši"));
 

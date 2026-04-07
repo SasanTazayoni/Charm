@@ -33,6 +33,19 @@ describe("DELETE /api/delete", () => {
     });
   });
 
+  describe("when the request body is malformed", () => {
+    it("returns 400 for invalid JSON", async () => {
+      const req = new NextRequest("http://localhost/api/delete", {
+        method: "DELETE",
+        body: "not-json",
+        headers: { "Content-Type": "application/json" },
+      });
+      req.cookies.set("admin_auth", "correct-secret");
+      const response = await DELETE(req);
+      expect(response.status).toBe(400);
+    });
+  });
+
   describe("when no URL is provided", () => {
     it("returns 400", async () => {
       const response = await DELETE(makeRequest({}, "correct-secret"));

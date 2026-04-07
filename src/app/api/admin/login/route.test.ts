@@ -15,6 +15,18 @@ describe("POST /api/admin/login", () => {
     process.env.ADMIN_SECRET = "correct-secret";
   });
 
+  describe("when the request body is malformed", () => {
+    it("returns 400 for invalid JSON", async () => {
+      const req = new NextRequest("http://localhost/api/admin/login", {
+        method: "POST",
+        body: "not-json",
+        headers: { "Content-Type": "application/json" },
+      });
+      const response = await POST(req);
+      expect(response.status).toBe(400);
+    });
+  });
+
   describe("when env vars are missing", () => {
     it("returns 500 if ADMIN_PASSWORD is not set", async () => {
       delete process.env.ADMIN_PASSWORD;

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AdminLogin from "./page";
+import { LanguageProvider } from "@/context/LanguageContext";
 import axios from "axios";
 
 const mockPush = vi.fn();
@@ -17,10 +18,6 @@ vi.mock("@/components/CascadeButton", () => ({
     <button {...props}>{children}</button>
   ),
 }));
-const mockGetCookie = vi.fn().mockReturnValue(undefined);
-vi.mock("cookies-next", () => ({
-  getCookie: () => mockGetCookie(),
-}));
 
 describe("AdminLogin", () => {
   beforeEach(() => {
@@ -28,14 +25,14 @@ describe("AdminLogin", () => {
   });
 
   it("renders the password input", () => {
-    render(<AdminLogin />);
+    render(<LanguageProvider><AdminLogin /></LanguageProvider>);
     expect(screen.getByPlaceholderText("Password")).toBeTruthy();
   });
 
   it("redirects to /admin on successful login", async () => {
     vi.mocked(axios.post).mockResolvedValue({});
 
-    render(<AdminLogin />);
+    render(<LanguageProvider><AdminLogin /></LanguageProvider>);
     fireEvent.change(screen.getByPlaceholderText("Password"), { target: { value: "correct" } });
     fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
 
@@ -48,7 +45,7 @@ describe("AdminLogin", () => {
     vi.mocked(axios.post).mockRejectedValue({ isAxiosError: true, response: { status: 401 } });
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-    render(<AdminLogin />);
+    render(<LanguageProvider><AdminLogin /></LanguageProvider>);
     fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
 
     await waitFor(() => {
@@ -60,7 +57,7 @@ describe("AdminLogin", () => {
     vi.mocked(axios.post).mockRejectedValue({ isAxiosError: true, response: { status: 500 } });
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-    render(<AdminLogin />);
+    render(<LanguageProvider><AdminLogin /></LanguageProvider>);
     fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
 
     await waitFor(() => {
@@ -72,7 +69,7 @@ describe("AdminLogin", () => {
     vi.mocked(axios.post).mockRejectedValue({ isAxiosError: true, response: undefined });
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-    render(<AdminLogin />);
+    render(<LanguageProvider><AdminLogin /></LanguageProvider>);
     fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
 
     await waitFor(() => {
@@ -84,7 +81,7 @@ describe("AdminLogin", () => {
     vi.mocked(axios.post).mockRejectedValue({ isAxiosError: true, response: { status: 418 } });
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-    render(<AdminLogin />);
+    render(<LanguageProvider><AdminLogin /></LanguageProvider>);
     fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
 
     await waitFor(() => {
@@ -96,7 +93,7 @@ describe("AdminLogin", () => {
     vi.mocked(axios.post).mockRejectedValue(new Error("unexpected"));
     vi.spyOn(axios, "isAxiosError").mockReturnValue(false);
 
-    render(<AdminLogin />);
+    render(<LanguageProvider><AdminLogin /></LanguageProvider>);
     fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
 
     await waitFor(() => {
@@ -105,15 +102,11 @@ describe("AdminLogin", () => {
   });
 
   describe("when language is Serbian", () => {
-    beforeEach(() => {
-      mockGetCookie.mockReturnValue("Serbian");
-    });
-
     it("shows Serbian incorrect password error on 401", async () => {
       vi.mocked(axios.post).mockRejectedValue({ isAxiosError: true, response: { status: 401 } });
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-      render(<AdminLogin />);
+      render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
       fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
 
       await waitFor(() => {
@@ -125,7 +118,7 @@ describe("AdminLogin", () => {
       vi.mocked(axios.post).mockRejectedValue({ isAxiosError: true, response: { status: 500 } });
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-      render(<AdminLogin />);
+      render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
       fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
 
       await waitFor(() => {
@@ -137,7 +130,7 @@ describe("AdminLogin", () => {
       vi.mocked(axios.post).mockRejectedValue({ isAxiosError: true, response: undefined });
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-      render(<AdminLogin />);
+      render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
       fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
 
       await waitFor(() => {
@@ -149,7 +142,7 @@ describe("AdminLogin", () => {
       vi.mocked(axios.post).mockRejectedValue({ isAxiosError: true, response: { status: 418 } });
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
-      render(<AdminLogin />);
+      render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
       fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
 
       await waitFor(() => {
@@ -161,7 +154,7 @@ describe("AdminLogin", () => {
       vi.mocked(axios.post).mockRejectedValue(new Error("unexpected"));
       vi.spyOn(axios, "isAxiosError").mockReturnValue(false);
 
-      render(<AdminLogin />);
+      render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
       fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
 
       await waitFor(() => {
