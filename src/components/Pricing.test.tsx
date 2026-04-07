@@ -8,14 +8,16 @@ vi.mock("next/image", () => ({
 }));
 
 describe("Pricing", () => {
-  let mediaQueryHandler: ((e: { matches: boolean }) => void) | null = null;
+  let mediaQueryHandler: (() => void) | null = null;
+  let currentMatches = false;
 
   beforeEach(() => {
     mediaQueryHandler = null;
+    currentMatches = false;
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-      matches: false,
+      get matches() { return currentMatches; },
       media: query,
-      addEventListener: vi.fn((_event: string, cb: (e: { matches: boolean }) => void) => {
+      addEventListener: vi.fn((_event: string, cb: () => void) => {
         mediaQueryHandler = cb;
       }),
       removeEventListener: vi.fn(),
@@ -29,13 +31,7 @@ describe("Pricing", () => {
   });
 
   it("renders the small image when screen is narrow", () => {
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-      matches: true,
-      media: query,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    }));
-
+    currentMatches = true;
     const { container } = render(<LanguageProvider><Pricing /></LanguageProvider>);
     const img = container.querySelector("img");
     expect(img?.getAttribute("src")).toBe("/pricing-small.png");
@@ -43,7 +39,7 @@ describe("Pricing", () => {
 
   it("switches to small image when media query changes to narrow", () => {
     const { container } = render(<LanguageProvider><Pricing /></LanguageProvider>);
-    act(() => { mediaQueryHandler?.({ matches: true }); });
+    act(() => { currentMatches = true; mediaQueryHandler?.(); });
     const img = container.querySelector("img");
     expect(img?.getAttribute("src")).toBe("/pricing-small.png");
   });
