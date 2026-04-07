@@ -102,4 +102,13 @@ describe("Gallery", () => {
       expect(container.querySelector(".lightbox-backdrop")).toBeNull();
     });
   });
+
+  it("does not open lightbox when viewport is 324px or below", async () => {
+    vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+    Object.defineProperty(window, "innerWidth", { value: 324, writable: true, configurable: true });
+    const { container } = render(<LanguageProvider><Gallery /></LanguageProvider>);
+    await waitFor(() => expect(container.querySelector(".gallery-item")).toBeTruthy());
+    fireEvent.click(container.querySelector(".gallery-item")!);
+    expect(container.querySelector(".lightbox-backdrop")).toBeNull();
+  });
 });

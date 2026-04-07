@@ -127,6 +127,22 @@ describe("AdminPage", () => {
     });
   });
 
+  it("shows error when uploading a file with a duplicate name", async () => {
+    vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+
+    const { container } = render(<AdminPage />);
+    await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
+
+    const input = container.querySelector("input[type='file']")!;
+    const file = new File(["content"], "photo1.jpg", { type: "image/jpeg" });
+    fireEvent.change(input, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.getByText("A photo with that name already exists. Rename the file and try again.")).toBeTruthy();
+    });
+    expect(vi.mocked(axios.post)).not.toHaveBeenCalled();
+  });
+
   it("shows error message when upload fails", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
     vi.mocked(axios.post).mockRejectedValue({
@@ -254,6 +270,22 @@ describe("AdminPage", () => {
       await waitFor(() => {
         expect(screen.getByText("Još nema fotografija.")).toBeTruthy();
       });
+    });
+
+    it("shows Serbian error when uploading a duplicate file name", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+
+      const { container } = render(<AdminPage />);
+      await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
+
+      const input = container.querySelector("input[type='file']")!;
+      const file = new File(["content"], "photo1.jpg", { type: "image/jpeg" });
+      fireEvent.change(input, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(screen.getByText("Fotografija s tim imenom već postoji. Preimenujte fajl i pokušajte ponovo.")).toBeTruthy();
+      });
+      expect(vi.mocked(axios.post)).not.toHaveBeenCalled();
     });
 
     it("shows Serbian success message after upload", async () => {
