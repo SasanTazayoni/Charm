@@ -6,7 +6,7 @@ import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { IoClose } from "react-icons/io5";
-import { Loader2 } from "lucide-react";
+import { Loader2, ImageUp } from "lucide-react";
 import CascadeButton from "@/components/CascadeButton";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
@@ -24,8 +24,11 @@ export default function AdminPage() {
   const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState<StatusMessage>(null);
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
+  const [replacingUrl, setReplacingUrl] = useState<string | null>(null);
   const [confirmUrl, setConfirmUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const replaceFileInputRef = useRef<HTMLInputElement>(null);
+  const replaceTargetRef = useRef<string | null>(null);
   const router = useRouter();
 
   const fetchPhotos = useCallback(async () => {
@@ -100,6 +103,56 @@ export default function AdminPage() {
     }
   };
 
+  const handleReplaceClick = (url: string) => {
+    replaceTargetRef.current = url;
+    replaceFileInputRef.current?.click();
+  };
+
+  const handleReplaceSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    const targetUrl = replaceTargetRef.current;
+    if (!files || files.length === 0 || !targetUrl) return;
+
+    const selectedFile = files[0];
+    const fileAlreadyExists = photos.some(
+      (photo) => photo.pathname === `${GALLERY_PREFIX}${selectedFile.name}` && photo.url !== targetUrl,
+    );
+
+    if (fileAlreadyExists) {
+      setStatus({ text: tr.admin.uploadErrorDuplicate[language], type: "error" });
+      replaceFileInputRef.current!.value = "";
+      return;
+    }
+
+    setReplacingUrl(targetUrl);
+    setStatus(null);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      await axios.post("/api/upload", formData);
+      await axios.delete("/api/delete", { data: { url: targetUrl } });
+      await fetchPhotos();
+      setStatus({ text: tr.admin.replaceSuccess[language], type: "success" });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const code = error.response?.status;
+        setStatus({
+          text: code === 400
+            ? tr.admin.uploadErrorInvalidFile[language]
+            : code === 413
+              ? tr.admin.uploadErrorFileTooLarge[language]
+              : tr.admin.replaceError[language],
+          type: "error",
+        });
+      }
+    } finally {
+      setReplacingUrl(null);
+      replaceTargetRef.current = null;
+      replaceFileInputRef.current!.value = "";
+    }
+  };
+
   const handleLogout = async () => {
     await axios.post("/api/admin/logout");
     router.push("/admin/login");
@@ -147,6 +200,13 @@ export default function AdminPage() {
           className="admin-file-input"
           onChange={handleUpload}
         />
+        <input
+          ref={replaceFileInputRef}
+          type="file"
+          accept="image/*"
+          className="admin-file-input"
+          onChange={handleReplaceSelect}
+        />
       </div>
 
       {loadingPhotos ? (
@@ -168,14 +228,24 @@ export default function AdminPage() {
                 sizes="25vw"
                 className="admin-photo-image"
               />
-              <button
-                className="admin-delete-button"
-                onClick={() => setConfirmUrl(photo.url)}
-                disabled={deletingUrl === photo.url}
-                aria-label={tr.admin.deletePhotoLabel[language]}
-              >
-                <IoClose size={16} />
-              </button>
+              <div className="admin-photo-actions">
+                <button
+                  className="admin-replace-button"
+                  onClick={() => handleReplaceClick(photo.url)}
+                  disabled={replacingUrl === photo.url || deletingUrl === photo.url}
+                  aria-label={tr.admin.replacePhotoLabel[language]}
+                >
+                  <ImageUp size={16} />
+                </button>
+                <button
+                  className="admin-delete-button"
+                  onClick={() => setConfirmUrl(photo.url)}
+                  disabled={deletingUrl === photo.url || replacingUrl === photo.url}
+                  aria-label={tr.admin.deletePhotoLabel[language]}
+                >
+                  <IoClose size={16} />
+                </button>
+              </div>
             </div>
           ))}
         </div>

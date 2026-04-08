@@ -1076,10 +1076,16 @@ body {
   object-fit: cover;
 }
 
-.admin-delete-button {
+.admin-photo-actions {
   position: absolute;
   top: 0.4rem;
   right: 0.4rem;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.admin-delete-button,
+.admin-replace-button {
   background-color: rgba(0, 0, 0, 0.7);
   border: none;
   border-radius: 50%;
@@ -1097,7 +1103,12 @@ body {
   background-color: var(--brand-pink-dark);
 }
 
-.admin-delete-button:disabled {
+.admin-replace-button:hover:not(:disabled) {
+  background-color: var(--brand-gold-dark);
+}
+
+.admin-delete-button:disabled,
+.admin-replace-button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
