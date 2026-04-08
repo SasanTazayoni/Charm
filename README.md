@@ -128,14 +128,16 @@ A scroll-to-top button appears once the user scrolls past the hero section, allo
 
 #### Admin panel
 
-A password-protected admin panel at `/admin` allows the salon owner to manage the gallery without touching code. Photos can be uploaded or deleted, with confirmation dialogs and clear status messages for success and error states. Duplicate file name detection prevents accidental overwrites.
+A password-protected admin panel at `/admin` allows the salon owner to manage the gallery without touching code. Photos can be uploaded, replaced, or deleted, with confirmation dialogs and clear status messages for success and error states. Duplicate file name detection prevents accidental overwrites.
 
 ![Admin login](documentation/admin.png)
 ![Admin panel](documentation/adminpanel.png)
-![Delete confirmation](documentation/deleteconfirmation.png)
+![Delete confirmation modal](documentation/deleteconfirmation.png)
 ![Upload message](documentation/uploadmessage.png)
+![Replace message](documentation/replacemessage.png)
 ![Delete message](documentation/deletemessage.png)
-![Error message](documentation/errormessage.png)
+![Error message for duplicates](documentation/duplicateerror.png)
+![Error message for wrong file type](documentation/wrongfiletype.png)
 
 ### Future features
 
@@ -159,7 +161,6 @@ A password-protected admin panel at `/admin` allows the salon owner to manage th
 - [Cloudinary](https://cloudinary.com/) used to host and serve gallery videos.
 - [Vercel](https://vercel.com/) used to deploy the website and host gallery images via Vercel Blob storage.
 - [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) used to store and serve gallery photos.
-- [Neon](https://neon.tech/) used to host gallery images.
 - [Axios](https://axios-http.com/) used for HTTP requests to the photos API.
 - [Lucide React](https://lucide.dev/) used for icons.
 - [React Icons](https://react-icons.github.io/react-icons/) used for icons.
@@ -236,8 +237,8 @@ As a user, I want the site to load quickly even with many photos so I am not wai
 
 **Admin**
 
-As the salon owner, I want to upload and delete gallery photos through a protected admin panel so I can keep the portfolio up to date without touching code.
-→ A password-protected admin panel at `/admin` allows the salon owner to upload and delete photos directly, with confirmation dialogs, duplicate detection, and clear status feedback for every action.
+As the salon owner, I want to upload, replace, and delete gallery photos through a protected admin panel so I can keep the portfolio up to date without touching code.
+→ A password-protected admin panel at `/admin` allows the salon owner to upload, replace, and delete photos directly, with confirmation dialogs, duplicate detection, and clear status feedback for every action.
 
 ### Lighthouse testing
 
@@ -263,7 +264,7 @@ Lighthouse was a helpful tool for checking where where the website was experienc
 
 ### Automated testing
 
-Automated tests were implemented across all 23 test files covering every component, page, API route, hook, and utility — 158 tests in total, using Vitest and React Testing Library.
+Automated tests were implemented across all 24 test files covering every component, page, API route, hook, and utility — 177 tests in total, using Vitest and React Testing Library.
 
 ![Unit tests for the application](documentation/unittests.png)
 
