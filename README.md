@@ -1,6 +1,6 @@
 # Charm Nail Salon
 
-![HTML](tech/html.png) ![CSS](tech/css.png) ![Typescript](tech/typescript.png) ![Tailwind](tech/tailwind.png) ![React](tech/react.png) ![Vercel](tech/vercel.png) ![NextJS](tech/next.png) ![Cloudinary](tech/cloudinary.png) ![Neon](tech/neon.png) ![ClaudeCode](tech/claude.png) ![Canva](tech/canva.png) ![VSCode](tech/vscode.png) ![Vitest](tech/jest.png)
+![HTML](tech/html.png) ![CSS](tech/css.png) ![Typescript](tech/typescript.png) ![Tailwind](tech/tailwind.png) ![React](tech/react.png) ![Vercel](tech/vercel.png) ![NextJS](tech/next.png) ![Cloudinary](tech/cloudinary.png) ![ClaudeCode](tech/claude.png) ![Canva](tech/canva.png) ![VSCode](tech/vscode.png) ![Vitest](tech/jest.png)
 
 ## Introduction
 
