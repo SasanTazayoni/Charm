@@ -238,6 +238,146 @@ describe("AdminPage", () => {
     expect(container.querySelector(".admin-confirm-modal")).toBeNull();
   });
 
+  describe("replace photo", () => {
+    it("clicking the replace button triggers the replace file input", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+      const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
+      await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
+
+      const replaceInput = container.querySelectorAll("input[type='file']")[1] as HTMLInputElement;
+      const clickSpy = vi.spyOn(replaceInput, "click");
+      fireEvent.click(container.querySelector(".admin-replace-button")!);
+      expect(clickSpy).toHaveBeenCalled();
+    });
+
+    it("does nothing when replace file input fires with no files", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+      const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
+      await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
+
+      fireEvent.click(container.querySelector(".admin-replace-button")!);
+      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      fireEvent.change(replaceInput, { target: { files: [] } });
+      expect(vi.mocked(axios.put)).not.toHaveBeenCalled();
+    });
+
+    it("does nothing when replace file input fires without clicking replace button first", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+      const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
+      await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
+
+      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
+      fireEvent.change(replaceInput, { target: { files: [file] } });
+      expect(vi.mocked(axios.put)).not.toHaveBeenCalled();
+    });
+
+    it("shows no error when replace throws a non-axios error", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+      vi.mocked(axios.put).mockRejectedValue(new Error("unexpected"));
+      vi.spyOn(axios, "isAxiosError").mockReturnValue(false);
+
+      const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
+      await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
+
+      fireEvent.click(container.querySelector(".admin-replace-button")!);
+      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
+      fireEvent.change(replaceInput, { target: { files: [file] } });
+
+      await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
+      expect(container.querySelector(".admin-upload-error")).toBeNull();
+    });
+
+    it("shows success message after replace", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+      vi.mocked(axios.put).mockResolvedValue({});
+
+      const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
+      await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
+
+      fireEvent.click(container.querySelector(".admin-replace-button")!);
+      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
+      fireEvent.change(replaceInput, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(screen.getByText("Photo replaced successfully.")).toBeTruthy();
+      });
+    });
+
+    it("shows error when replacing with a duplicate file name from another photo", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+
+      const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
+      await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
+
+      fireEvent.click(container.querySelector(".admin-replace-button")!);
+      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const file = new File(["content"], "photo2.jpg", { type: "image/jpeg" });
+      fireEvent.change(replaceInput, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(screen.getByText("A photo with that name already exists. Rename the file and try again.")).toBeTruthy();
+      });
+      expect(vi.mocked(axios.put)).not.toHaveBeenCalled();
+    });
+
+    it("shows error message when replace fails with 400", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+      vi.mocked(axios.put).mockRejectedValue({ isAxiosError: true, response: { status: 400 } });
+      vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
+
+      const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
+      await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
+
+      fireEvent.click(container.querySelector(".admin-replace-button")!);
+      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
+      fireEvent.change(replaceInput, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(screen.getByText("Invalid file type. Only JPEG, PNG and WebP are allowed.")).toBeTruthy();
+      });
+    });
+
+    it("shows error message when replace fails with 413", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+      vi.mocked(axios.put).mockRejectedValue({ isAxiosError: true, response: { status: 413 } });
+      vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
+
+      const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
+      await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
+
+      fireEvent.click(container.querySelector(".admin-replace-button")!);
+      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
+      fireEvent.change(replaceInput, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(screen.getByText("File too large. Maximum size is 10MB.")).toBeTruthy();
+      });
+    });
+
+    it("shows generic error message when replace fails with unexpected status", async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
+      vi.mocked(axios.put).mockRejectedValue({ isAxiosError: true, response: { status: 500 } });
+      vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
+
+      const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
+      await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
+
+      fireEvent.click(container.querySelector(".admin-replace-button")!);
+      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
+      fireEvent.change(replaceInput, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(screen.getByText("Replace failed. Please try again.")).toBeTruthy();
+      });
+    });
+  });
+
   it("redirects to login on logout", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: [] });
     vi.mocked(axios.post).mockResolvedValue({});
