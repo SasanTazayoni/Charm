@@ -378,6 +378,26 @@ describe("AdminPage", () => {
     });
   });
 
+  it("redirects to login when page is restored from bfcache", async () => {
+    vi.mocked(axios.get).mockResolvedValue({ data: [] });
+    render(<LanguageProvider><AdminPage /></LanguageProvider>);
+    await waitFor(() => expect(screen.getByText("No photos yet.")).toBeTruthy());
+
+    fireEvent(window, new PageTransitionEvent("pageshow", { persisted: true }));
+
+    expect(mockPush).toHaveBeenCalledWith("/admin/login");
+  });
+
+  it("does not redirect when pageshow fires without bfcache restore", async () => {
+    vi.mocked(axios.get).mockResolvedValue({ data: [] });
+    render(<LanguageProvider><AdminPage /></LanguageProvider>);
+    await waitFor(() => expect(screen.getByText("No photos yet.")).toBeTruthy());
+
+    fireEvent(window, new PageTransitionEvent("pageshow", { persisted: false }));
+
+    expect(mockPush).not.toHaveBeenCalled();
+  });
+
   it("redirects to login on logout", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: [] });
     vi.mocked(axios.post).mockResolvedValue({});
