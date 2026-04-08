@@ -128,10 +128,10 @@ export default function AdminPage() {
     setStatus(null);
     const formData = new FormData();
     formData.append("file", selectedFile);
+    formData.append("url", targetUrl);
 
     try {
-      await axios.post("/api/upload", formData);
-      await axios.delete("/api/delete", { data: { url: targetUrl } });
+      await axios.put("/api/replace", formData);
       await fetchPhotos();
       setStatus({ text: tr.admin.replaceSuccess[language], type: "success" });
     } catch (error) {
