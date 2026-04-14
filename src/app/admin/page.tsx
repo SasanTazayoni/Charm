@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -9,6 +8,7 @@ import { IoClose } from "react-icons/io5";
 import { Loader2, ImageUp } from "lucide-react";
 import CascadeButton from "@/components/CascadeButton";
 import Footer from "@/components/Footer";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
 import { GALLERY_PREFIX } from "@/constants/blob";
@@ -259,38 +259,11 @@ export default function AdminPage() {
         </div>
       )}
 
-      {confirmUrl && createPortal(
-        <div
-          className="admin-confirm-backdrop"
-          onClick={() => setConfirmUrl(null)}
-        >
-          <div
-            className="admin-confirm-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="admin-confirm-text">
-              {tr.admin.confirmDelete[language]}
-            </p>
-            <div className="admin-confirm-actions">
-              <CascadeButton
-                variant="pink-outline"
-                className="pink-outline-button admin-confirm-cancel"
-                onClick={() => setConfirmUrl(null)}
-              >
-                {tr.admin.cancel[language]}
-              </CascadeButton>
-              <CascadeButton
-                variant="gold"
-                className="gold-button admin-confirm-delete"
-                onClick={handleDelete}
-              >
-                {tr.admin.delete[language]}
-              </CascadeButton>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
+      <ConfirmDeleteModal
+        isOpen={!!confirmUrl}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmUrl(null)}
+      />
     </div>
     <Footer />
     </>

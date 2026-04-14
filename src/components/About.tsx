@@ -1,15 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
 import { useModalState } from "@/hooks/useModalState";
-import { createPortal } from "react-dom";
-import Image from "next/image";
-import { IoClose } from "react-icons/io5";
+import CertificateModal from "@/components/modals/CertificateModal";
 
 export default function About() {
   const { language } = useLanguage();
-  const { isOpen: certificateOpen, isVisible: certificateVisible, open: openCertificate, close: closeCertificate } = useModalState();
+  const { isOpen, isVisible, open, close } = useModalState();
 
   return (
     <section id="about" className="about-section">
@@ -35,7 +34,7 @@ export default function About() {
         <div className="about-content">
           <p className="about-text">
             {tr.about.para1Prefix[language]}
-            <button onClick={openCertificate} className="certificate-inline-link">
+            <button onClick={open} className="certificate-inline-link">
               {tr.about.para1LinkText[language]}
             </button>
             .
@@ -46,35 +45,7 @@ export default function About() {
 
       </div>
 
-      {certificateOpen && createPortal(
-        <div
-          className={`certificate-modal-backdrop ${certificateVisible ? "certificate-modal-backdrop-visible" : ""}`}
-          onClick={closeCertificate}
-          onKeyDown={(e) => e.key === "Escape" && closeCertificate()}
-          role="presentation"
-          tabIndex={-1}
-        >
-          <div
-            className="certificate-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="certificate-modal-close"
-              onClick={closeCertificate}
-              aria-label={tr.about.closeLabel[language]}
-            >
-              <IoClose size={32} />
-            </button>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/certificate.jpeg"
-              alt={tr.about.certAlt[language]}
-              className="certificate-modal-image"
-            />
-          </div>
-        </div>,
-        document.body
-      )}
+      <CertificateModal isOpen={isOpen} isVisible={isVisible} onClose={close} />
 
     </section>
   );

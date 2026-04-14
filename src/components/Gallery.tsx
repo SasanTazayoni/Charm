@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { IoClose } from "react-icons/io5";
 import { FaInstagram } from "react-icons/fa";
 import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
@@ -12,6 +10,7 @@ import { translations as tr } from "@/constants/translations";
 import { fetchWithRetry } from "@/lib/fetchWithRetry";
 import { useModalState } from "@/hooks/useModalState";
 import { INSTAGRAM_URL } from "@/constants/contact";
+import LightboxModal from "@/components/modals/LightboxModal";
 import type { Photo } from "@/types/photo";
 
 export default function Gallery() {
@@ -21,17 +20,13 @@ export default function Gallery() {
   const [fetchError, setFetchError] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const { isOpen: lightboxOpen, isVisible: lightboxVisible, open: openLightboxModal, close: closeLightbox } = useModalState();
-  const backdropRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     fetchWithRetry(() => axios.get<Photo[]>("/api/photos", { timeout: 8000 }))
       .then((photosResponse) => setPhotos(photosResponse.data))
       .catch(() => setFetchError(true))
       .finally(() => setLoading(false));
   }, []);
-
-  useEffect(() => {
-    if (lightboxOpen) backdropRef.current?.focus();
-  }, [lightboxOpen]);
 
   const openLightbox = (photo: Photo) => {
     if (window.innerWidth <= 324) return;
@@ -98,33 +93,7 @@ export default function Gallery() {
         </>
       )}
 
-      {lightboxOpen &&
-        createPortal(
-          <div
-            ref={backdropRef}
-            className={`lightbox-backdrop ${lightboxVisible ? "lightbox-backdrop-visible" : ""}`}
-            onClick={closeLightbox}
-            onKeyDown={(e) => e.key === "Escape" && closeLightbox()}
-            role="presentation"
-            tabIndex={-1}
-          >
-            <div
-              className="lightbox-modal"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button className="lightbox-close" onClick={closeLightbox} aria-label={tr.gallery.closeLabel[language]}>
-                <IoClose size={32} className="text-brand-gold" />
-              </button>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={selectedPhoto!.url}
-                alt={tr.gallery.photoAlt[language]}
-                className="lightbox-image"
-              />
-            </div>
-          </div>,
-          document.body,
-        )}
+      <LightboxModal isOpen={lightboxOpen} isVisible={lightboxVisible} onClose={closeLightbox} photo={selectedPhoto} />
     </section>
   );
 }
