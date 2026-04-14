@@ -22,7 +22,7 @@ vi.mock("@/components/modals/ConfirmDeleteModal", async () => {
   const { useLanguage } = await import("@/context/LanguageContext");
   const { translations: tr } = await import("@/constants/translations");
   return {
-    default: ({ isOpen, onConfirm, onCancel }: { isOpen: boolean; onConfirm: () => void; onCancel: () => void }) => {
+    default: ({ isOpen, onConfirm, onCancel }: { isOpen: boolean; isVisible: boolean; onConfirm: () => void; onCancel: () => void }) => {
       const { language } = useLanguage();
       if (!isOpen) return null;
       return (
@@ -193,7 +193,9 @@ describe("AdminPage", () => {
     await waitFor(() => fireEvent.click(container.querySelector(".admin-delete-button")!));
 
     fireEvent.click(screen.getByText("Cancel"));
-    expect(container.querySelector(".admin-confirm-modal")).toBeNull();
+    await waitFor(() => {
+      expect(container.querySelector(".admin-confirm-modal")).toBeNull();
+    });
   });
 
   it("shows success message after delete", async () => {
@@ -239,7 +241,9 @@ describe("AdminPage", () => {
     await waitFor(() => fireEvent.click(container.querySelector(".admin-delete-button")!));
 
     fireEvent.click(container.querySelector(".admin-confirm-backdrop")!);
-    expect(container.querySelector(".admin-confirm-modal")).toBeNull();
+    await waitFor(() => {
+      expect(container.querySelector(".admin-confirm-modal")).toBeNull();
+    });
   });
 
   describe("replace photo", () => {

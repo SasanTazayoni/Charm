@@ -18,7 +18,7 @@ describe("ConfirmDeleteModal", () => {
   it("renders nothing when closed", () => {
     const { container } = render(
       <LanguageProvider>
-        <ConfirmDeleteModal isOpen={false} onConfirm={vi.fn()} onCancel={vi.fn()} />
+        <ConfirmDeleteModal isOpen={false} isVisible={false} onConfirm={vi.fn()} onCancel={vi.fn()} />
       </LanguageProvider>
     );
     expect(container.querySelector(".admin-confirm-backdrop")).toBeNull();
@@ -27,16 +27,34 @@ describe("ConfirmDeleteModal", () => {
   it("renders the modal when open", () => {
     const { container } = render(
       <LanguageProvider>
-        <ConfirmDeleteModal isOpen={true} onConfirm={vi.fn()} onCancel={vi.fn()} />
+        <ConfirmDeleteModal isOpen={true} isVisible={true} onConfirm={vi.fn()} onCancel={vi.fn()} />
       </LanguageProvider>
     );
     expect(container.querySelector(".admin-confirm-modal")).toBeTruthy();
   });
 
+  it("applies visible class when isVisible is true", () => {
+    const { container } = render(
+      <LanguageProvider>
+        <ConfirmDeleteModal isOpen={true} isVisible={true} onConfirm={vi.fn()} onCancel={vi.fn()} />
+      </LanguageProvider>
+    );
+    expect(container.querySelector(".admin-confirm-backdrop-visible")).toBeTruthy();
+  });
+
+  it("does not apply visible class when isVisible is false", () => {
+    const { container } = render(
+      <LanguageProvider>
+        <ConfirmDeleteModal isOpen={true} isVisible={false} onConfirm={vi.fn()} onCancel={vi.fn()} />
+      </LanguageProvider>
+    );
+    expect(container.querySelector(".admin-confirm-backdrop-visible")).toBeNull();
+  });
+
   it("renders the confirmation text when open", () => {
     render(
       <LanguageProvider>
-        <ConfirmDeleteModal isOpen={true} onConfirm={vi.fn()} onCancel={vi.fn()} />
+        <ConfirmDeleteModal isOpen={true} isVisible={true} onConfirm={vi.fn()} onCancel={vi.fn()} />
       </LanguageProvider>
     );
     expect(screen.getByText("Delete this photo?")).toBeTruthy();
@@ -46,7 +64,7 @@ describe("ConfirmDeleteModal", () => {
     const onConfirm = vi.fn();
     render(
       <LanguageProvider>
-        <ConfirmDeleteModal isOpen={true} onConfirm={onConfirm} onCancel={vi.fn()} />
+        <ConfirmDeleteModal isOpen={true} isVisible={true} onConfirm={onConfirm} onCancel={vi.fn()} />
       </LanguageProvider>
     );
     fireEvent.click(screen.getByText("Delete"));
@@ -57,7 +75,7 @@ describe("ConfirmDeleteModal", () => {
     const onCancel = vi.fn();
     render(
       <LanguageProvider>
-        <ConfirmDeleteModal isOpen={true} onConfirm={vi.fn()} onCancel={onCancel} />
+        <ConfirmDeleteModal isOpen={true} isVisible={true} onConfirm={vi.fn()} onCancel={onCancel} />
       </LanguageProvider>
     );
     fireEvent.click(screen.getByText("Cancel"));
@@ -68,7 +86,7 @@ describe("ConfirmDeleteModal", () => {
     const onCancel = vi.fn();
     const { container } = render(
       <LanguageProvider>
-        <ConfirmDeleteModal isOpen={true} onConfirm={vi.fn()} onCancel={onCancel} />
+        <ConfirmDeleteModal isOpen={true} isVisible={true} onConfirm={vi.fn()} onCancel={onCancel} />
       </LanguageProvider>
     );
     fireEvent.click(container.querySelector(".admin-confirm-backdrop")!);
@@ -79,7 +97,7 @@ describe("ConfirmDeleteModal", () => {
     const onCancel = vi.fn();
     const { container } = render(
       <LanguageProvider>
-        <ConfirmDeleteModal isOpen={true} onConfirm={vi.fn()} onCancel={onCancel} />
+        <ConfirmDeleteModal isOpen={true} isVisible={true} onConfirm={vi.fn()} onCancel={onCancel} />
       </LanguageProvider>
     );
     fireEvent.click(container.querySelector(".admin-confirm-modal")!);
@@ -89,7 +107,7 @@ describe("ConfirmDeleteModal", () => {
   it("renders Serbian text when language is Serbian", () => {
     render(
       <LanguageProvider initialLanguage="Serbian">
-        <ConfirmDeleteModal isOpen={true} onConfirm={vi.fn()} onCancel={vi.fn()} />
+        <ConfirmDeleteModal isOpen={true} isVisible={true} onConfirm={vi.fn()} onCancel={vi.fn()} />
       </LanguageProvider>
     );
     expect(screen.getByText("Obrisati ovu fotografiju?")).toBeTruthy();

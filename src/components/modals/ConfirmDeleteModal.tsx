@@ -7,17 +7,18 @@ import { translations as tr } from "@/constants/translations";
 
 type Props = {
   isOpen: boolean;
+  isVisible: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 };
 
-export default function ConfirmDeleteModal({ isOpen, onConfirm, onCancel }: Props) {
+export default function ConfirmDeleteModal({ isOpen, isVisible, onConfirm, onCancel }: Props) {
   const { language } = useLanguage();
 
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="admin-confirm-backdrop" onClick={onCancel}>
+    <div className={`admin-confirm-backdrop ${isVisible ? "admin-confirm-backdrop-visible" : ""}`} onClick={onCancel}>
       <div className="admin-confirm-modal" onClick={(e) => e.stopPropagation()}>
         <p className="admin-confirm-text">{tr.admin.confirmDelete[language]}</p>
         <div className="admin-confirm-actions">

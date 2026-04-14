@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useModalState } from "@/hooks/useModalState";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -25,7 +26,8 @@ export default function AdminPage() {
   const [status, setStatus] = useState<StatusMessage>(null);
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
   const [replacingUrl, setReplacingUrl] = useState<string | null>(null);
-  const [confirmUrl, setConfirmUrl] = useState<string | null>(null);
+  const { isOpen: confirmOpen, isVisible: confirmVisible, open: openConfirm, close: closeConfirm } = useModalState();
+  const confirmUrlRef = useRef<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replaceFileInputRef = useRef<HTMLInputElement>(null);
   const replaceTargetRef = useRef<string | null>(null);
@@ -96,11 +98,13 @@ export default function AdminPage() {
   };
 
   const handleDelete = async () => {
-    setDeletingUrl(confirmUrl!);
-    setConfirmUrl(null);
+    const url = confirmUrlRef.current!;
+    setDeletingUrl(url);
+    closeConfirm();
+    confirmUrlRef.current = null;
     setStatus(null);
     try {
-      await axios.delete("/api/delete", { data: { url: confirmUrl } });
+      await axios.delete("/api/delete", { data: { url } });
       await fetchPhotos();
       setStatus({ text: tr.admin.deleteSuccess[language], type: "success" });
     } catch {
@@ -246,7 +250,7 @@ export default function AdminPage() {
                 </button>
                 <button
                   className="admin-delete-button"
-                  onClick={() => setConfirmUrl(photo.url)}
+                  onClick={() => { confirmUrlRef.current = photo.url; openConfirm(); }}
                   disabled={deletingUrl === photo.url || replacingUrl === photo.url}
                   aria-label={tr.admin.deletePhotoLabel[language]}
                 >
@@ -259,9 +263,10 @@ export default function AdminPage() {
       )}
 
       <ConfirmDeleteModal
-        isOpen={!!confirmUrl}
+        isOpen={confirmOpen}
+        isVisible={confirmVisible}
         onConfirm={handleDelete}
-        onCancel={() => setConfirmUrl(null)}
+        onCancel={() => { closeConfirm(); confirmUrlRef.current = null; }}
       />
     </div>
     <Footer />

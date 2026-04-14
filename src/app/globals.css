@@ -1216,6 +1216,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+.admin-confirm-backdrop-visible {
+  opacity: 1;
 }
 
 .admin-confirm-modal {
