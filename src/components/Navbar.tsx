@@ -13,7 +13,7 @@ import { IoClose } from "react-icons/io5";
 const NAV_LINKS = ["About", "Pricing", "Gallery", "Contact"] as const;
 
 const NAV_LABELS = {
-  About:   tr.navbar.about,
+  About: tr.navbar.about,
   Pricing: tr.navbar.pricing,
   Gallery: tr.navbar.gallery,
   Contact: tr.navbar.contact,
@@ -21,8 +21,17 @@ const NAV_LABELS = {
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
-  const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
-  const { isOpen: isMenuOpen, isVisible: isMenuVisible, open: openMenu, close: closeMenu } = useModalState();
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  const {
+    isOpen: isMenuOpen,
+    isVisible: isMenuVisible,
+    open: openMenu,
+    close: closeMenu,
+  } = useModalState();
   const { language } = useLanguage();
 
   useEffect(() => {
@@ -46,12 +55,12 @@ export default function Navbar() {
             setActiveSection(entry.target.id);
           } else {
             setActiveSection((current) =>
-              current === entry.target.id ? "" : current
+              current === entry.target.id ? "" : current,
             );
           }
         });
       },
-      { threshold: 0, rootMargin: "-30% 0px -30% 0px" }
+      { threshold: 0, rootMargin: "-30% 0px -30% 0px" },
     );
 
     NAV_LINKS.forEach((link) => {
@@ -67,7 +76,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar bg-brand-green/40 backdrop-blur-sm">
+      <nav className="navbar bg-brand-green/70 backdrop-blur-sm">
         <div className="navbar-logo">
           <Image src="/logo.png" alt="Charm" width={60} height={60} priority />
           <span className="navbar-brand">Charm</span>
@@ -88,14 +97,16 @@ export default function Navbar() {
 
         <button
           className="navbar-hamburger"
-          onClick={() => isMenuOpen ? closeMenu() : openMenu()}
+          onClick={() => (isMenuOpen ? closeMenu() : openMenu())}
           aria-label="Toggle menu"
         >
           {isMenuOpen ? <IoClose size={28} /> : <RxHamburgerMenu size={28} />}
         </button>
 
         {isMenuOpen && (
-          <ul className={`navbar-mobile-menu ${isMenuVisible ? "navbar-mobile-menu-open" : ""}`}>
+          <ul
+            className={`navbar-mobile-menu ${isMenuVisible ? "navbar-mobile-menu-open" : ""}`}
+          >
             {NAV_LINKS.map((link) => (
               <li key={link}>
                 <Link
@@ -111,13 +122,14 @@ export default function Navbar() {
         )}
       </nav>
 
-      {mounted && createPortal(
-        <div
-          className={`navbar-mobile-backdrop ${isMenuVisible ? "navbar-mobile-backdrop-visible" : ""}`}
-          onClick={closeMenu}
-        />,
-        document.body
-      )}
+      {mounted &&
+        createPortal(
+          <div
+            className={`navbar-mobile-backdrop ${isMenuVisible ? "navbar-mobile-backdrop-visible" : ""}`}
+            onClick={closeMenu}
+          />,
+          document.body,
+        )}
     </>
   );
 }
