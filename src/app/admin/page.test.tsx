@@ -18,9 +18,23 @@ vi.mock("@/components/CascadeButton", () => ({
     <button onClick={onClick} disabled={disabled} {...props}>{children}</button>
   ),
 }));
-vi.mock("react-dom", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("react-dom")>();
-  return { ...actual, createPortal: (node: React.ReactNode) => node };
+vi.mock("@/components/modals/ConfirmDeleteModal", async () => {
+  const { useLanguage } = await import("@/context/LanguageContext");
+  const { translations: tr } = await import("@/constants/translations");
+  return {
+    default: ({ isOpen, onConfirm, onCancel }: { isOpen: boolean; onConfirm: () => void; onCancel: () => void }) => {
+      const { language } = useLanguage();
+      if (!isOpen) return null;
+      return (
+        <div className="admin-confirm-backdrop" onClick={onCancel}>
+          <div className="admin-confirm-modal">
+            <button onClick={onCancel}>{tr.admin.cancel[language]}</button>
+            <button onClick={onConfirm}>{tr.admin.delete[language]}</button>
+          </div>
+        </div>
+      );
+    },
+  };
 });
 vi.mock("@/lib/fetchWithRetry", () => ({
   fetchWithRetry: vi.fn((operation: () => Promise<unknown>) => operation()),

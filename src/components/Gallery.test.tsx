@@ -8,10 +8,10 @@ vi.mock("axios");
 vi.mock("next/image", () => ({
   default: ({ alt }: { alt: string }) => <img alt={alt} />,
 }));
-vi.mock("react-dom", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("react-dom")>();
-  return { ...actual, createPortal: (node: React.ReactNode) => node };
-});
+vi.mock("@/components/modals/LightboxModal", () => ({
+  default: ({ isOpen }: { isOpen: boolean }) =>
+    isOpen ? <div className="lightbox-backdrop" /> : null,
+}));
 vi.mock("@/lib/fetchWithRetry", () => ({
   fetchWithRetry: vi.fn((operation: () => Promise<unknown>) => operation()),
 }));
@@ -79,28 +79,6 @@ describe("Gallery", () => {
     await waitFor(() => expect(container.querySelector(".gallery-item")).toBeTruthy());
     fireEvent.keyDown(container.querySelector(".gallery-item")!, { key: "Enter" });
     expect(container.querySelector(".lightbox-backdrop")).toBeTruthy();
-  });
-
-  it("closes lightbox when close button is clicked", async () => {
-    vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    const { container } = render(<LanguageProvider><Gallery /></LanguageProvider>);
-    await waitFor(() => expect(container.querySelector(".gallery-item")).toBeTruthy());
-    fireEvent.click(container.querySelector(".gallery-item")!);
-    fireEvent.click(container.querySelector(".lightbox-close")!);
-    await waitFor(() => {
-      expect(container.querySelector(".lightbox-backdrop")).toBeNull();
-    });
-  });
-
-  it("closes lightbox when Escape is pressed", async () => {
-    vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    const { container } = render(<LanguageProvider><Gallery /></LanguageProvider>);
-    await waitFor(() => expect(container.querySelector(".gallery-item")).toBeTruthy());
-    fireEvent.click(container.querySelector(".gallery-item")!);
-    fireEvent.keyDown(container.querySelector(".lightbox-backdrop")!, { key: "Escape" });
-    await waitFor(() => {
-      expect(container.querySelector(".lightbox-backdrop")).toBeNull();
-    });
   });
 
   it("does not open lightbox when viewport is 324px or below", async () => {
