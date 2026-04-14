@@ -178,16 +178,6 @@ describe("AdminPage", () => {
     });
   });
 
-  it("does nothing when delete is confirmed with no confirmUrl set", async () => {
-    vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
-    await waitFor(() => expect(container.querySelector(".admin-delete-button")).toBeTruthy());
-
-    fireEvent.click(container.querySelector(".admin-delete-button")!);
-    fireEvent.click(container.querySelector(".admin-confirm-backdrop")!);
-    expect(vi.mocked(axios.delete)).not.toHaveBeenCalled();
-  });
-
   it("shows confirm modal when delete button is clicked", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
     const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);

@@ -96,8 +96,7 @@ export default function AdminPage() {
   };
 
   const handleDelete = async () => {
-    if (!confirmUrl) return;
-    setDeletingUrl(confirmUrl);
+    setDeletingUrl(confirmUrl!);
     setConfirmUrl(null);
     setStatus(null);
     try {
