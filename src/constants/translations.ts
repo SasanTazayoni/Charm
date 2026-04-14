@@ -59,7 +59,14 @@ export const translations = {
   },
 
   footer: {
-    copyright: createTranslation("© 2026 Charm. All rights reserved.", "© 2026 Charm. Sva prava zadržana."),
+    copyright:      createTranslation("© 2026 Charm. All rights reserved.", "© 2026 Charm. Sva prava zadržana."),
+    privacyLink:    createTranslation("Privacy & Cookie Notice", "Obavještenje o privatnosti i kolačićima"),
+    privacyHeading: createTranslation("Privacy & Cookie Notice", "Obavještenje o privatnosti i kolačićima"),
+    privacyBody:    createTranslation(
+      "This website uses one cookie (language) to remember whether you prefer English or Serbian. It does not track you or identify you personally.\n\nWhen you contact us via WhatsApp, your message and number are handled by WhatsApp (Meta Platforms) — please refer to their privacy policy for details.\n\nNo other personal data is collected. This website is hosted on Vercel, gallery images are stored on Vercel Blob, and hero videos are hosted on Cloudinary.",
+      "Ova web stranica koristi jedan kolačić (language) kako bi zapamtila da li preferirate engleski ili srpski jezik. Ovaj kolačić vas ne prati niti vas lično identifikuje.\n\nKada nas kontaktirate putem WhatsAppa, vašu poruku i broj obrađuje WhatsApp (Meta Platforms) — pogledajte njihovu politiku privatnosti za detalje.\n\nNe prikupljamo nikakve druge lične podatke. Web stranica je hostovana na Vercel-u, fotografije galerije se čuvaju na Vercel Blob-u, a video snimci heroja su hostovani na Cloudinary-ju.",
+    ),
+    privacyClose:   createTranslation("Close", "Zatvori"),
   },
 
   languageToggle: {
