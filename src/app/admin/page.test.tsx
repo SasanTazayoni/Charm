@@ -87,7 +87,7 @@ describe("AdminPage", () => {
     const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-    const input = container.querySelector("input[type='file']")!;
+    const input = screen.getByTestId("upload-input");
     const file = new File(["content"], "test.jpg", { type: "image/jpeg" });
     fireEvent.change(input, { target: { files: [file] } });
 
@@ -101,7 +101,7 @@ describe("AdminPage", () => {
     const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-    const input = container.querySelector("input[type='file']")!;
+    const input = screen.getByTestId("upload-input");
     fireEvent.change(input, { target: { files: [] } });
     expect(screen.queryByText(/uploaded/i)).toBeNull();
   });
@@ -114,7 +114,7 @@ describe("AdminPage", () => {
     const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-    const input = container.querySelector("input[type='file']")!;
+    const input = screen.getByTestId("upload-input");
     const file = new File(["content"], "test.jpg", { type: "image/jpeg" });
     fireEvent.change(input, { target: { files: [file] } });
 
@@ -133,7 +133,7 @@ describe("AdminPage", () => {
     const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-    const input = container.querySelector("input[type='file']")!;
+    const input = screen.getByTestId("upload-input");
     const file = new File(["content"], "test.gif", { type: "image/gif" });
     fireEvent.change(input, { target: { files: [file] } });
 
@@ -148,7 +148,7 @@ describe("AdminPage", () => {
     const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-    const input = container.querySelector("input[type='file']")!;
+    const input = screen.getByTestId("upload-input");
     const file = new File(["content"], "photo1.jpg", { type: "image/jpeg" });
     fireEvent.change(input, { target: { files: [file] } });
 
@@ -169,7 +169,7 @@ describe("AdminPage", () => {
     const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-    const input = container.querySelector("input[type='file']")!;
+    const input = screen.getByTestId("upload-input");
     const file = new File(["content"], "test.jpg", { type: "image/jpeg" });
     fireEvent.change(input, { target: { files: [file] } });
 
@@ -252,7 +252,7 @@ describe("AdminPage", () => {
       const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
 
-      const replaceInput = container.querySelectorAll("input[type='file']")[1] as HTMLInputElement;
+      const replaceInput = screen.getByTestId("replace-input") as HTMLInputElement;
       const clickSpy = vi.spyOn(replaceInput, "click");
       fireEvent.click(container.querySelector(".admin-replace-button")!);
       expect(clickSpy).toHaveBeenCalled();
@@ -264,7 +264,7 @@ describe("AdminPage", () => {
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
 
       fireEvent.click(container.querySelector(".admin-replace-button")!);
-      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const replaceInput = screen.getByTestId("replace-input");
       fireEvent.change(replaceInput, { target: { files: [] } });
       expect(vi.mocked(axios.put)).not.toHaveBeenCalled();
     });
@@ -274,7 +274,7 @@ describe("AdminPage", () => {
       const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
 
-      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const replaceInput = screen.getByTestId("replace-input");
       const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
       fireEvent.change(replaceInput, { target: { files: [file] } });
       expect(vi.mocked(axios.put)).not.toHaveBeenCalled();
@@ -289,7 +289,7 @@ describe("AdminPage", () => {
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
 
       fireEvent.click(container.querySelector(".admin-replace-button")!);
-      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const replaceInput = screen.getByTestId("replace-input");
       const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
       fireEvent.change(replaceInput, { target: { files: [file] } });
 
@@ -305,7 +305,7 @@ describe("AdminPage", () => {
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
 
       fireEvent.click(container.querySelector(".admin-replace-button")!);
-      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const replaceInput = screen.getByTestId("replace-input");
       const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
       fireEvent.change(replaceInput, { target: { files: [file] } });
 
@@ -321,7 +321,7 @@ describe("AdminPage", () => {
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
 
       fireEvent.click(container.querySelector(".admin-replace-button")!);
-      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const replaceInput = screen.getByTestId("replace-input");
       const file = new File(["content"], "photo2.jpg", { type: "image/jpeg" });
       fireEvent.change(replaceInput, { target: { files: [file] } });
 
@@ -340,7 +340,7 @@ describe("AdminPage", () => {
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
 
       fireEvent.click(container.querySelector(".admin-replace-button")!);
-      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const replaceInput = screen.getByTestId("replace-input");
       const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
       fireEvent.change(replaceInput, { target: { files: [file] } });
 
@@ -358,7 +358,7 @@ describe("AdminPage", () => {
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
 
       fireEvent.click(container.querySelector(".admin-replace-button")!);
-      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const replaceInput = screen.getByTestId("replace-input");
       const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
       fireEvent.change(replaceInput, { target: { files: [file] } });
 
@@ -376,7 +376,7 @@ describe("AdminPage", () => {
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
 
       fireEvent.click(container.querySelector(".admin-replace-button")!);
-      const replaceInput = container.querySelectorAll("input[type='file']")[1]!;
+      const replaceInput = screen.getByTestId("replace-input");
       const file = new File(["content"], "new.jpg", { type: "image/jpeg" });
       fireEvent.change(replaceInput, { target: { files: [file] } });
 
@@ -443,7 +443,7 @@ describe("AdminPage", () => {
       const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-      const input = container.querySelector("input[type='file']")!;
+      const input = screen.getByTestId("upload-input");
       const file = new File(["content"], "photo1.jpg", { type: "image/jpeg" });
       fireEvent.change(input, { target: { files: [file] } });
 
@@ -460,7 +460,7 @@ describe("AdminPage", () => {
       const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-      const input = container.querySelector("input[type='file']")!;
+      const input = screen.getByTestId("upload-input");
       const file = new File(["content"], "test.jpg", { type: "image/jpeg" });
       fireEvent.change(input, { target: { files: [file] } });
 
@@ -480,7 +480,7 @@ describe("AdminPage", () => {
       const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-      const input = container.querySelector("input[type='file']")!;
+      const input = screen.getByTestId("upload-input");
       const file = new File(["content"], "test.gif", { type: "image/gif" });
       fireEvent.change(input, { target: { files: [file] } });
 
@@ -500,7 +500,7 @@ describe("AdminPage", () => {
       const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-      const input = container.querySelector("input[type='file']")!;
+      const input = screen.getByTestId("upload-input");
       const file = new File(["content"], "test.jpg", { type: "image/jpeg" });
       fireEvent.change(input, { target: { files: [file] } });
 
@@ -520,7 +520,7 @@ describe("AdminPage", () => {
       const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
 
-      const input = container.querySelector("input[type='file']")!;
+      const input = screen.getByTestId("upload-input");
       const file = new File(["content"], "test.jpg", { type: "image/jpeg" });
       fireEvent.change(input, { target: { files: [file] } });
 

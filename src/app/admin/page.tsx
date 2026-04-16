@@ -214,6 +214,7 @@ export default function AdminPage() {
           type="file"
           accept="image/*"
           className="admin-file-input"
+          data-testid="upload-input"
           onChange={handleUpload}
         />
         <input
@@ -221,6 +222,7 @@ export default function AdminPage() {
           type="file"
           accept="image/*"
           className="admin-file-input"
+          data-testid="replace-input"
           onChange={handleReplaceSelect}
         />
       </div>
