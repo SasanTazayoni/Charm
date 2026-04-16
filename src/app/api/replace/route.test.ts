@@ -1,7 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { PUT } from "./route";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import * as blob from "@vercel/blob";
+import * as validationModule from "@/lib/validateImageFile";
+
+vi.mock("@/lib/validateImageFile", () => ({
+  validateImageFile: vi.fn().mockReturnValue(null),
+}));
 
 vi.mock("@vercel/blob", () => ({
   put: vi.fn().mockResolvedValue({ url: "https://blob.vercel.com/gallery/new.jpg" }),
@@ -59,17 +64,13 @@ describe("PUT /api/replace", () => {
     });
   });
 
-  describe("when the file type is invalid", () => {
-    it("returns 400 for a GIF", async () => {
+  describe("when the file fails validation", () => {
+    it("returns the validation error response", async () => {
+      vi.spyOn(validationModule, "validateImageFile").mockReturnValueOnce(
+        NextResponse.json({ error: "Invalid file type. Only JPEG, PNG and WebP are allowed." }, { status: 400 }),
+      );
       const response = await PUT(makeRequest({ name: "test.gif", type: "image/gif", size: 100 }, "https://blob.vercel.com/gallery/old.jpg", "correct-secret"));
       expect(response.status).toBe(400);
-    });
-  });
-
-  describe("when the file is too large", () => {
-    it("returns 413", async () => {
-      const response = await PUT(makeRequest({ name: "large.jpg", type: "image/jpeg", size: 11 * 1024 * 1024 }, "https://blob.vercel.com/gallery/old.jpg", "correct-secret"));
-      expect(response.status).toBe(413);
     });
   });
 
