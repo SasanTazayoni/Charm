@@ -52,6 +52,7 @@ export default function AdminLogin() {
           <input
             type="password"
             placeholder={isSerbian ? "Lozinka" : "Password"}
+            aria-label={isSerbian ? "Lozinka" : "Password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="admin-login-input"

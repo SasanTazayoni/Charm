@@ -76,7 +76,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar bg-brand-green/70 backdrop-blur-sm">
+      <nav className="navbar bg-brand-green/70 backdrop-blur-sm" aria-label="Main navigation">
         <div className="navbar-logo">
           <Image src="/logo.png" alt="Charm" width={60} height={60} priority />
           <span className="navbar-brand">Charm</span>

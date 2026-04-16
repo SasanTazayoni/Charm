@@ -83,6 +83,7 @@ export default function Hero() {
             opacity: opacities[videoIndex],
             transition: `opacity ${FADE_DURATION}ms ease-in-out`,
           }}
+          aria-hidden="true"
           className="absolute inset-0 h-full w-full object-cover"
         />
       ))}

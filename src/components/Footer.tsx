@@ -21,6 +21,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="footer-github"
+            aria-label="View source on GitHub"
           >
             <FaGithub size={18} />
           </Link>
