@@ -30,7 +30,9 @@ export default function LightboxModal({ isOpen, isVisible, onClose, photo }: Pro
       className={`lightbox-backdrop ${isVisible ? "lightbox-backdrop-visible" : ""}`}
       onClick={onClose}
       onKeyDown={(e) => e.key === "Escape" && onClose()}
-      role="presentation"
+      role="dialog"
+      aria-modal="true"
+      aria-label={tr.gallery.photoAlt[language]}
       tabIndex={-1}
     >
       <div className="lightbox-modal" onClick={(e) => e.stopPropagation()}>
