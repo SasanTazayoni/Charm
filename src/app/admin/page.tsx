@@ -239,7 +239,7 @@ export default function AdminPage() {
             <div key={photo.url} className="admin-photo-item">
               <Image
                 src={photo.url}
-                alt="Charm nail art"
+                alt={tr.gallery.photoAlt[language]}
                 fill
                 sizes="25vw"
                 className="admin-photo-image"

@@ -6,6 +6,7 @@ import Image from "next/image";
 import axios from "axios";
 import CascadeButton from "@/components/CascadeButton";
 import { useLanguage } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
 
 export default function AdminLogin() {
   const { language } = useLanguage();
@@ -47,7 +48,7 @@ export default function AdminLogin() {
     <div className="admin-login-page">
       <div className="admin-login-card">
         <Image src="/logo.png" alt="Charm" width={160} height={160} priority />
-        <h1 className="section-heading admin-login-heading">{isSerbian ? "Administrator" : "Admin"}</h1>
+        <h1 className="section-heading admin-login-heading">{tr.adminLogin.heading[language]}</h1>
         <form onSubmit={handleSubmit} className="admin-login-form">
           <input
             type="password"
