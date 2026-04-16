@@ -31,7 +31,12 @@ export default function AdminPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replaceFileInputRef = useRef<HTMLInputElement>(null);
   const replaceTargetRef = useRef<string | null>(null);
+  const languageRef = useRef(language);
   const router = useRouter();
+
+  useEffect(() => {
+    languageRef.current = language;
+  }, [language]);
 
   const fetchPhotos = useCallback(async () => {
     try {
@@ -40,11 +45,11 @@ export default function AdminPage() {
       );
       setPhotos(photosResponse.data);
     } catch {
-      setStatus({ text: tr.admin.loadError[language], type: "error" });
+      setStatus({ text: tr.admin.loadError[languageRef.current], type: "error" });
     } finally {
       setLoadingPhotos(false);
     }
-  }, [language]);
+  }, []);
 
   useEffect(() => {
     fetchPhotos();

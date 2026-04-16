@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
@@ -21,11 +21,11 @@ const NAV_LABELS = {
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const {
     isOpen: isMenuOpen,
     isVisible: isMenuVisible,

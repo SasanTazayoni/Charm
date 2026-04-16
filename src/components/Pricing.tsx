@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { translations as tr } from "@/constants/translations";
 
@@ -9,15 +9,15 @@ const SMALL_BREAKPOINT = "(max-width: 428px)";
 
 export default function Pricing() {
   const { language } = useLanguage();
-  const isSmall = useSyncExternalStore(
-    (cb) => {
-      const mq = window.matchMedia(SMALL_BREAKPOINT);
-      mq.addEventListener("change", cb);
-      return () => mq.removeEventListener("change", cb);
-    },
-    () => window.matchMedia(SMALL_BREAKPOINT).matches,
-    () => false,
-  );
+  const [isSmall, setIsSmall] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(SMALL_BREAKPOINT);
+    setIsSmall(mq.matches);
+    const handler = () => setIsSmall(window.matchMedia(SMALL_BREAKPOINT).matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   const pricingImageSrc = isSmall
     ? tr.pricing.imageSrcSmall[language]
