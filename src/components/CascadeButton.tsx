@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, type ButtonHTMLAttributes } from "react";
+import { useEffect, useRef, type ButtonHTMLAttributes, type Ref } from "react";
 
 type Variant = "gold" | "pink-outline";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant: Variant;
+  ref?: Ref<HTMLButtonElement>;
 };
 
 const SQUARE_SIZE = 5;
@@ -15,8 +16,14 @@ const SQUARE_COLORS: Record<Variant, string> = {
   "pink-outline": "rgba(242, 120, 161, 0.25)",
 };
 
-export default function CascadeButton({ children, className = "", variant, ...props }: Props) {
+export default function CascadeButton({ children, className = "", variant, ref: externalRef, ...props }: Props) {
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  function setRefs(el: HTMLButtonElement | null) {
+    (buttonRef as { current: HTMLButtonElement | null }).current = el;
+    if (typeof externalRef === "function") externalRef(el);
+    else if (externalRef) (externalRef as { current: HTMLButtonElement | null }).current = el;
+  }
 
   useEffect(() => {
     const button = buttonRef.current!;
@@ -139,7 +146,7 @@ export default function CascadeButton({ children, className = "", variant, ...pr
   }, [variant]);
 
   return (
-    <button ref={buttonRef} className={`cascade-button ${className}`} {...props}>
+    <button ref={setRefs} className={`cascade-button ${className}`} {...props}>
       <span className="cascade-button-content">{children}</span>
     </button>
   );

@@ -18,6 +18,18 @@ describe("CascadeButton", () => {
     expect(container.querySelector(".cascade-button")).toBeTruthy();
   });
 
+  it("forwards an object ref to the button element", () => {
+    const ref = { current: null as HTMLButtonElement | null };
+    render(<CascadeButton ref={ref} variant="gold">Click me</CascadeButton>);
+    expect(ref.current).toBeTruthy();
+  });
+
+  it("forwards a callback ref to the button element", () => {
+    let captured: HTMLButtonElement | null = null;
+    render(<CascadeButton ref={(el) => { captured = el; }} variant="gold">Click me</CascadeButton>);
+    expect(captured).toBeTruthy();
+  });
+
   it("passes disabled prop to the button", () => {
     render(<CascadeButton variant="gold" disabled>Click me</CascadeButton>);
     expect((screen.getByRole("button") as HTMLButtonElement).disabled).toBe(true);

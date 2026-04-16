@@ -104,6 +104,17 @@ describe("ConfirmDeleteModal", () => {
     expect(onCancel).not.toHaveBeenCalled();
   });
 
+  it("calls onCancel when Escape is pressed on the backdrop", () => {
+    const onCancel = vi.fn();
+    const { container } = render(
+      <LanguageProvider>
+        <ConfirmDeleteModal isOpen={true} isVisible={true} onConfirm={vi.fn()} onCancel={onCancel} />
+      </LanguageProvider>
+    );
+    fireEvent.keyDown(container.querySelector(".admin-confirm-backdrop")!, { key: "Escape" });
+    expect(onCancel).toHaveBeenCalledOnce();
+  });
+
   it("renders Serbian text when language is Serbian", () => {
     render(
       <LanguageProvider initialLanguage="Serbian">
