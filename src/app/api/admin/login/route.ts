@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -13,7 +14,10 @@ export async function POST(request: NextRequest) {
   }
   const { password } = body;
 
-  if (password !== process.env.ADMIN_PASSWORD) {
+  const expected = Buffer.from(process.env.ADMIN_PASSWORD);
+  const actual = Buffer.from(typeof password === "string" ? password : "");
+  const match = actual.length === expected.length && timingSafeEqual(actual, expected);
+  if (!match) {
     return NextResponse.json({ error: "Invalid password" }, { status: 401 });
   }
 

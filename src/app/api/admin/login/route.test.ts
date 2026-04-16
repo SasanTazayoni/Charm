@@ -42,8 +42,18 @@ describe("POST /api/admin/login", () => {
   });
 
   describe("when the password is incorrect", () => {
-    it("returns 401", async () => {
+    it("returns 401 for a wrong password", async () => {
       const response = await POST(makeRequest({ password: "wrong-password" }));
+      expect(response.status).toBe(401);
+    });
+
+    it("returns 401 for a wrong password of the same length", async () => {
+      const response = await POST(makeRequest({ password: "xxxxxxxxxxxxxxxx" }));
+      expect(response.status).toBe(401);
+    });
+
+    it("returns 401 when password is not a string", async () => {
+      const response = await POST(makeRequest({ password: 12345 }));
       expect(response.status).toBe(401);
     });
   });
