@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { DELETE } from "./route";
 import { NextRequest } from "next/server";
+import * as blob from "@vercel/blob";
 
 vi.mock("@vercel/blob", () => ({
   del: vi.fn().mockResolvedValue(undefined),
@@ -57,6 +58,14 @@ describe("DELETE /api/delete", () => {
     it("returns 200", async () => {
       const response = await DELETE(makeRequest({ url: "https://blob.vercel.com/gallery/test.jpg" }, "correct-secret"));
       expect(response.status).toBe(200);
+    });
+  });
+
+  describe("when the blob operation fails", () => {
+    it("returns 500 if del throws", async () => {
+      vi.spyOn(blob, "del").mockRejectedValueOnce(new Error("Blob error"));
+      const response = await DELETE(makeRequest({ url: "https://blob.vercel.com/gallery/test.jpg" }, "correct-secret"));
+      expect(response.status).toBe(500);
     });
   });
 });

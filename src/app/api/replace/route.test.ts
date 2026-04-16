@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { PUT } from "./route";
 import { NextRequest } from "next/server";
+import * as blob from "@vercel/blob";
 
 vi.mock("@vercel/blob", () => ({
   put: vi.fn().mockResolvedValue({ url: "https://blob.vercel.com/gallery/new.jpg" }),
@@ -86,6 +87,20 @@ describe("PUT /api/replace", () => {
     it("returns 200 for a WebP", async () => {
       const response = await PUT(makeRequest({ name: "new.webp", type: "image/webp", size: 100 }, "https://blob.vercel.com/gallery/old.jpg", "correct-secret"));
       expect(response.status).toBe(200);
+    });
+  });
+
+  describe("when the blob operation fails", () => {
+    it("returns 500 if put throws", async () => {
+      vi.spyOn(blob, "put").mockRejectedValueOnce(new Error("Blob error"));
+      const response = await PUT(makeRequest({ name: "new.jpg", type: "image/jpeg", size: 100 }, "https://blob.vercel.com/gallery/old.jpg", "correct-secret"));
+      expect(response.status).toBe(500);
+    });
+
+    it("returns 500 if del throws", async () => {
+      vi.spyOn(blob, "del").mockRejectedValueOnce(new Error("Blob error"));
+      const response = await PUT(makeRequest({ name: "new.jpg", type: "image/jpeg", size: 100 }, "https://blob.vercel.com/gallery/old.jpg", "correct-secret"));
+      expect(response.status).toBe(500);
     });
   });
 });

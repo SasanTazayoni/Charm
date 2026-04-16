@@ -19,6 +19,12 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "No URL provided" }, { status: 400 });
   }
 
-  await del(url);
+  try {
+    await del(url);
+  } catch (error) {
+    console.error("Blob delete failed:", error);
+    return NextResponse.json({ error: "Failed to delete photo" }, { status: 500 });
+  }
+
   return NextResponse.json({ success: true });
 }

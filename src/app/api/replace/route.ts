@@ -28,7 +28,12 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: `File too large. Maximum size is ${MAX_SIZE_MB}MB.` }, { status: 413 });
   }
 
-  const blob = await put(`${GALLERY_PREFIX}${file.name}`, file, { access: "public" });
-  await del(url);
-  return NextResponse.json(blob);
+  try {
+    const blob = await put(`${GALLERY_PREFIX}${file.name}`, file, { access: "public" });
+    await del(url);
+    return NextResponse.json(blob);
+  } catch (error) {
+    console.error("Blob replace failed:", error);
+    return NextResponse.json({ error: "Failed to replace photo" }, { status: 500 });
+  }
 }
