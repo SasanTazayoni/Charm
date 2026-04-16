@@ -10,7 +10,6 @@ import { translations as tr } from "@/constants/translations";
 
 export default function AdminLogin() {
   const { language } = useLanguage();
-  const isSerbian = language === "Serbian";
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,16 +27,16 @@ export default function AdminLogin() {
       if (axios.isAxiosError(err)) {
         const status = err.response?.status;
         if (status === 401) {
-          setError(isSerbian ? "Netačna lozinka." : "Incorrect password.");
+          setError(tr.adminLogin.errorWrongPassword[language]);
         } else if (status === 500) {
-          setError(isSerbian ? "Greška na serveru. Kontaktirajte administratora." : "Server error. Please contact the administrator.");
+          setError(tr.adminLogin.errorServer[language]);
         } else if (!err.response) {
-          setError(isSerbian ? "Nema veze. Provjerite internet i pokušajte ponovo." : "No connection. Check your internet and try again.");
+          setError(tr.adminLogin.errorNoConnection[language]);
         } else {
-          setError(isSerbian ? "Nešto je pošlo po krivu. Pokušajte ponovo." : "Something went wrong. Please try again.");
+          setError(tr.adminLogin.errorGeneric[language]);
         }
       } else {
-        setError(isSerbian ? "Nešto je pošlo po krivu. Pokušajte ponovo." : "Something went wrong. Please try again.");
+        setError(tr.adminLogin.errorGeneric[language]);
       }
     } finally {
       setLoading(false);
@@ -52,8 +51,8 @@ export default function AdminLogin() {
         <form onSubmit={handleSubmit} className="admin-login-form">
           <input
             type="password"
-            placeholder={isSerbian ? "Lozinka" : "Password"}
-            aria-label={isSerbian ? "Lozinka" : "Password"}
+            placeholder={tr.adminLogin.passwordPlaceholder[language]}
+            aria-label={tr.adminLogin.passwordPlaceholder[language]}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="admin-login-input"
@@ -61,7 +60,7 @@ export default function AdminLogin() {
           />
           {error && <p className="admin-login-error">{error}</p>}
           <CascadeButton type="submit" variant="gold" className="gold-button admin-login-button" disabled={loading}>
-            {isSerbian ? "Prijava" : "Log in"}
+            {tr.adminLogin.submit[language]}
           </CascadeButton>
         </form>
       </div>

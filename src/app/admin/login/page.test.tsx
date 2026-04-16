@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AdminLogin from "./page";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { translations as tr } from "@/constants/translations";
 import axios from "axios";
 
 const mockPush = vi.fn();
@@ -26,18 +27,30 @@ describe("AdminLogin", () => {
 
   it("renders the password input", () => {
     render(<LanguageProvider><AdminLogin /></LanguageProvider>);
-    expect(screen.getByPlaceholderText("Password")).toBeTruthy();
+    expect(screen.getByPlaceholderText(tr.adminLogin.passwordPlaceholder.English)).toBeTruthy();
   });
 
   it("redirects to /admin on successful login", async () => {
     vi.mocked(axios.post).mockResolvedValue({});
 
     render(<LanguageProvider><AdminLogin /></LanguageProvider>);
-    fireEvent.change(screen.getByPlaceholderText("Password"), { target: { value: "correct" } });
-    fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
+    fireEvent.change(screen.getByPlaceholderText(tr.adminLogin.passwordPlaceholder.English), { target: { value: "correct" } });
+    fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.English }));
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith("/admin");
+    });
+  });
+
+  it("disables the submit button while loading", async () => {
+    vi.mocked(axios.post).mockReturnValue(new Promise(() => {}));
+
+    render(<LanguageProvider><AdminLogin /></LanguageProvider>);
+    fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.English }));
+
+    await waitFor(() => {
+      const button = screen.getByRole("button", { name: tr.adminLogin.submit.English }) as HTMLButtonElement;
+      expect(button.disabled).toBe(true);
     });
   });
 
@@ -46,10 +59,10 @@ describe("AdminLogin", () => {
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
     render(<LanguageProvider><AdminLogin /></LanguageProvider>);
-    fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
+    fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.English }));
 
     await waitFor(() => {
-      expect(screen.getByText("Incorrect password.")).toBeTruthy();
+      expect(screen.getByText(tr.adminLogin.errorWrongPassword.English)).toBeTruthy();
     });
   });
 
@@ -58,10 +71,10 @@ describe("AdminLogin", () => {
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
     render(<LanguageProvider><AdminLogin /></LanguageProvider>);
-    fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
+    fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.English }));
 
     await waitFor(() => {
-      expect(screen.getByText(/server error/i)).toBeTruthy();
+      expect(screen.getByText(tr.adminLogin.errorServer.English)).toBeTruthy();
     });
   });
 
@@ -70,10 +83,10 @@ describe("AdminLogin", () => {
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
     render(<LanguageProvider><AdminLogin /></LanguageProvider>);
-    fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
+    fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.English }));
 
     await waitFor(() => {
-      expect(screen.getByText(/no connection/i)).toBeTruthy();
+      expect(screen.getByText(tr.adminLogin.errorNoConnection.English)).toBeTruthy();
     });
   });
 
@@ -82,10 +95,10 @@ describe("AdminLogin", () => {
     vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
     render(<LanguageProvider><AdminLogin /></LanguageProvider>);
-    fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
+    fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.English }));
 
     await waitFor(() => {
-      expect(screen.getByText(/something went wrong/i)).toBeTruthy();
+      expect(screen.getByText(tr.adminLogin.errorGeneric.English)).toBeTruthy();
     });
   });
 
@@ -94,10 +107,10 @@ describe("AdminLogin", () => {
     vi.spyOn(axios, "isAxiosError").mockReturnValue(false);
 
     render(<LanguageProvider><AdminLogin /></LanguageProvider>);
-    fireEvent.submit(screen.getByRole("button", { name: /log in/i }));
+    fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.English }));
 
     await waitFor(() => {
-      expect(screen.getByText(/something went wrong/i)).toBeTruthy();
+      expect(screen.getByText(tr.adminLogin.errorGeneric.English)).toBeTruthy();
     });
   });
 
@@ -107,10 +120,10 @@ describe("AdminLogin", () => {
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
       render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
-      fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
+      fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.Serbian }));
 
       await waitFor(() => {
-        expect(screen.getByText("Netačna lozinka.")).toBeTruthy();
+        expect(screen.getByText(tr.adminLogin.errorWrongPassword.Serbian)).toBeTruthy();
       });
     });
 
@@ -119,10 +132,10 @@ describe("AdminLogin", () => {
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
       render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
-      fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
+      fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.Serbian }));
 
       await waitFor(() => {
-        expect(screen.getByText("Greška na serveru. Kontaktirajte administratora.")).toBeTruthy();
+        expect(screen.getByText(tr.adminLogin.errorServer.Serbian)).toBeTruthy();
       });
     });
 
@@ -131,10 +144,10 @@ describe("AdminLogin", () => {
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
       render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
-      fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
+      fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.Serbian }));
 
       await waitFor(() => {
-        expect(screen.getByText("Nema veze. Provjerite internet i pokušajte ponovo.")).toBeTruthy();
+        expect(screen.getByText(tr.adminLogin.errorNoConnection.Serbian)).toBeTruthy();
       });
     });
 
@@ -143,10 +156,10 @@ describe("AdminLogin", () => {
       vi.spyOn(axios, "isAxiosError").mockReturnValue(true);
 
       render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
-      fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
+      fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.Serbian }));
 
       await waitFor(() => {
-        expect(screen.getByText("Nešto je pošlo po krivu. Pokušajte ponovo.")).toBeTruthy();
+        expect(screen.getByText(tr.adminLogin.errorGeneric.Serbian)).toBeTruthy();
       });
     });
 
@@ -155,10 +168,10 @@ describe("AdminLogin", () => {
       vi.spyOn(axios, "isAxiosError").mockReturnValue(false);
 
       render(<LanguageProvider initialLanguage="Serbian"><AdminLogin /></LanguageProvider>);
-      fireEvent.submit(screen.getByRole("button", { name: /prijava/i }));
+      fireEvent.submit(screen.getByRole("button", { name: tr.adminLogin.submit.Serbian }));
 
       await waitFor(() => {
-        expect(screen.getByText("Nešto je pošlo po krivu. Pokušajte ponovo.")).toBeTruthy();
+        expect(screen.getByText(tr.adminLogin.errorGeneric.Serbian)).toBeTruthy();
       });
     });
   });
