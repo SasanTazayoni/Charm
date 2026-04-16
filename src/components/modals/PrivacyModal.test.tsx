@@ -86,6 +86,28 @@ describe("PrivacyModal", () => {
     expect(onClose).toHaveBeenCalledOnce();
   });
 
+  it("calls onClose when Escape is pressed", () => {
+    const onClose = vi.fn();
+    const { container } = render(
+      <LanguageProvider>
+        <PrivacyModal isOpen={true} isVisible={true} onClose={onClose} />
+      </LanguageProvider>
+    );
+    fireEvent.keyDown(container.querySelector(".privacy-modal-backdrop")!, { key: "Escape" });
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it("does not call onClose when a non-Escape key is pressed", () => {
+    const onClose = vi.fn();
+    const { container } = render(
+      <LanguageProvider>
+        <PrivacyModal isOpen={true} isVisible={true} onClose={onClose} />
+      </LanguageProvider>
+    );
+    fireEvent.keyDown(container.querySelector(".privacy-modal-backdrop")!, { key: "Enter" });
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it("does not call onClose when the modal content is clicked", () => {
     const onClose = vi.fn();
     const { container } = render(
