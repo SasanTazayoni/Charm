@@ -170,12 +170,14 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: transform 300ms ease-in-out;
+  transition: opacity 400ms ease, visibility 400ms ease, transform 300ms ease-in-out;
 }
 
 .scroll-to-top-visible {
+  opacity: 1;
   visibility: visible;
   pointer-events: auto;
   animation: pulse 2s ease-in-out infinite;
