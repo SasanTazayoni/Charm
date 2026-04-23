@@ -82,7 +82,7 @@ describe("AdminPage", () => {
 
   it("shows success message after upload", async () => {
     vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-    vi.mocked(axios.post).mockResolvedValue({});
+    vi.mocked(axios.post).mockResolvedValue({ data: { url: "https://blob.vercel.com/gallery/test.jpg", pathname: "gallery/test.jpg" } });
 
     const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
     await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());
@@ -299,7 +299,7 @@ describe("AdminPage", () => {
 
     it("shows success message after replace", async () => {
       vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-      vi.mocked(axios.put).mockResolvedValue({});
+      vi.mocked(axios.put).mockResolvedValue({ data: { url: "https://blob.vercel.com/gallery/new.jpg", pathname: "gallery/new.jpg" } });
 
       const { container } = render(<LanguageProvider><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-replace-button")).toBeTruthy());
@@ -455,7 +455,7 @@ describe("AdminPage", () => {
 
     it("shows Serbian success message after upload", async () => {
       vi.mocked(axios.get).mockResolvedValue({ data: mockPhotos });
-      vi.mocked(axios.post).mockResolvedValue({});
+      vi.mocked(axios.post).mockResolvedValue({ data: { url: "https://blob.vercel.com/gallery/test.jpg", pathname: "gallery/test.jpg" } });
 
       const { container } = render(<LanguageProvider initialLanguage="Serbian"><AdminPage /></LanguageProvider>);
       await waitFor(() => expect(container.querySelector(".admin-photo-item")).toBeTruthy());

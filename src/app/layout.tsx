@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PHONE, INSTAGRAM_URL } from "@/constants/contact";
 import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
@@ -114,7 +115,7 @@ export default function RootLayout({
       <body
         className={`${cormorant.variable} ${montserrat.variable} antialiased`}
       >
-        {children}
+        <Suspense>{children}</Suspense>
       </body>
     </html>
   );

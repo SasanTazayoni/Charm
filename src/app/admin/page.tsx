@@ -81,8 +81,8 @@ export default function AdminPage() {
     formData.append("file", selectedFile);
 
     try {
-      await axios.post("/api/upload", formData);
-      await fetchPhotos();
+      const response = await axios.post<Photo>("/api/upload", formData);
+      setPhotos((prev) => [...prev, response.data]);
       setStatus({ text: tr.admin.uploadSuccess[language], type: "success" });
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -110,7 +110,7 @@ export default function AdminPage() {
     setStatus(null);
     try {
       await axios.delete("/api/delete", { data: { url } });
-      await fetchPhotos();
+      setPhotos((prev) => prev.filter((photo) => photo.url !== url));
       setStatus({ text: tr.admin.deleteSuccess[language], type: "success" });
     } catch {
       setStatus({ text: tr.admin.deleteError[language], type: "error" });
@@ -147,8 +147,8 @@ export default function AdminPage() {
     formData.append("url", targetUrl);
 
     try {
-      await axios.put("/api/replace", formData);
-      await fetchPhotos();
+      const response = await axios.put<Photo>("/api/replace", formData);
+      setPhotos((prev) => prev.map((photo) => (photo.url === targetUrl ? response.data : photo)));
       setStatus({ text: tr.admin.replaceSuccess[language], type: "success" });
     } catch (error) {
       if (axios.isAxiosError(error)) {
