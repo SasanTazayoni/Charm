@@ -3,6 +3,7 @@ import { PUT } from "./route";
 import { NextRequest, NextResponse } from "next/server";
 import * as blob from "@vercel/blob";
 import * as validationModule from "@/lib/validateImageFile";
+import * as cache from "next/cache";
 
 vi.mock("@/lib/validateImageFile", () => ({
   validateImageFile: vi.fn().mockReturnValue(null),
@@ -11,6 +12,10 @@ vi.mock("@/lib/validateImageFile", () => ({
 vi.mock("@vercel/blob", () => ({
   put: vi.fn().mockResolvedValue({ url: "https://blob.vercel.com/gallery/new.jpg" }),
   del: vi.fn().mockResolvedValue(undefined),
+}));
+
+vi.mock("next/cache", () => ({
+  revalidateTag: vi.fn(),
 }));
 
 describe("PUT /api/replace", () => {
@@ -75,9 +80,10 @@ describe("PUT /api/replace", () => {
   });
 
   describe("when the request is valid", () => {
-    it("returns 200 for a JPEG", async () => {
+    it("returns 200 for a JPEG and busts the photo cache", async () => {
       const response = await PUT(makeRequest({ name: "new.jpg", type: "image/jpeg", size: 100 }, "https://blob.vercel.com/gallery/old.jpg", "correct-secret"));
       expect(response.status).toBe(200);
+      expect(cache.revalidateTag).toHaveBeenCalledWith("photos", {});
     });
 
     it("returns 200 for a PNG", async () => {

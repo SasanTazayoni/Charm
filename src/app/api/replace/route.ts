@@ -1,4 +1,5 @@
 import { put, del } from "@vercel/blob";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { GALLERY_PREFIX } from "@/constants/blob";
 import { validateImageFile } from "@/lib/validateImageFile";
@@ -23,6 +24,7 @@ export async function PUT(request: NextRequest) {
   try {
     const blob = await put(`${GALLERY_PREFIX}${file.name}`, file, { access: "public" });
     await del(url);
+    revalidateTag("photos", {});
     return NextResponse.json(blob);
   } catch (error) {
     console.error("Blob replace failed:", error);

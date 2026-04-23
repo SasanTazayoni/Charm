@@ -1,4 +1,5 @@
 import { del } from "@vercel/blob";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(request: NextRequest) {
@@ -21,6 +22,7 @@ export async function DELETE(request: NextRequest) {
 
   try {
     await del(url);
+    revalidateTag("photos", {});
   } catch (error) {
     console.error("Blob delete failed:", error);
     return NextResponse.json({ error: "Failed to delete photo" }, { status: 500 });

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { POST } from "./route";
 import { NextRequest, NextResponse } from "next/server";
 import * as validationModule from "@/lib/validateImageFile";
+import * as cache from "next/cache";
 
 vi.mock("@/lib/validateImageFile", () => ({
   validateImageFile: vi.fn().mockReturnValue(null),
@@ -9,6 +10,10 @@ vi.mock("@/lib/validateImageFile", () => ({
 
 vi.mock("@vercel/blob", () => ({
   put: vi.fn().mockResolvedValue({ url: "https://blob.vercel.com/gallery/test.jpg" }),
+}));
+
+vi.mock("next/cache", () => ({
+  revalidateTag: vi.fn(),
 }));
 
 describe("POST /api/upload", () => {
@@ -55,9 +60,10 @@ describe("POST /api/upload", () => {
   });
 
   describe("when the file is valid", () => {
-    it("returns 200 for a JPEG", async () => {
+    it("returns 200 for a JPEG and busts the photo cache", async () => {
       const response = await POST(makeRequest({ name: "test.jpg", type: "image/jpeg", size: 100 }, "correct-secret"));
       expect(response.status).toBe(200);
+      expect(cache.revalidateTag).toHaveBeenCalledWith("photos", {});
     });
 
     it("returns 200 for a PNG", async () => {

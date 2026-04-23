@@ -5,6 +5,10 @@ vi.mock("@vercel/blob", () => ({
   list: vi.fn(),
 }));
 
+vi.mock("next/cache", () => ({
+  cacheTag: vi.fn(),
+}));
+
 import { list } from "@vercel/blob";
 
 describe("GET /api/photos", () => {

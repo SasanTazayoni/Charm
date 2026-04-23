@@ -2,9 +2,14 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { DELETE } from "./route";
 import { NextRequest } from "next/server";
 import * as blob from "@vercel/blob";
+import * as cache from "next/cache";
 
 vi.mock("@vercel/blob", () => ({
   del: vi.fn().mockResolvedValue(undefined),
+}));
+
+vi.mock("next/cache", () => ({
+  revalidateTag: vi.fn(),
 }));
 
 describe("DELETE /api/delete", () => {
@@ -55,9 +60,10 @@ describe("DELETE /api/delete", () => {
   });
 
   describe("when the request is valid", () => {
-    it("returns 200", async () => {
+    it("returns 200 and busts the photo cache", async () => {
       const response = await DELETE(makeRequest({ url: "https://blob.vercel.com/gallery/test.jpg" }, "correct-secret"));
       expect(response.status).toBe(200);
+      expect(cache.revalidateTag).toHaveBeenCalledWith("photos", {});
     });
   });
 

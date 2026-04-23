@@ -1,4 +1,5 @@
 import { put } from "@vercel/blob";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { GALLERY_PREFIX } from "@/constants/blob";
 import { validateImageFile } from "@/lib/validateImageFile";
@@ -20,5 +21,6 @@ export async function POST(request: NextRequest) {
   if (validationError) return validationError;
 
   const blob = await put(`${GALLERY_PREFIX}${file.name}`, file, { access: "public" });
+  revalidateTag("photos", {});
   return NextResponse.json(blob);
 }
