@@ -2,6 +2,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import CascadeButton from "./CascadeButton";
 
+global.ResizeObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
 describe("CascadeButton", () => {
   it("renders children", () => {
     render(<CascadeButton variant="gold">Click me</CascadeButton>);
