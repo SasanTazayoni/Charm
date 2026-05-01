@@ -22,8 +22,7 @@ export default function ScrollToTop() {
   }, []);
 
   useEffect(() => {
-    const btn = buttonRef.current;
-    if (!btn) return;
+    const btn = buttonRef.current!;
     const onTransitionEnd = (e: TransitionEvent) => {
       if (e.propertyName === "opacity" && visible) setPulsing(true);
     };
