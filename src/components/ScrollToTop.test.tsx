@@ -56,6 +56,44 @@ describe("ScrollToTop", () => {
     }
   });
 
+  it("does not pulse when transitionend fires for a non-opacity property", async () => {
+    const spy = vi.spyOn(EventTarget.prototype, "addEventListener");
+
+    try {
+      const { container } = render(<ScrollToTop />);
+      Object.defineProperty(window, "scrollY", { value: 900 });
+      fireEvent.scroll(window);
+
+      const calls = spy.mock.calls.filter(([type]) => type === "transitionend");
+      const handler = calls.at(-1)?.[1] as EventListener;
+      const fakeEvent = Object.assign(new Event("transitionend"), { propertyName: "transform" });
+      await act(async () => { handler(fakeEvent); });
+
+      const button = container.querySelector(".scroll-to-top")!;
+      expect(button.classList.contains("scroll-to-top-pulsing")).toBe(false);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  it("does not pulse when opacity transitionend fires while not visible", async () => {
+    const spy = vi.spyOn(EventTarget.prototype, "addEventListener");
+
+    try {
+      const { container } = render(<ScrollToTop />);
+
+      const calls = spy.mock.calls.filter(([type]) => type === "transitionend");
+      const handler = calls.at(-1)?.[1] as EventListener;
+      const fakeEvent = Object.assign(new Event("transitionend"), { propertyName: "opacity" });
+      await act(async () => { handler(fakeEvent); });
+
+      const button = container.querySelector(".scroll-to-top")!;
+      expect(button.classList.contains("scroll-to-top-pulsing")).toBe(false);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
   it("resets pulsing when scrolled back above innerHeight", () => {
     const { container } = render(<ScrollToTop />);
     Object.defineProperty(window, "scrollY", { value: 900 });
