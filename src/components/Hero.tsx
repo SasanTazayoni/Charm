@@ -8,13 +8,12 @@ import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 import Divider from "@/components/Divider";
 
 const VIDEOS = [
-  "https://res.cloudinary.com/dfpneqsxy/video/upload/v1775236747/Charm/hero-video1_ufotyn.mp4",
   "https://res.cloudinary.com/dfpneqsxy/video/upload/v1775236738/Charm/hero-video2_xkcmhn.mp4",
   "https://res.cloudinary.com/dfpneqsxy/video/upload/v1775236741/Charm/hero-video3_bt3ffi.mp4",
 ];
 
 const FADE_DURATION = 2000;
-const FADE_OFFSET = 2.5;
+const DISPLAY_DURATION = 10000;
 
 export default function Hero() {
   const { language } = useLanguage();
@@ -22,63 +21,59 @@ export default function Hero() {
     Array(VIDEOS.length).fill(null),
   );
   const [opacities, setOpacities] = useState<number[]>(
-    VIDEOS.map((_, videoIndex) => (videoIndex === 0 ? 1 : 0)),
+    VIDEOS.map((_, i) => (i === 0 ? 1 : 0)),
   );
-  const activeIndexRef = useRef(0);
-  const fadingRef = useRef(false);
-  const fadeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const displayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    const firstVideo = videoRefs.current[0];
-    firstVideo?.play().catch(() => {});
+  const startDisplayTimer = useCallback((index: number) => {
+    if (displayTimerRef.current) clearTimeout(displayTimerRef.current);
 
-    return () => {
-      if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
-      firstVideo?.pause();
-    };
-  }, []);
+    displayTimerRef.current = setTimeout(() => {
+      const nextIndex = (index + 1) % VIDEOS.length;
 
-  const handleTimeUpdate = useCallback((index: number) => {
-    if (index !== activeIndexRef.current || fadingRef.current) return;
-    const video = videoRefs.current[index];
-    if (!video || !isFinite(video.duration)) return;
-    if (video.duration - video.currentTime > FADE_OFFSET) return;
-
-    fadingRef.current = true;
-    const nextIndex = (index + 1) % VIDEOS.length;
-
-    const nextVideo = videoRefs.current[nextIndex];
-    if (nextVideo) {
+      const nextVideo = videoRefs.current[nextIndex]!;
       nextVideo.currentTime = 0;
       nextVideo.play().catch(() => {});
-    }
 
-    setOpacities((currentOpacities) => {
-      const updatedOpacities = [...currentOpacities];
-      updatedOpacities[index] = 0;
-      updatedOpacities[nextIndex] = 1;
-      return updatedOpacities;
-    });
+      setOpacities((prev) => {
+        const updated = [...prev];
+        updated[index] = 0;
+        updated[nextIndex] = 1;
+        return updated;
+      });
 
-    fadeTimeoutRef.current = setTimeout(() => {
-      activeIndexRef.current = nextIndex;
-      fadingRef.current = false;
-    }, FADE_DURATION);
+      fadeTimerRef.current = setTimeout(() => {
+        videoRefs.current[index]?.pause();
+        startDisplayTimer(nextIndex);
+      }, FADE_DURATION);
+    }, DISPLAY_DURATION - FADE_DURATION);
   }, []);
+
+  useEffect(() => {
+    videoRefs.current[0]?.play().catch(() => {});
+    startDisplayTimer(0);
+
+    return () => {
+      clearTimeout(displayTimerRef.current!);
+      if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
+      videoRefs.current.forEach((v) => v?.pause());
+    };
+  }, [startDisplayTimer]);
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
       {VIDEOS.map((videoSrc, videoIndex) => (
         <video
           key={videoSrc}
-          ref={(videoElement) => {
-            videoRefs.current[videoIndex] = videoElement;
+          ref={(el) => {
+            videoRefs.current[videoIndex] = el;
           }}
           src={videoSrc}
           muted
           playsInline
+          loop
           preload={videoIndex === 0 ? "auto" : "none"}
-          onTimeUpdate={() => handleTimeUpdate(videoIndex)}
           style={{
             opacity: opacities[videoIndex],
             transition: `opacity ${FADE_DURATION}ms ease-in-out`,
