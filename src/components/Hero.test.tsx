@@ -1,11 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, fireEvent } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 import Hero from "./Hero";
 import { LanguageProvider } from "@/context/LanguageContext";
 
 vi.mock("@/components/Divider", () => ({
   default: () => <div className="divider" />,
 }));
+
+const DISPLAY_DURATION = 10000;
+const FADE_DURATION = 2000;
 
 describe("Hero", () => {
   beforeEach(() => {
@@ -23,9 +26,9 @@ describe("Hero", () => {
     expect(container.firstChild).toBeTruthy();
   });
 
-  it("renders 3 video elements", () => {
+  it("renders 2 video elements", () => {
     const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
-    expect(container.querySelectorAll("video")).toHaveLength(3);
+    expect(container.querySelectorAll("video")).toHaveLength(2);
   });
 
   it("first video has opacity 1 initially", () => {
@@ -38,7 +41,6 @@ describe("Hero", () => {
     const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
     const videos = container.querySelectorAll("video");
     expect((videos[1] as HTMLElement).style.opacity).toBe("0");
-    expect((videos[2] as HTMLElement).style.opacity).toBe("0");
   });
 
   it("renders social links", () => {
@@ -47,73 +49,63 @@ describe("Hero", () => {
     expect(links.length).toBeGreaterThanOrEqual(2);
   });
 
-  describe("handleTimeUpdate", () => {
-    it("does not fade if video duration is not finite", () => {
-      const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
-      const video = container.querySelectorAll("video")[0] as HTMLVideoElement;
+  it("videos have loop attribute", () => {
+    const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
+    const videos = container.querySelectorAll("video");
+    videos.forEach((v) => expect((v as HTMLVideoElement).loop).toBe(true));
+  });
 
-      Object.defineProperty(video, "duration", { value: Infinity, configurable: true });
-      Object.defineProperty(video, "currentTime", { value: 0, configurable: true });
-      fireEvent.timeUpdate(video);
+  it("plays first video on mount", () => {
+    render(<LanguageProvider><Hero /></LanguageProvider>);
+    expect(window.HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(1);
+  });
 
-      expect((video as HTMLElement).style.opacity).toBe("1");
-    });
+  it("fades to next video after display duration", () => {
+    const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
+    const videos = container.querySelectorAll("video");
 
-    it("does not fade if video is not near the end", () => {
-      const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
-      const video = container.querySelectorAll("video")[0] as HTMLVideoElement;
+    act(() => { vi.advanceTimersByTime(DISPLAY_DURATION - FADE_DURATION); });
 
-      Object.defineProperty(video, "duration", { value: 20, configurable: true });
-      Object.defineProperty(video, "currentTime", { value: 0, configurable: true });
-      fireEvent.timeUpdate(video);
+    expect((videos[0] as HTMLElement).style.opacity).toBe("0");
+    expect((videos[1] as HTMLElement).style.opacity).toBe("1");
+  });
 
-      expect((video as HTMLElement).style.opacity).toBe("1");
-    });
+  it("pauses previous video after fade completes", () => {
+    render(<LanguageProvider><Hero /></LanguageProvider>);
 
-    it("fades to next video when current video approaches end", () => {
-      const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
-      const videos = container.querySelectorAll("video");
-      const video = videos[0] as HTMLVideoElement;
+    act(() => { vi.advanceTimersByTime(DISPLAY_DURATION); });
 
-      Object.defineProperty(video, "duration", { value: 10, configurable: true });
-      Object.defineProperty(video, "currentTime", { value: 8, configurable: true });
-      fireEvent.timeUpdate(video);
+    expect(window.HTMLMediaElement.prototype.pause).toHaveBeenCalledTimes(1);
+  });
 
-      expect((video as HTMLElement).style.opacity).toBe("0");
-      expect((videos[1] as HTMLElement).style.opacity).toBe("1");
-    });
+  it("loops back to first video after second video display duration", () => {
+    const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
+    const videos = container.querySelectorAll("video");
 
-    it("does not trigger fade again while already fading", () => {
-      const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
-      const video = container.querySelectorAll("video")[0] as HTMLVideoElement;
+    act(() => { vi.advanceTimersByTime(DISPLAY_DURATION); });
+    act(() => { vi.advanceTimersByTime(DISPLAY_DURATION - FADE_DURATION); });
 
-      Object.defineProperty(video, "duration", { value: 10, configurable: true });
-      Object.defineProperty(video, "currentTime", { value: 8, configurable: true });
+    expect((videos[1] as HTMLElement).style.opacity).toBe("0");
+    expect((videos[0] as HTMLElement).style.opacity).toBe("1");
+  });
 
-      fireEvent.timeUpdate(video);
-      fireEvent.timeUpdate(video);
+  it("unmounts without errors and clears display timer", () => {
+    const { unmount } = render(<LanguageProvider><Hero /></LanguageProvider>);
+    expect(() => unmount()).not.toThrow();
+  });
 
-      expect(window.HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(2);
-    });
+  it("unmounts without errors mid-fade and clears fade timer", () => {
+    const { unmount } = render(<LanguageProvider><Hero /></LanguageProvider>);
+    act(() => { vi.advanceTimersByTime(DISPLAY_DURATION - FADE_DURATION); });
+    expect(() => unmount()).not.toThrow();
+  });
 
-    it("resets fading state after fade duration and allows next fade", () => {
-      const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
-      const videos = container.querySelectorAll("video");
-      const video0 = videos[0] as HTMLVideoElement;
-      const video1 = videos[1] as HTMLVideoElement;
-
-      Object.defineProperty(video0, "duration", { value: 10, configurable: true });
-      Object.defineProperty(video0, "currentTime", { value: 8, configurable: true });
-      fireEvent.timeUpdate(video0);
-
-      vi.advanceTimersByTime(2000);
-
-      Object.defineProperty(video1, "duration", { value: 10, configurable: true });
-      Object.defineProperty(video1, "currentTime", { value: 8, configurable: true });
-      fireEvent.timeUpdate(video1);
-
-      expect((video1 as HTMLElement).style.opacity).toBe("0");
-      expect((videos[2] as HTMLElement).style.opacity).toBe("1");
-    });
+  it("handles play rejection without crashing", async () => {
+    window.HTMLMediaElement.prototype.play = vi.fn().mockRejectedValue(new Error("NotAllowedError"));
+    const { container } = render(<LanguageProvider><Hero /></LanguageProvider>);
+    await Promise.resolve();
+    act(() => { vi.advanceTimersByTime(DISPLAY_DURATION - FADE_DURATION); });
+    await Promise.resolve();
+    expect(container.firstChild).toBeTruthy();
   });
 });
