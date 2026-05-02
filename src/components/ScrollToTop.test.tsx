@@ -7,6 +7,7 @@ describe("ScrollToTop", () => {
     Object.defineProperty(window, "scrollY", { value: 0, writable: true, configurable: true });
     Object.defineProperty(window, "innerHeight", { value: 800, writable: true, configurable: true });
     window.scrollTo = vi.fn();
+    window.requestAnimationFrame = vi.fn((cb) => { cb(0); return 0; });
   });
 
   it("renders a scroll to top button", () => {
