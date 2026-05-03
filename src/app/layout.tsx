@@ -55,16 +55,22 @@ export const metadata: Metadata = {
   },
   authors: [{ name: "Mirjana Vuković Đorđić" }],
   creator: "Mirjana Vuković Đorđić",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Charm | Professional Nail Artist",
     description:
       "Charm by Mirjana — professional nail artist based in Bijeljina, Bosnia & Herzegovina, specialising in nail art, gel nails, and manicure. Book your appointment today.",
+    url: "/",
     type: "website",
     locale: "en_US",
     siteName: "Charm",
     images: [
       {
         url: "/og-image.png",
+        width: 1200,
+        height: 630,
         alt: "Charm - Professional Nail Artist",
       },
     ],
