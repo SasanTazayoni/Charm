@@ -172,7 +172,9 @@ body {
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 300ms ease, transform 300ms ease-in-out;
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease-in-out;
 }
 
 .scroll-to-top-visible {
@@ -899,16 +901,6 @@ body {
   gap: 0.5rem;
   padding: 1rem 2rem;
   border-top: 1px solid rgba(212, 175, 55, 0.25);
-}
-
-.footer-github {
-  color: rgba(212, 175, 55, 0.5);
-  display: flex;
-  transition: color 300ms ease-in-out;
-}
-
-.footer-github:hover {
-  color: var(--brand-gold);
 }
 
 .footer-copyright {
